@@ -1,0 +1,39 @@
+version: '3'
+services:
+  db:
+    build: ./mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_DATABASE: 'common'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/mysql_volume:/var/lib/mysql
+
+  nginx:
+    build: ./backend/nginx/.
+    ports:
+      - '8000:80'
+    depends_on:
+      - web-back
+      - db
+    volumes:
+      - .:/var/www/html
+
+  web-back:
+    build: ./backend/php/.
+    volumes:
+      - ./backend/php:/var/www/html
+    depends_on:
+      - db
+
+  web-front:
+    build: frontend/.
+    volumes:
+      - ./frontend/:/usr/src
+    ports:
+      - 3000:3000
+    tty: true
