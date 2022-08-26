@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.16",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^0.27.2",
+    "msw": "^0.45.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "react": "^17.0.2",
     "react-cookie": "^4.1.1",
