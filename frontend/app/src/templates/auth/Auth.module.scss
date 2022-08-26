@@ -1,0 +1,41 @@
+.source {
+  font-size: 10px;
+}
+
+.separation {
+  color: rgb(73, 73, 73);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --text-divider-gap: 1.5rem;
+
+  &::before,
+  &::after {
+    content: '';
+    border-top: 1px solid gray;
+    flex-grow: 1;
+    margin-right: var(--text-divider-gap);
+    margin-left: var(--text-divider-gap);
+  }
+}
+
+@media screen and (max-width: 389px) {
+  .google_btn {
+    width: 95%;
+
+    & span {
+      font-size: 14px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .separation::before,
+  .separation::after {
+    content: '';
+    border-top: 1px solid rgb(73, 73, 73);
+    width: 3rem;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
