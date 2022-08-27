@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         'gofun': '#edebe8',
+        'thin-black': '#434343',
         'secondary': '#dd4b39',
         'orange': 'rgb(226, 147, 0)',
         'button-color-orange': '#ffa45b',
