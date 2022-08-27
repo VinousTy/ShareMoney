@@ -17,3 +17,7 @@ export interface AUTH_DATA {
   email: string;
   password: string;
 }
+
+export interface LAYOUT_STATE {
+  isDrawer: boolean;
+}
