@@ -7,14 +7,16 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import Alert from '../../components/message/alert/Alert';
 import { AppDispatch } from '../../app/store';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   editMessage,
   isSignIn,
   isSuccessOrFailure,
+  selectMessage,
 } from '../../features/auth/authSlice';
 import signin from '../../assets/login_bro.png';
 import useMedia from 'use-media';
+import FlashMessage from '../../components/message/flashMessage/FlashMessage';
 
 interface INPUTS {
   email: string;
@@ -26,6 +28,7 @@ const apiUrl = process.env.REACT_APP_DEV_API_URL;
 
 const SignIn: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
+  const message = useSelector(selectMessage);
   const history = useHistory();
   const [loginError, setLoginError] = useState(false);
   const [cookies, setCookie] = useCookies();
@@ -67,6 +70,7 @@ const SignIn: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {message !== '' && <FlashMessage />}
       <div className="w-10/12 md:w-11/12 md:flex bg-white shadow-2xl my-24 mx-auto rounded-3xl lg:w-10/12">
         <div className="mx-auto md:w-7/12 lg:w-6/12 py-8">
           <div className="text-center text-white h-auto rounded">
