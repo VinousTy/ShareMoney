@@ -22,9 +22,9 @@ class ResetPasswordController extends Controller
     });
 
     if ($reset_password_status == Password::INVALID_TOKEN) {
-      return ['success' => 'パスワードの変更に失敗しました'];
+      return ['パスワードの変更に失敗しました'];
     }
 
-    return ['success' => 'パスワードの変更が完了しました'];
+    return ['パスワードの変更が完了しました'];
   }
 }
