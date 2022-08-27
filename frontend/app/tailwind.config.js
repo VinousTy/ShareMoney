@@ -11,6 +11,7 @@ module.exports = {
         'button-color-orange': '#ffa45b',
         'button-color-orange-hover': '#fa812b',
         'button-color-orange-shadow': '#fa8d35',
+        'green': 'rgb(0, 185, 46)'
       },
     },
   },
