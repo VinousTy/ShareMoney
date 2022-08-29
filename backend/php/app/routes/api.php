@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Profile\ProfileController;
+use App\Http\Controllers\Api\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ Route::post('password/request', [ForgotPasswordController::class, 'sendResetLink
 Route::post('password/reset/{token}', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+  Route::get('user', [UserController::class, 'index']);
   Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
   Route::get('profile/list', [ProfileController::class, 'list']);
   Route::post('create/profile', [ProfileController::class, 'create'])->name('profile.create');
