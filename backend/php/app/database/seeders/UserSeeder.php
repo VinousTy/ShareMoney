@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
   {
     DB::table('users')->insert([
       [
-        'id' => (string)Str::uuid(),
+        'id' => '8f2ce26a-8923-467c-b844-fae0bfa1b20d',
         'email' => 'guest@example.com',
         'password' => Hash::make(env('GUEST_PASSWORD')),
         'created_at' => '2022/08/07 14:09:10'
