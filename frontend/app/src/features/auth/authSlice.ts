@@ -1,7 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/store';
-import { AUTH_STATE, AUTH_DATA, NEW_PASSWORD } from '../../types/Types';
+import {
+  AUTH_STATE,
+  AUTH_DATA,
+  NEW_PASSWORD,
+  PROFILE_CREATE,
+  PROFILE_UPDATE,
+  COOKIE,
+} from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
 
@@ -13,6 +20,30 @@ const initialState: AUTH_STATE = {
     id: 0,
     email: '',
   },
+  myProf: {
+    id: '',
+    name: '',
+    job: '',
+    age: 0,
+    income: '',
+    composition: '',
+    body: '',
+    img: '',
+    user_id: 0,
+  },
+  profiles: [
+    {
+      id: '',
+      name: '',
+      job: '',
+      age: 0,
+      income: '',
+      composition: '',
+      body: '',
+      img: '',
+      user_id: 0,
+    },
+  ],
   message: '',
   successOrFailure: false,
 };
@@ -64,6 +95,87 @@ export const newPassword = createAsyncThunk(
   }
 );
 
+export const getUser = createAsyncThunk('get/user', async (cookie: COOKIE) => {
+  const res = await axios.get(`${apiUrl}api/user/`, {
+    headers: {
+      Authorization: `Bearer ${cookie.Bearer}`,
+    },
+  });
+  return res.data;
+});
+
+export const createProfile = createAsyncThunk(
+  'profile/post',
+  async (profile: PROFILE_CREATE) => {
+    console.log(profile);
+    const uploadData = new FormData();
+    uploadData.append('name', profile.name);
+    uploadData.append('age', String(profile.age));
+    uploadData.append('job', profile.job);
+    uploadData.append('income', profile.income);
+    uploadData.append('composition', profile.composition);
+    uploadData.append('body', profile.body);
+    profile.img && uploadData.append('img', profile.img, profile.img.name);
+    const res = await axios.post(`${apiUrl}api/create/profile`, uploadData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${profile.cookie.Bearer}`,
+      },
+    });
+    return res.data;
+  }
+);
+
+export const updateProfile = createAsyncThunk(
+  'profile/put',
+  async (profile: PROFILE_UPDATE) => {
+    const uploadData = new FormData();
+    uploadData.append('_method', 'put');
+    uploadData.append('name', profile.name);
+    uploadData.append('age', String(profile.age));
+    uploadData.append('job', profile.job);
+    uploadData.append('income', profile.income);
+    uploadData.append('composition', profile.composition);
+    uploadData.append('body', profile.body);
+    profile.img && uploadData.append('img', profile.img, profile.img.name);
+    const res = await axios.post(
+      `${apiUrl}api/update/profile/${profile.id}/`,
+      uploadData,
+      {
+        headers: {
+          'content-type': 'multipart/form-data',
+          Authorization: `Bearer ${profile.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const getMyProfile = createAsyncThunk(
+  'profile/get',
+  async (cookie: COOKIE) => {
+    const res = await axios.get(`${apiUrl}api/profile/`, {
+      headers: {
+        Authorization: `Bearer ${cookie.Bearer}`,
+      },
+    });
+    return res.data[0];
+  }
+);
+
+export const getProfiles = createAsyncThunk(
+  'profile/list',
+  async (cookie: COOKIE) => {
+    const res = await axios.get(`${apiUrl}api/profile/list`, {
+      headers: {
+        Authorization: `Bearer ${cookie.Bearer}`,
+      },
+    });
+    return res.data;
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -82,6 +194,9 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getUser.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
     builder.addCase(postEmail.fulfilled, (state, action) => {
       state.isEmail = true;
       state.isNotEmail = false;
@@ -98,6 +213,23 @@ export const authSlice = createSlice({
       state.message = action.payload;
       state.successOrFailure = false;
     });
+    builder.addCase(createProfile.fulfilled, (state, action) => {
+      state.myProf = action.payload;
+    });
+    builder.addCase(getMyProfile.fulfilled, (state, action) => {
+      state.myProf = action.payload;
+    });
+    builder.addCase(getProfiles.fulfilled, (state, action) => {
+      state.profiles = action.payload;
+    });
+    builder.addCase(updateProfile.fulfilled, (state, action) => {
+      state.myProf = action.payload;
+      state.profiles = state.profiles.map((prof) =>
+        prof.id === action.payload.id ? action.payload : prof
+      );
+      state.message = action.payload.message;
+      state.successOrFailure = true;
+    });
   },
 });
 
@@ -108,6 +240,8 @@ export const selectIsSignIn = (state: RootState) => state.auth.signIn;
 export const selectIsNotEmail = (state: RootState) => state.auth.isNotEmail;
 export const selectIsEmail = (state: RootState) => state.auth.isEmail;
 export const selectUserId = (state: RootState) => state.auth.user.id;
+export const selectProfile = (state: RootState) => state.auth.myProf;
+export const selectProfiles = (state: RootState) => state.auth.profiles;
 export const selectMessage = (state: RootState) => state.auth.message;
 export const selectSuccessOrFailure = (state: RootState) =>
   state.auth.successOrFailure;

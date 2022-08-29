@@ -6,6 +6,7 @@ import EmailPost from './templates/auth/EmailPost';
 import PasswordReset from './templates/auth/PasswordReset';
 import SignIn from './templates/auth/SignIn';
 import SignUp from './templates/auth/SignUp';
+import Profile from './templates/profile/Profile';
 import TestPage from './TestPage';
 
 const Router: React.VFC = () => {
@@ -17,6 +18,7 @@ const Router: React.VFC = () => {
         <Route exact path="/signin" component={SignIn} />
         <Route exact path="/reset" component={EmailPost} />
         <Route path={'/password/reset(/?token=)?'} component={PasswordReset} />
+        <Route path="/profile(/:id)?" component={Profile} />
       </Switch>
       <Footer />
     </BrowserRouter>
