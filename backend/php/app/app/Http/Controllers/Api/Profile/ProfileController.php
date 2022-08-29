@@ -19,8 +19,13 @@ class ProfileController extends Controller
 
   public function create(Request $request)
   {
-    $valid_age = $request->validate([
-      'age' => 'integer|between:1,100',
+    $request->validate([
+      'name' => 'required | string',
+      'age' => 'required | integer | between:0,100',
+      'job' =>  'required | string',
+      'income' =>  'required | string',
+      'composition' =>  'required | string',
+      'body' =>  'required | string | max:150'
     ]);
 
     if (!empty($request->img)) {
@@ -48,12 +53,12 @@ class ProfileController extends Controller
   public function update(Request $request, $id)
   {
     $request->validate([
-      'name' => ['required', 'string'],
-      'age' => ['required', 'integer'],
-      'job' => ['required', 'string'],
-      'income' => ['required', 'string'],
-      'composition' => ['required', 'string'],
-      'body' => ['required', 'string', 'max:150'],
+      'name' => 'required | string',
+      'age' => 'required | integer | between:0,100',
+      'job' =>  'required | string',
+      'income' =>  'required | string',
+      'composition' =>  'required | string',
+      'body' =>  'required | string | max:150'
     ]);
 
     $img = $request->img;
