@@ -44,6 +44,10 @@ class User extends Authenticatable
     'email_verified_at' => 'datetime',
   ];
 
+  public $incrementing = false;
+
+  protected $keyType = 'string';
+
   public function sendPasswordResetNotification($token)
   {
     $this->notify(new PasswordResetNotification($token));
@@ -54,5 +58,10 @@ class User extends Authenticatable
     static::creating(function (User $model) {
       empty($model->id) && $model->id = Str::uuid();
     });
+  }
+
+  public function profile()
+  {
+    return $this->hasOne(Profile::class);
   }
 }
