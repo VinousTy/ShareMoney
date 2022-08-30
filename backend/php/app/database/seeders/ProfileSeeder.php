@@ -16,9 +16,11 @@ class ProfileSeeder extends Seeder
    */
   public function run()
   {
+    $user_id = User::select('id')->get();
+
     DB::table('profiles')->insert([
       [
-        'id' => (string)Str::uuid(),
+        'id' => Str::uuid(),
         'name' => 'ゲストユーザー',
         'age' => 20,
         'job' => 'その他',
@@ -26,7 +28,7 @@ class ProfileSeeder extends Seeder
         'composition' => 'その他',
         'body' =>  'ゲストユーザーとしてログインしています。ゲストユーザーのため、各種投稿やユーザー情報の変更等の一部機能の使用は制限されております。',
         'img' => '',
-        'user_id' => '8f2ce26a-8923-467c-b844-fae0bfa1b20d'
+        'user_id' => $user_id[0]->id,
       ],
     ]);
   }

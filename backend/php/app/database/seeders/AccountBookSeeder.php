@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class UserSeeder extends Seeder
+class AccountBookSeeder extends Seeder
 {
   /**
    * Run the database seeds.
@@ -16,12 +16,14 @@ class UserSeeder extends Seeder
    */
   public function run()
   {
-    DB::table('users')->insert([
+    $user_id = User::select('id')->get();
+
+    DB::table('account_books')->insert([
       [
         'id' => Str::uuid(),
-        'email' => 'guest@example.com',
-        'password' => Hash::make(env('GUEST_PASSWORD')),
-        'created_at' => '2022/08/07 14:09:10'
+        'date' => '2022/08/21 14:09:10',
+        'monthly_income' => 300000,
+        'user_id' => $user_id[0]->id
       ],
     ]);
   }
