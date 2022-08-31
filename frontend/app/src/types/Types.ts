@@ -90,6 +90,9 @@ export interface PROFILE_UPDATE {
 
 export interface LAYOUT_STATE {
   isDrawer: boolean;
+  // isModal: boolean;
+  isDeleteModal: boolean;
+  isPostModal: boolean;
 }
 
 export interface ACCOUNTBOOK_STATE {
@@ -143,6 +146,14 @@ export interface UPDATE_ACCOUNT_BOOK {
   id: string;
   date: string;
   monthly_income: number;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface DELETE_ACCOUNT_BOOK {
+  id: number;
+  date: any;
   cookie: {
     [x: string]: string;
   };
