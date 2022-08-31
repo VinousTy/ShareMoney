@@ -23,6 +23,8 @@ import {
 } from '../../features/layout/layoutSlice';
 import Modals from '../modals/Modals';
 import { deleteAccountBook } from '../../features/accountBook/accountBookSlice';
+import PieChart from '../chart/PieChart';
+import useMedia from 'use-media';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -125,6 +127,7 @@ const HouseholdBooksList = (props: PROPS) => {
     [path, setPath] = useState(''),
     [tabIndex, setTabIndex] = useState(0);
   const history = useHistory();
+  const isWide = useMedia({ maxWidth: '768px' });
 
   let sortCost = [...props.costs];
 
@@ -228,6 +231,9 @@ const HouseholdBooksList = (props: PROPS) => {
         )}
       </div>
       <div className="md:flex md:justify-start">
+        <div className={`${isWide && 'mx-auto'} w-9/12 md:w-7/12`}>
+          <PieChart expenseItem={expenseItem} costs={costs} />
+        </div>
         <div className="text-center mt-4 text-2xl md:mt-20 lg:mt-28">
           {asset === 0 ? (
             <></>
