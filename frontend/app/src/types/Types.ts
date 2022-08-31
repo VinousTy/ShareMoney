@@ -84,3 +84,45 @@ export interface PROFILE_UPDATE {
 export interface LAYOUT_STATE {
   isDrawer: boolean;
 }
+
+export interface ACCOUNTBOOK_STATE {
+  accountBook: {
+    id: string;
+    date: string;
+    user_id: number;
+    monthly_income: number;
+    expenses: {
+      expenseItem: string;
+      cost: number;
+    }[];
+    likes: string[];
+    bookmarks: string[];
+  }[];
+  message: string;
+  successOrFailure: boolean;
+}
+
+export interface CREATE_ACCOUNT_BOOK {
+  date: string;
+  monthly_income: number;
+  cookie: {
+    [x: string]: string;
+  };
+  expenses: any;
+}
+
+export interface UPDATE_ACCOUNT_BOOK {
+  id: string;
+  date: string;
+  monthly_income: number;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface DELETE_COST {
+  id: number;
+  cookie: {
+    [x: string]: string;
+  };
+}
