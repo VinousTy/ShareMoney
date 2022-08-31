@@ -17,7 +17,7 @@ class ExpenseController extends Controller
         Expense::create([
           "expenseItem" => $expense['expenseItem'],
           "cost" => (int)$expense['cost'],
-          "account_book_id" => (int)$request['account_book_id'],
+          "account_book_id" => $request['account_book_id'],
         ]);
       }
     }
