@@ -8,6 +8,7 @@ import {
   UPDATE_ACCOUNT_BOOK,
   DELETE_COST,
   DATE,
+  DELETE_ACCOUNT_BOOK,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -149,6 +150,24 @@ export const updateAccountBook = createAsyncThunk(
   }
 );
 
+export const deleteAccountBook = createAsyncThunk(
+  'delete/accountBook',
+  async (data: DELETE_ACCOUNT_BOOK) => {
+    const result = data.date.slice(0, 7);
+    const res = await axios.post(
+      `${apiUrl}api/destroy/accountbook/${data.id}`,
+      { id: data.id, date: result },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const postCosts = createAsyncThunk('post/costs', async (data: any) => {
   console.log(data);
   const uploadData = new FormData();
@@ -233,6 +252,15 @@ export const accountBookSlice = createSlice({
       );
       state.successOrFailure = true;
       state.message = action.payload;
+    });
+    builder.addCase(deleteAccountBook.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accountBookChart: action.payload,
+        showMessage: true,
+        message: '削除が完了しました',
+        successOrFailure: true,
+      };
     });
   },
 });

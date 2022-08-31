@@ -15,6 +15,14 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import clsx from 'clsx';
 import { useCookies } from 'react-cookie';
 import { IoMdWallet } from 'react-icons/io';
+import { AppDispatch } from '../../app/store';
+import { useDispatch } from 'react-redux';
+import {
+  isDeleteModalOpen,
+  isPostModalOpen,
+} from '../../features/layout/layoutSlice';
+import Modals from '../modals/Modals';
+import { deleteAccountBook } from '../../features/accountBook/accountBookSlice';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -86,7 +94,7 @@ interface ITEM {
 }
 
 interface DELETE {
-  id: number;
+  id: string;
   date: any;
   cookie: {
     [x: string]: string;
@@ -95,6 +103,7 @@ interface DELETE {
 
 const HouseholdBooksList = (props: PROPS) => {
   const classes = useStyles();
+  const dispatch: AppDispatch = useDispatch();
   const [cookies] = useCookies();
   const [sortCosts, setSortCosts] = useState<Array<COSTS>>([]),
     [costs, setCosts] = useState<number[]>([]),
@@ -102,6 +111,18 @@ const HouseholdBooksList = (props: PROPS) => {
     [asset, setAsset] = useState(0),
     [index, setIndex] = useState(0),
     [open, setOpen] = useState(false),
+    [deleteOpen, setDeleteOpen] = useState(false),
+    [shareOpen, setShareOpen] = useState(false),
+    [deletePacket, setDeletePacket] = useState<DELETE>({
+      id: '',
+      date: '',
+      cookie: cookies,
+    }),
+    [title, setTitle] = useState(''),
+    [subText, setSubText] = useState(''),
+    [body, setBody] = useState(''),
+    [btnText, setBtnText] = useState(''),
+    [path, setPath] = useState(''),
     [tabIndex, setTabIndex] = useState(0);
   const history = useHistory();
 
@@ -130,8 +151,57 @@ const HouseholdBooksList = (props: PROPS) => {
     setIndex(i);
   };
 
+  const deleteHistory = async (book: ITEM) => {
+    setDeleteOpen(true);
+    setDeletePacket({
+      id: book.id,
+      date: book.date,
+      cookie: cookies,
+    });
+    setTitle('履歴削除');
+    setBody('本当に削除してもよろしいですか');
+    setSubText('(削除すると元に戻せません)');
+    setBtnText('削除');
+    setPath('/mypage');
+    await dispatch(isDeleteModalOpen());
+  };
+
+  const shareHistory = async () => {
+    setShareOpen(true);
+    setTitle('公開');
+    setBody('当月の家計簿を公開します');
+    setSubText('(既に当月の家計簿が公開済みの場合は更新されます)');
+    setBtnText('OK');
+    setPath('/accountBook/list');
+    await dispatch(isPostModalOpen());
+  };
+
   return (
     <div>
+      {deleteOpen && (
+        <Modals
+          type={'delete'}
+          title={title}
+          body={body}
+          subText={subText}
+          btnText={btnText}
+          func={deleteAccountBook}
+          packet={deletePacket}
+          path={path}
+        />
+      )}
+      {shareOpen && (
+        <Modals
+          type={'share'}
+          title={title}
+          body={body}
+          subText={subText}
+          btnText={btnText}
+          func={''}
+          packet={deletePacket}
+          path={path}
+        />
+      )}
       <div className="text-center mt-2 md:flex md:items-center md:justify-center">
         {asset === 0 ? (
           <></>
@@ -259,7 +329,10 @@ const HouseholdBooksList = (props: PROPS) => {
                   <></>
                 ) : (
                   <div className="my-2">
-                    <button className={styles.button}>
+                    <button
+                      className={styles.button}
+                      onClick={() => shareHistory()}
+                    >
                       当月の家計簿をシェア
                     </button>
                   </div>
@@ -323,7 +396,10 @@ const HouseholdBooksList = (props: PROPS) => {
                             <Grid>
                               <ListItemText>
                                 <div className="ml-4">
-                                  <button className="text-red-500 underline ... cursor-pointer hover:text-red-400 transition-all">
+                                  <button
+                                    className="text-red-500 underline ... cursor-pointer hover:text-red-400 transition-all"
+                                    onClick={() => deleteHistory(book)}
+                                  >
                                     削除
                                   </button>
                                 </div>
@@ -395,7 +471,10 @@ const HouseholdBooksList = (props: PROPS) => {
                     <></>
                   ) : (
                     <div className="my-4">
-                      <button className={styles.button}>
+                      <button
+                        className={styles.button}
+                        onClick={() => shareHistory()}
+                      >
                         当月の家計簿をシェア
                       </button>
                     </div>
