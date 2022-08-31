@@ -7,6 +7,7 @@ import {
   CREATE_ACCOUNT_BOOK,
   UPDATE_ACCOUNT_BOOK,
   DELETE_COST,
+  DATE,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -28,6 +29,35 @@ const initialState: ACCOUNTBOOK_STATE = {
       bookmarks: [''],
     },
   ],
+  accountBookChart: {
+    accountBook: [
+      {
+        id: '',
+        date: '',
+        monthly_income: 0,
+        user_id: 0,
+        expenses: [
+          {
+            expenseItem: '',
+            cost: 0,
+          },
+        ],
+        likes: [''],
+        bookmarks: [''],
+      },
+    ],
+    costs: [
+      {
+        expenseItem: '',
+        cost: 0,
+      },
+    ],
+    totalCost: [
+      {
+        cost: 0,
+      },
+    ],
+  },
   message: '',
   successOrFailure: true,
 };
@@ -67,6 +97,33 @@ export const getMyAccountBook = createAsyncThunk(
         Authorization: `Bearer ${cookie.Bearer}`,
       },
     });
+    return res.data;
+  }
+);
+
+export const getSelectDateAccountBook = createAsyncThunk(
+  'edit/accountBook',
+  async (data: DATE) => {
+    const pad2 = (n: number) => {
+      return n < 10 ? '0' + n : n;
+    };
+    const str =
+      data.date.getFullYear().toString() +
+      '-' +
+      pad2(data.date.getMonth() + 1) +
+      '-' +
+      pad2(data.date.getDate());
+
+    const result = str.substring(0, 7);
+    const res = await axios.post(
+      `${apiUrl}api/edit/accountbook`,
+      { date: result },
+      {
+        headers: {
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
     return res.data;
   }
 );
@@ -159,6 +216,12 @@ export const accountBookSlice = createSlice({
         accountBook: action.payload,
       };
     });
+    builder.addCase(getSelectDateAccountBook.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accountBookChart: action.payload,
+      };
+    });
     builder.addCase(createAccountBook.fulfilled, (state, action) => {
       state.accountBook = action.payload;
       state.successOrFailure = true;
@@ -178,6 +241,8 @@ export const { editAccountBookMessage } = accountBookSlice.actions;
 
 export const selectAccountBook = (state: RootState) =>
   state.accountBook.accountBook;
+export const selectAccountBookChart = (state: RootState) =>
+  state.accountBook.accountBookChart;
 export const selectAccountBookMessage = (state: RootState) =>
   state.accountBook.message;
 export const selectAccountBookSuccessOrFailure = (state: RootState) =>

@@ -14,6 +14,8 @@ module.exports = {
         'button-color-orange-shadow': '#fa8d35',
         'green': 'rgb(0, 185, 46)',
         'amber': 'rgb(254 243 199)',
+        'gold': '#a37f06',
+        'thin-gold': '#c1ab05',
       },
     },
   },
