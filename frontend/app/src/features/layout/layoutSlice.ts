@@ -3,8 +3,8 @@ import { RootState } from '../../app/store';
 import { LAYOUT_STATE } from '../../types/Types';
 
 const initialState: LAYOUT_STATE = {
+  isLoading: false,
   isDrawer: false,
-  // isModal: false,
   isDeleteModal: false,
   isPostModal: false,
 };
@@ -13,15 +13,15 @@ export const layoutSlice = createSlice({
   name: 'layout',
   initialState,
   reducers: {
+    isLoadingStart(state) {
+      state.isLoading = true;
+    },
+    isLoadingEnd(state) {
+      state.isLoading = false;
+    },
     isToggleDrawer(state) {
       state.isDrawer = !state.isDrawer;
     },
-    // isModalOpen(state) {
-    //   state.isModal = true;
-    // },
-    // isModalClose(state) {
-    //   state.isModal = false;
-    // },
     isDeleteModalOpen(state) {
       state.isDeleteModal = true;
     },
@@ -38,17 +38,17 @@ export const layoutSlice = createSlice({
 });
 
 export const {
+  isLoadingStart,
+  isLoadingEnd,
   isToggleDrawer,
-  // isModalOpen,
-  // isModalClose,
   isDeleteModalOpen,
   isDeleteModalClose,
   isPostModalOpen,
   isPostModalClose,
 } = layoutSlice.actions;
 
+export const selectIsLoading = (state: RootState) => state.layout.isLoading;
 export const selectIsDrawer = (state: RootState) => state.layout.isDrawer;
-// export const selectIsModal = (state: RootState) => state.layout.isModal;
 export const selectIsDeleteModal = (state: RootState) =>
   state.layout.isDeleteModal;
 export const selectIsPostModal = (state: RootState) => state.layout.isPostModal;
