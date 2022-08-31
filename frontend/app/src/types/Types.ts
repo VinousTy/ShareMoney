@@ -7,6 +7,13 @@ export interface COOKIE {
   [x: string]: string;
 }
 
+export interface DATE {
+  date: any;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
 export interface AUTH_STATE {
   signIn: boolean;
   isEmail: boolean;
@@ -98,6 +105,27 @@ export interface ACCOUNTBOOK_STATE {
     likes: string[];
     bookmarks: string[];
   }[];
+  accountBookChart: {
+    accountBook: {
+      id: string;
+      date: string;
+      user_id: number;
+      monthly_income: number;
+      expenses: {
+        expenseItem: string;
+        cost: number;
+      }[];
+      likes: string[];
+      bookmarks: string[];
+    }[];
+    costs: {
+      expenseItem: string;
+      cost: number;
+    }[];
+    totalCost: {
+      cost: number;
+    }[];
+  };
   message: string;
   successOrFailure: boolean;
 }
