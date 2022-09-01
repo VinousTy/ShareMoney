@@ -39,7 +39,32 @@ describe('MyPage Components Test Cases', () => {
       },
     });
   });
+
   Modal.setAppElement = () => null;
+
+  it('Should render Loading Component before data is retrieved', async () => {
+    const history = createMemoryHistory();
+    history.push('/mypage');
+
+    global.matchMedia =
+      global.matchMedia ||
+      function () {
+        return {
+          addListener: jest.fn(),
+          removeListener: jest.fn(),
+        };
+      };
+
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <MyPage />
+        </Router>
+      </Provider>
+    );
+
+    expect(screen.getByTestId('loading')).toBeTruthy();
+  });
 
   it('Should check if Mypage is rendering all elements correctly', async () => {
     const history = createMemoryHistory();

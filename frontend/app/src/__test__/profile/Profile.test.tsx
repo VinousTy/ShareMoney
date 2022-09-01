@@ -6,6 +6,7 @@ import { setupServer } from 'msw/node';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../../features/auth/authSlice';
+import layoutReducer from '../../features/layout/layoutSlice';
 import { createMemoryHistory } from 'history';
 import Profile from '../../templates/profile/Profile';
 import { Router } from 'react-router-dom';
@@ -31,6 +32,7 @@ describe('Profile Components Test Cases', () => {
     store = configureStore({
       reducer: {
         auth: authReducer,
+        layout: layoutReducer,
       },
     });
   });
