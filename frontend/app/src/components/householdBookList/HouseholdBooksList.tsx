@@ -19,10 +19,19 @@ import { AppDispatch } from '../../app/store';
 import { useDispatch } from 'react-redux';
 import {
   isDeleteModalOpen,
+  isLoadingEnd,
+  isLoadingStart,
   isPostModalOpen,
 } from '../../features/layout/layoutSlice';
 import Modals from '../modals/Modals';
-import { deleteAccountBook } from '../../features/accountBook/accountBookSlice';
+import {
+  createPostAccountBook,
+  createPostCost,
+  deleteAccountBook,
+  deletePostCost,
+  updatePostAccountBook,
+  updatePostCost,
+} from '../../features/accountBook/accountBookSlice';
 import PieChart from '../chart/PieChart';
 import useMedia from 'use-media';
 
@@ -66,6 +75,27 @@ interface PROPS {
     cost: number;
   }[];
   totalCost: number;
+  postAccountBook: {
+    accountBook: {
+      id: string;
+      date: string;
+      user_id: number;
+      monthly_income: number;
+      expenses: {
+        expenseItem: string;
+        cost: number;
+      }[];
+      likes: string[];
+      bookmarks: string[];
+    }[];
+    costs: {
+      expenseItem: string;
+      cost: number;
+    }[];
+    totalCost: {
+      cost: number;
+    }[];
+  };
 }
 
 interface COSTS {
@@ -179,6 +209,92 @@ const HouseholdBooksList = (props: PROPS) => {
     await dispatch(isPostModalOpen());
   };
 
+  const createShareAccountBook = async () => {
+    const packet = {
+      date: props.accountBook[0]?.date,
+      monthly_income: props.monthlyIncome,
+      user_id: props.accountBook[0]?.user_id,
+      cookie: cookies,
+      expenses: props.costs,
+    };
+
+    const updatePacket = {
+      id: props.postAccountBook.accountBook[0]?.id,
+      date: props.accountBook[0]?.date,
+      monthly_income: props.monthlyIncome,
+      user_id: props.accountBook[0]?.user_id,
+      cookie: cookies,
+      expenses: getCostDiff(),
+    };
+
+    const createPacketCost: PACKET = {
+      id: props.postAccountBook.accountBook[0]?.id,
+      cookie: cookies,
+      expenses: getCostDiff(),
+    };
+
+    const updatePacketCost: PACKET = {
+      id: props.postAccountBook.accountBook[0]?.id,
+      cookie: cookies,
+      expenses: [],
+    };
+
+    const deletePacketCost: PACKET = {
+      id: props.postAccountBook.accountBook[0]?.id,
+      cookie: cookies,
+      expenses: getPostAccountDiff(),
+    };
+
+    props.postAccountBook.costs?.filter((expense) => {
+      props.costs.forEach((cost) => {
+        if (cost.expenseItem === expense.expenseItem) {
+          updatePacketCost.expenses.push(cost);
+        }
+      });
+    });
+
+    function getCostDiff() {
+      const same = props.costs?.filter((cost) => {
+        return props.postAccountBook.costs?.find(
+          (expense) => expense.expenseItem === cost.expenseItem
+        );
+      });
+      const sameIds = same.map((_item) => _item.expenseItem);
+
+      return props.costs.filter((cost) => {
+        return !sameIds.includes(cost.expenseItem);
+      });
+    }
+
+    function getPostAccountDiff() {
+      const same = props.costs?.filter((cost) => {
+        return props.postAccountBook.costs?.find(
+          (expense) => expense.expenseItem === cost.expenseItem
+        );
+      });
+      const sameIds = same.map((_item) => _item.expenseItem);
+
+      return props.postAccountBook.costs.filter((cost) => {
+        return !sameIds.includes(cost.expenseItem);
+      });
+    }
+
+    if (props.postAccountBook.accountBook.length === 0) {
+      await dispatch(isLoadingStart());
+      await dispatch(createPostAccountBook(packet));
+      await dispatch(isLoadingEnd());
+      await history.push('/accountBook/list');
+    } else {
+      await dispatch(isLoadingStart());
+      await dispatch(updatePostAccountBook(updatePacket));
+      await dispatch(createPostCost(createPacketCost));
+      await dispatch(updatePostCost(updatePacketCost));
+      await dispatch(deletePostCost(deletePacketCost));
+      await dispatch(isLoadingEnd());
+      await history.push('/accountBook/list');
+    }
+  };
+
   return (
     <div>
       {deleteOpen && (
@@ -200,7 +316,7 @@ const HouseholdBooksList = (props: PROPS) => {
           body={body}
           subText={subText}
           btnText={btnText}
-          func={''}
+          func={createShareAccountBook}
           packet={deletePacket}
           path={path}
         />
