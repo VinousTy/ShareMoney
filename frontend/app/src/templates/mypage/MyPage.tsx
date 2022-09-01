@@ -9,8 +9,10 @@ import {
 } from '../../features/auth/authSlice';
 import {
   getSelectDateAccountBook,
+  postAccountBookDetail,
   selectAccountBookChart,
   selectAccountBookMessage,
+  selectPostMyAccountBook,
 } from '../../features/accountBook/accountBookSlice';
 import ProfileList from '../../components/profileList/ProfileList';
 import HouseholdBooksList from '../../components/householdBookList/HouseholdBooksList';
@@ -34,7 +36,8 @@ const MyPage: React.FC = () => {
     accountBook = useSelector(selectAccountBookChart),
     isLoading = useSelector(selectIsLoading),
     authMessage = useSelector(selectMessage),
-    accountBookMessage = useSelector(selectAccountBookMessage);
+    accountBookMessage = useSelector(selectAccountBookMessage),
+    postAccountBook = useSelector(selectPostMyAccountBook);
   const [cookies, setCookie] = useCookies();
   const history = useHistory();
 
@@ -59,8 +62,15 @@ const MyPage: React.FC = () => {
       dispatch(isLoadingStart());
       if (cookies) {
         await dispatch(getSelectDateAccountBook(packet));
+        await dispatch(
+          postAccountBookDetail({
+            user_id: 0,
+            date: date,
+            cookie: cookies,
+          })
+        );
+        dispatch(isLoadingEnd());
       }
-      dispatch(isLoadingEnd());
     };
     fetchBootLoader();
   }, [dispatch, date]);
@@ -161,6 +171,7 @@ const MyPage: React.FC = () => {
                 monthlyIncome={monthlyIncome}
                 costs={accountBook?.costs}
                 totalCost={Number(accountBook?.totalCost[0].cost)}
+                postAccountBook={postAccountBook}
               />
             </div>
           </div>
