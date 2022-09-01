@@ -89,8 +89,8 @@ export interface PROFILE_UPDATE {
 }
 
 export interface LAYOUT_STATE {
+  isLoading: boolean;
   isDrawer: boolean;
-  // isModal: boolean;
   isDeleteModal: boolean;
   isPostModal: boolean;
 }
