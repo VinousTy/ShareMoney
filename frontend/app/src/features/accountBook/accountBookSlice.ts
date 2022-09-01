@@ -9,6 +9,9 @@ import {
   DELETE_COST,
   DATE,
   DELETE_ACCOUNT_BOOK,
+  DETAIL_POST_ACCOUNT_BOOK_DATA,
+  POST_ACCOUNT_BOOK,
+  UPDATE_POST_ACCOUNT_BOOK,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -31,6 +34,74 @@ const initialState: ACCOUNTBOOK_STATE = {
     },
   ],
   accountBookChart: {
+    accountBook: [
+      {
+        id: '',
+        date: '',
+        monthly_income: 0,
+        user_id: 0,
+        expenses: [
+          {
+            expenseItem: '',
+            cost: 0,
+          },
+        ],
+        likes: [''],
+        bookmarks: [''],
+      },
+    ],
+    costs: [
+      {
+        expenseItem: '',
+        cost: 0,
+      },
+    ],
+    totalCost: [
+      {
+        cost: 0,
+      },
+    ],
+  },
+  accountBooks: {
+    accountBook: [
+      {
+        id: 0,
+        date: '',
+        user_id: 0,
+        monthly_income: 0,
+        likes: [
+          {
+            id: 0,
+            user_id: 0,
+            post_account_book_id: 0,
+          },
+        ],
+        bookmarks: [
+          {
+            id: 0,
+            user_id: 0,
+            post_account_book_id: 0,
+          },
+        ],
+      },
+    ],
+    costs: [
+      {
+        date: '',
+        expenseItem: '',
+        cost: 0,
+        user_id: 0,
+      },
+    ],
+    income: [
+      {
+        date: '',
+        monthly_income: 0,
+        user_id: 0,
+      },
+    ],
+  },
+  postMyAccountBook: {
     accountBook: [
       {
         id: '',
@@ -220,6 +291,164 @@ export const deleteCost = createAsyncThunk(
   }
 );
 
+export const getAccountBookList = createAsyncThunk(
+  'get/accountBookList',
+  async (cookie: COOKIE) => {
+    const res = await axios.get(`${apiUrl}api/accountbook/list`, {
+      headers: {
+        Authorization: `Bearer ${cookie.Bearer}`,
+      },
+    });
+    return res.data;
+  }
+);
+
+export const createPostAccountBook = createAsyncThunk(
+  'share/accountBook',
+  async (data: POST_ACCOUNT_BOOK) => {
+    const uploadData = new FormData();
+    const result = data.date.slice(0, 7);
+    uploadData.append('date', result);
+    uploadData.append('monthly_income', String(data.monthly_income));
+    uploadData.append('user_id', String(data.user_id));
+
+    const res = await axios
+      .post(`${apiUrl}api/create/postAccountBook`, uploadData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.post_account_book.id);
+        uploadData.append('expenses', JSON.stringify(data.expenses));
+        uploadData.append(
+          'post_account_book_id',
+          res.data.post_account_book.id
+        );
+        axios.post(`${apiUrl}api/create/postExpense`, uploadData, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        });
+      });
+  }
+);
+
+export const updatePostAccountBook = createAsyncThunk(
+  'shareUpdate/accountBook',
+  async (data: UPDATE_POST_ACCOUNT_BOOK) => {
+    const uploadData = new FormData();
+    const result = data.date.slice(0, 7);
+    uploadData.append('date', result);
+    uploadData.append('monthly_income', String(data.monthly_income));
+    uploadData.append('user_id', String(data.user_id));
+
+    const res = await axios.post(
+      `${apiUrl}api/update/postAccountBook/${data.id}`,
+      uploadData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const createPostCost = createAsyncThunk(
+  'create/postCosts',
+  async (data: any) => {
+    const uploadData = new FormData();
+    uploadData.append('expenses', JSON.stringify(data.expenses));
+    uploadData.append('post_account_book_id', data.id);
+    const res = await axios.post(
+      `${apiUrl}api/create/postExpense`,
+      uploadData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const updatePostCost = createAsyncThunk(
+  'update/postCosts',
+  async (data: any) => {
+    const uploadData = new FormData();
+    uploadData.append('_method', 'put');
+    uploadData.append('expenses', JSON.stringify(data.expenses));
+    uploadData.append('post_account_book_id', data.id);
+    const res = await axios.post(
+      `${apiUrl}api/update/postExpense/${data.id}`,
+      uploadData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const deletePostCost = createAsyncThunk(
+  'update/postCosts',
+  async (data: any) => {
+    const uploadData = new FormData();
+    uploadData.append('expenses', JSON.stringify(data.expenses));
+    uploadData.append('post_account_book_id', data.id);
+    const res = await axios.post(
+      `${apiUrl}api/destroy/postExpense/${data.id}`,
+      uploadData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const postAccountBookDetail = createAsyncThunk(
+  'post/postAccountBookDetail',
+  async (data: DETAIL_POST_ACCOUNT_BOOK_DATA) => {
+    const pad2 = (n: number) => {
+      return n < 10 ? '0' + n : n;
+    };
+    const str =
+      data.date.getFullYear().toString() +
+      '-' +
+      pad2(data.date.getMonth() + 1) +
+      '-' +
+      pad2(data.date.getDate());
+
+    const result = str.substring(0, 7);
+    const res = await axios.post(
+      `${apiUrl}api/detail/postAccountBook`,
+      {
+        date: result,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const accountBookSlice = createSlice({
   name: 'accountBook',
   initialState,
@@ -262,6 +491,29 @@ export const accountBookSlice = createSlice({
         successOrFailure: true,
       };
     });
+    builder.addCase(getAccountBookList.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accountBooks: action.payload,
+      };
+    });
+    builder.addCase(createPostAccountBook.fulfilled, (state, action) => {
+      state.successOrFailure = true;
+      state.message = '家計簿をシェアしました';
+    });
+    builder.addCase(updatePostAccountBook.fulfilled, (state, action) => {
+      state.accountBook = state.accountBook.map((accountId) =>
+        accountId.id === action.payload.id ? action.payload : accountId
+      );
+      state.successOrFailure = true;
+      state.message = action.payload;
+    });
+    builder.addCase(postAccountBookDetail.fulfilled, (state, action) => {
+      return {
+        ...state,
+        postMyAccountBook: action.payload,
+      };
+    });
   },
 });
 
@@ -271,6 +523,10 @@ export const selectAccountBook = (state: RootState) =>
   state.accountBook.accountBook;
 export const selectAccountBookChart = (state: RootState) =>
   state.accountBook.accountBookChart;
+export const selectAccountBooks = (state: RootState) =>
+  state.accountBook.accountBooks;
+export const selectPostMyAccountBook = (state: RootState) =>
+  state.accountBook.postMyAccountBook;
 export const selectAccountBookMessage = (state: RootState) =>
   state.accountBook.message;
 export const selectAccountBookSuccessOrFailure = (state: RootState) =>

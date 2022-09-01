@@ -38,7 +38,10 @@ class PostAccountBookController extends Controller
       'user_id' => Auth::id(),
     ]);
 
-    return response()->json('家計簿をシェアしました', 200);
+    return response()->json([
+      'message' => '家計簿をシェアしました',
+      'post_account_book' => $postAccountBook
+    ], 200);
   }
 
   public function detail(Request $request)

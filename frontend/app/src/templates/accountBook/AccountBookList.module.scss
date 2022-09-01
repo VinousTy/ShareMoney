@@ -1,0 +1,40 @@
+.search_container {
+  box-sizing: border-box;
+  position: relative;
+  border: 1px solid #999;
+  padding: 3px 10px;
+  margin: 15px auto 0;
+  border-radius: 20px;
+  height: 2.3em;
+  display: flex;
+  justify-items: center;
+  justify-content: space-between;
+}
+.search_container input[type='text'] {
+  background-color: transparent;
+  width: 90%;
+  color: black;
+  border: none;
+  height: 2em;
+}
+.search_container input[type='text']:focus {
+  outline: 0;
+}
+.serach_icon {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: #333;
+  width: 1.3em;
+  height: 1.3em;
+  margin-top: 4px;
+  margin-right: 3px;
+  outline: none;
+}
+
+.flex_container::after {
+  content: '';
+  display: block;
+  width: 50%;
+  height: 0;
+}

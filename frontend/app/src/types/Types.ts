@@ -129,6 +129,56 @@ export interface ACCOUNTBOOK_STATE {
       cost: number;
     }[];
   };
+  accountBooks: {
+    accountBook: {
+      id: number;
+      date: string;
+      user_id: number;
+      monthly_income: number;
+      likes: {
+        id: number;
+        user_id: number;
+        post_account_book_id: number;
+      }[];
+      bookmarks: {
+        id: number;
+        user_id: number;
+        post_account_book_id: number;
+      }[];
+    }[];
+    costs: {
+      date: string;
+      expenseItem: string;
+      cost: number;
+      user_id: number;
+    }[];
+    income: {
+      date: string;
+      monthly_income: number;
+      user_id: number;
+    }[];
+  };
+  postMyAccountBook: {
+    accountBook: {
+      id: string;
+      date: string;
+      user_id: number;
+      monthly_income: number;
+      expenses: {
+        expenseItem: string;
+        cost: number;
+      }[];
+      likes: string[];
+      bookmarks: string[];
+    }[];
+    costs: {
+      expenseItem: string;
+      cost: number;
+    }[];
+    totalCost: {
+      cost: number;
+    }[];
+  };
   message: string;
   successOrFailure: boolean;
 }
@@ -161,6 +211,35 @@ export interface DELETE_ACCOUNT_BOOK {
 
 export interface DELETE_COST {
   id: number;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface POST_ACCOUNT_BOOK {
+  date: string;
+  monthly_income: number;
+  user_id: number;
+  expenses: any;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface UPDATE_POST_ACCOUNT_BOOK {
+  id: string;
+  date: string;
+  monthly_income: number;
+  user_id: number;
+  expenses: any;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface DETAIL_POST_ACCOUNT_BOOK_DATA {
+  user_id: number;
+  date: any;
   cookie: {
     [x: string]: string;
   };
