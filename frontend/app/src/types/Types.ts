@@ -244,3 +244,17 @@ export interface DETAIL_POST_ACCOUNT_BOOK_DATA {
     [x: string]: string;
   };
 }
+
+export interface LIKE_BOOKMARK {
+  post_account_book_id: number;
+  current: {
+    id: number;
+    user_id: number;
+    post_account_book_id: number;
+  }[];
+  income: number;
+  push_icon_user_id: number;
+  cookie: {
+    [x: string]: string;
+  };
+}
