@@ -4,6 +4,7 @@ import { AppDispatch } from '../../app/store';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getProfiles,
+  getUser,
   isSignIn,
   selectMessage,
 } from '../../features/auth/authSlice';
@@ -54,6 +55,7 @@ const AccountBookList: React.FC = () => {
         await dispatch(getProfiles(cookies));
         await dispatch(getProfiles(cookies));
         await dispatch(isSignIn());
+        await dispatch(getUser(cookies));
         await dispatch(getAccountBookList(cookies));
       }
       await dispatch(isLoadingEnd());

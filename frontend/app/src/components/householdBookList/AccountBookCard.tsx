@@ -13,6 +13,8 @@ import { BsBookmark } from 'react-icons/bs';
 import { BsBookmarkFill } from 'react-icons/bs';
 import useMedia from 'use-media';
 import PieChart from '../chart/PieChart';
+import { useCookies } from 'react-cookie';
+import { patchLiked } from '../../features/accountBook/accountBookSlice';
 
 interface PROPS {
   id: number;
@@ -49,6 +51,7 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
   const profiles = useSelector(selectProfiles);
   const isWide = useMedia({ maxWidth: '768px' });
   const history = useHistory();
+  const [cookies] = useCookies();
 
   let sortCost = [...props.costs];
 
@@ -85,6 +88,17 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
     }, 0);
     setTotalCost(totalCost);
   }, [costs]);
+
+  const handlerLiked = async () => {
+    const packet = {
+      post_account_book_id: props.id,
+      current: props.likes,
+      push_icon_user_id: loginUserId,
+      income: income,
+      cookie: cookies,
+    };
+    await dispatch(patchLiked(packet));
+  };
 
   return (
     <>
@@ -173,7 +187,10 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
               </div>
             </div>
             <div className="flex items-center w-full">
-              <div className="flex items-center border border-orange rounded-full cursor-pointer px-2 py-2 bg-header-menu shadow-2xl ml-6 mr-4 my-2">
+              <div
+                className="flex items-center border border-orange rounded-full cursor-pointer px-2 py-2 bg-header-menu shadow-2xl ml-6 mr-4 my-2"
+                onClick={() => handlerLiked()}
+              >
                 {props.likes?.some((like) => like.user_id === loginUserId) ? (
                   <AiFillLike className="text-red-400" />
                 ) : (
