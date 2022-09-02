@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\HouseHoldBook\AccountBookController;
+use App\Http\Controllers\Api\HouseHoldBook\BookmarkController;
 use App\Http\Controllers\Api\HouseHoldBook\ExpenseController;
 use App\Http\Controllers\Api\HouseHoldBook\LikeController;
 use App\Http\Controllers\Api\HouseHoldBook\PostAccountBookController;

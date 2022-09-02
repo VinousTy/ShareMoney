@@ -494,6 +494,52 @@ export const patchLiked = createAsyncThunk(
   }
 );
 
+export const patchBookmark = createAsyncThunk(
+  'post/bookmark',
+  async (data: LIKE_BOOKMARK) => {
+    const currentBookmarked = data.current;
+    const uploadData = new FormData();
+
+    let overlapped = false;
+    currentBookmarked.forEach((current) => {
+      if (current.user_id === data.push_icon_user_id) {
+        overlapped = true;
+      } else {
+        uploadData.append('bookmarked', String(current));
+      }
+    });
+
+    if (!overlapped) {
+      uploadData.append('user_id', String(data.push_icon_user_id));
+      uploadData.append(
+        'post_account_book_id',
+        String(data.post_account_book_id)
+      );
+
+      const res = await axios.post(`${apiUrl}api/bookmark`, uploadData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      });
+      return res.data;
+    }
+    uploadData.append('user_id', String(data.push_icon_user_id));
+    uploadData.append(
+      'post_account_book_id',
+      String(data.post_account_book_id)
+    );
+
+    const res = await axios.post(`${apiUrl}api/destroy/bookmark`, uploadData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${data.cookie.Bearer}`,
+      },
+    });
+    return res.data;
+  }
+);
+
 export const accountBookSlice = createSlice({
   name: 'accountBook',
   initialState,
@@ -560,6 +606,12 @@ export const accountBookSlice = createSlice({
       };
     });
     builder.addCase(patchLiked.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accountBooks: action.payload,
+      };
+    });
+    builder.addCase(patchBookmark.fulfilled, (state, action) => {
       return {
         ...state,
         accountBooks: action.payload,
