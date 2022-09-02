@@ -42,4 +42,9 @@ class PostAccountBook extends Model
   {
     return $this->hasMany(Like::class);
   }
+
+  public function bookmarks()
+  {
+    return $this->hasMany(Bookmark::class);
+  }
 }

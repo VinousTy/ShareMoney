@@ -3,27 +3,20 @@
 namespace App\Http\Controllers\Api\HouseHoldBook;
 
 use App\Http\Controllers\Controller;
-use App\Models\Like;
+use App\Models\Bookmark;
 use App\Models\PostAccountBook;
 use Illuminate\Http\Request;
 
-class LikeController extends Controller
+class BookmarkController extends Controller
 {
-  public function index()
+  public function bookmark(Request $request)
   {
-    $like = Like::all();
-    return response()->json($like, 200);
-  }
-
-  public function like(Request $request)
-  {
-    $like = Like::create([
+    Bookmark::create([
       'user_id' => $request->user_id,
       'post_account_book_id' => $request->post_account_book_id,
     ]);
 
-
-    $accountBook = PostAccountBook::with(['likes', 'bookmark'])
+    $accountBook = PostAccountBook::with(['likes', 'bookmarks'])
       ->get();
 
     $income = PostAccountBook::selectRaw('date, user_id, sum(monthly_income) as monthly_income')
@@ -45,10 +38,9 @@ class LikeController extends Controller
   public function destroy(Request $request)
   {
     $matchThese = ['user_id' => $request->user_id, 'post_account_book_id' => $request->post_account_book_id];
-    $like = Like::where($matchThese)->first();
+    $bookmark = Bookmark::where($matchThese)->first();
 
-    $like->delete();
-
+    $bookmark->delete();
     $accountBook = PostAccountBook::with(['likes', 'bookmarks'])
       ->get();
 
