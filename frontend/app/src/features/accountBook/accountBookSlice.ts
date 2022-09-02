@@ -12,6 +12,7 @@ import {
   DETAIL_POST_ACCOUNT_BOOK_DATA,
   POST_ACCOUNT_BOOK,
   UPDATE_POST_ACCOUNT_BOOK,
+  LIKE_BOOKMARK,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -449,6 +450,50 @@ export const postAccountBookDetail = createAsyncThunk(
   }
 );
 
+export const patchLiked = createAsyncThunk(
+  'post/like',
+  async (data: LIKE_BOOKMARK) => {
+    const currentLiked = data.current;
+    const uploadData = new FormData();
+
+    let overlapped = false;
+    currentLiked.forEach((current) => {
+      if (current.user_id === data.push_icon_user_id) {
+        overlapped = true;
+      } else {
+        uploadData.append('liked', String(current));
+      }
+    });
+
+    if (!overlapped) {
+      uploadData.append('user_id', String(data.push_icon_user_id));
+      uploadData.append(
+        'post_account_book_id',
+        String(data.post_account_book_id)
+      );
+      const res = await axios.post(`${apiUrl}api/like`, uploadData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      });
+      return res.data;
+    }
+    uploadData.append('user_id', String(data.push_icon_user_id));
+    uploadData.append(
+      'post_account_book_id',
+      String(data.post_account_book_id)
+    );
+    const res = await axios.post(`${apiUrl}api/destroy/like`, uploadData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${data.cookie.Bearer}`,
+      },
+    });
+    return res.data;
+  }
+);
+
 export const accountBookSlice = createSlice({
   name: 'accountBook',
   initialState,
@@ -512,6 +557,12 @@ export const accountBookSlice = createSlice({
       return {
         ...state,
         postMyAccountBook: action.payload,
+      };
+    });
+    builder.addCase(patchLiked.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accountBooks: action.payload,
       };
     });
   },
