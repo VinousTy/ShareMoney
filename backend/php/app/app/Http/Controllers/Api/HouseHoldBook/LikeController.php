@@ -23,7 +23,7 @@ class LikeController extends Controller
     ]);
 
 
-    $accountBook = PostAccountBook::with(['likes'])
+    $accountBook = PostAccountBook::with(['likes', 'bookmark'])
       ->get();
 
     $income = PostAccountBook::selectRaw('date, user_id, sum(monthly_income) as monthly_income')
@@ -49,7 +49,7 @@ class LikeController extends Controller
 
     $like->delete();
 
-    $accountBook = PostAccountBook::with(['likes'])
+    $accountBook = PostAccountBook::with(['likes', 'bookmarks'])
       ->get();
 
     $income = PostAccountBook::selectRaw('date, user_id, sum(monthly_income) as monthly_income')
