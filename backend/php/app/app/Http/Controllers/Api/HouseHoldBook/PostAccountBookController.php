@@ -12,7 +12,7 @@ class PostAccountBookController extends Controller
 {
   public function index(Request $request)
   {
-    $accountBook = PostAccountBook::all();
+    $accountBook = PostAccountBook::with(['likes'])->get();
 
     $income = PostAccountBook::selectRaw('date, user_id, sum(monthly_income) as monthly_income')
       ->groupBy('date', 'user_id')
