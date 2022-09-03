@@ -7,6 +7,7 @@ const initialState: LAYOUT_STATE = {
   isDrawer: false,
   isDeleteModal: false,
   isPostModal: false,
+  isSearchModal: false,
 };
 
 export const layoutSlice = createSlice({
@@ -34,6 +35,12 @@ export const layoutSlice = createSlice({
     isPostModalClose(state) {
       state.isPostModal = false;
     },
+    isSearchModalOpen(state) {
+      state.isSearchModal = true;
+    },
+    isSearchModalClose(state) {
+      state.isSearchModal = false;
+    },
   },
 });
 
@@ -45,6 +52,8 @@ export const {
   isDeleteModalClose,
   isPostModalOpen,
   isPostModalClose,
+  isSearchModalOpen,
+  isSearchModalClose,
 } = layoutSlice.actions;
 
 export const selectIsLoading = (state: RootState) => state.layout.isLoading;
@@ -52,5 +61,7 @@ export const selectIsDrawer = (state: RootState) => state.layout.isDrawer;
 export const selectIsDeleteModal = (state: RootState) =>
   state.layout.isDeleteModal;
 export const selectIsPostModal = (state: RootState) => state.layout.isPostModal;
+export const selectIsSearchModal = (state: RootState) =>
+  state.layout.isSearchModal;
 
 export default layoutSlice.reducer;
