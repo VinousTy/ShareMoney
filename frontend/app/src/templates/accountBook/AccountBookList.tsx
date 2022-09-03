@@ -10,12 +10,14 @@ import {
 } from '../../features/auth/authSlice';
 import {
   getAccountBookList,
+  searchGetAccountBook,
   selectAccountBookMessage,
   selectAccountBooks,
 } from '../../features/accountBook/accountBookSlice';
 import {
   isLoadingEnd,
   isLoadingStart,
+  isSearchModalOpen,
   selectIsLoading,
 } from '../../features/layout/layoutSlice';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -27,6 +29,7 @@ import { ImSearch } from 'react-icons/im';
 import AccountBookCard from '../../components/householdBookList/AccountBookCard';
 import FlashMessage from '../../components/message/flashMessage/FlashMessage';
 import Loading from '../../components/loading/Loading';
+import SearchModal from '../../components/modals/SearchModal';
 
 interface NAME {
   name: string;
@@ -40,7 +43,14 @@ const AccountBookList: React.FC = () => {
     authMessage = useSelector(selectMessage),
     accountBookMessage = useSelector(selectAccountBookMessage);
   const history = useHistory();
+  const search = useLocation().search;
   const [cookies] = useCookies();
+
+  const query = new URLSearchParams(search);
+  const query_name = query.get('name');
+  const query_income = query.get('income');
+  const query_job = query.get('job');
+  const query_composition = query.get('composition');
 
   const {
     handleSubmit,
@@ -50,18 +60,63 @@ const AccountBookList: React.FC = () => {
 
   useEffect(() => {
     const fetchBootLoader = async () => {
-      if (cookies) {
-        await dispatch(isLoadingStart());
+      let name = '';
+      let type = '';
+      if (query_name) {
+        name = unescape(String(query_name));
+        type = 'username';
+      } else if (query_income) {
+        name = unescape(String(query_income));
+        type = 'income';
+      } else if (query_job) {
+        name = unescape(String(query_job));
+        type = 'job';
+      } else if (query_composition) {
+        name = unescape(String(query_composition));
+        type = 'composition';
+      }
+      await dispatch(isLoadingStart());
+      await dispatch(getUser(cookies));
+      if (
+        (cookies && query_name) ||
+        query_income ||
+        query_job ||
+        query_composition
+      ) {
         await dispatch(getProfiles(cookies));
+        await dispatch(
+          searchGetAccountBook({
+            name: name,
+            type: type,
+            cookie: cookies,
+          })
+        );
+        await dispatch(isSignIn());
+      } else if (cookies) {
         await dispatch(getProfiles(cookies));
         await dispatch(isSignIn());
-        await dispatch(getUser(cookies));
         await dispatch(getAccountBookList(cookies));
       }
       await dispatch(isLoadingEnd());
     };
     fetchBootLoader();
   }, [dispatch, history]);
+
+  const searchOnName = async () => {
+    await dispatch(isLoadingStart());
+    if (name === '') {
+      await history.push('/accountBook/list');
+      await dispatch(getAccountBookList(cookies));
+    } else {
+      const encodeName = escape(name);
+      await history.push(`?name=${encodeName}`);
+      await dispatch(
+        searchGetAccountBook({ name: name, type: 'username', cookie: cookies })
+      );
+    }
+    await dispatch(isLoadingEnd());
+    reset();
+  };
 
   return (
     <>
@@ -85,6 +140,7 @@ const AccountBookList: React.FC = () => {
           </h2>
           <form
             className={`${styles.search_container} bg-gray-50 w-10/12 md:w-7/12`}
+            onSubmit={handleSubmit(searchOnName)}
           >
             <input
               type="text"
@@ -93,12 +149,18 @@ const AccountBookList: React.FC = () => {
               onChange={(e) => setName(e.target.value)}
               data-testid="search-input"
             />
-            <ImSearch type="submit" className={styles.serach_icon} />
+            <ImSearch
+              type="submit"
+              className={styles.serach_icon}
+              onClick={searchOnName}
+            />
           </form>
+          <SearchModal />
           <div className="m-3">
             <button
               className="w-20 h-20 shadow-lg bg-button-color-orange text-white rounded-full hover:bg-button-color-orange-hover transition-all border-button-color-orange-shadow fixed bottom-24 right-8 text-center md:right-16"
               data-testid="search-button"
+              onClick={() => dispatch(isSearchModalOpen())}
             >
               <span className="text-center">
                 <FiFilter className="text-center text-lg mx-auto" />
