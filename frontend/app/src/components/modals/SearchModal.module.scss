@@ -1,0 +1,119 @@
+.select {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 325px;
+  color: #cccccc;
+  text-align: left;
+  user-select: none;
+  -webkit-touch-callout: none;
+
+  .placeholder {
+    position: relative;
+    display: block;
+    z-index: 1;
+    padding: 1em;
+    border-radius: 2px;
+    cursor: pointer;
+    background: #faca77;
+    color: rgb(70, 70, 70);
+    transition: all 0.3s;
+
+    &:hover {
+      background: darken(#f8a539, 2%);
+    }
+
+    &:after {
+      position: absolute;
+      right: 1em;
+      top: 50%;
+      transform: translateY(-50%);
+      // font-family: 'FontAwesome';
+      content: '\025b2';
+      z-index: 10;
+    }
+  }
+
+  &.is_open {
+    .placeholder:after {
+      content: '\025bc';
+    }
+    ul {
+      opacity: 1;
+      display: block;
+    }
+  }
+
+  &.select--white {
+    .placeholder {
+      background: #fff;
+      color: #999;
+      &:hover {
+        background: darken(#fff, 2%);
+      }
+    }
+  }
+
+  ul {
+    opacity: 0;
+    display: none;
+    position: absolute;
+    overflow: hidden;
+    overflow-y: auto;
+    width: 100%;
+    background: #fff;
+    border-radius: 2px;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    margin: 5px 0 0 0;
+    padding: 0;
+    z-index: 100;
+    max-height: 200px;
+    transition: all 0.3s;
+
+    li {
+      display: block;
+      text-align: left;
+      padding: 0.8em 1em 0.8em 1em;
+      color: #999;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover {
+        background: darken(#f8a539, 2%);
+        color: #fff;
+      }
+    }
+  }
+}
+
+.select_placeholder:invalid {
+  color: #757575;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  padding: 20px;
+  transform: translate(-50%, -50%);
+  background: #edebe8;
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 45%;
+    padding: 20px;
+    transform: translate(-50%, -50%);
+    background: #edebe8;
+  }
+}

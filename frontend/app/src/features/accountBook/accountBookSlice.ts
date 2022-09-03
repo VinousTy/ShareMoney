@@ -13,6 +13,7 @@ import {
   POST_ACCOUNT_BOOK,
   UPDATE_POST_ACCOUNT_BOOK,
   LIKE_BOOKMARK,
+  SEARCH_NAME,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -304,6 +305,53 @@ export const getAccountBookList = createAsyncThunk(
   }
 );
 
+export const searchGetAccountBook = createAsyncThunk(
+  'search/accountBook',
+  async (data: SEARCH_NAME) => {
+    if (data.type === 'username') {
+      const res = await axios.get(
+        `${apiUrl}api/accountbook/list?name=${data.name}`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'income') {
+      const res = await axios.get(
+        `${apiUrl}api/accountbook/list?income=${data.name}`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'job') {
+      const res = await axios.get(
+        `${apiUrl}api/accountbook/list?job=${data.name}`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'composition') {
+      const res = await axios.get(
+        `${apiUrl}api/accountbook/list?composition=${data.name}`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    }
+  }
+);
+
 export const createPostAccountBook = createAsyncThunk(
   'share/accountBook',
   async (data: POST_ACCOUNT_BOOK) => {
@@ -583,6 +631,12 @@ export const accountBookSlice = createSlice({
       };
     });
     builder.addCase(getAccountBookList.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accountBooks: action.payload,
+      };
+    });
+    builder.addCase(searchGetAccountBook.fulfilled, (state, action) => {
       return {
         ...state,
         accountBooks: action.payload,
