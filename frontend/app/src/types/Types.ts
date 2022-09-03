@@ -93,6 +93,7 @@ export interface LAYOUT_STATE {
   isDrawer: boolean;
   isDeleteModal: boolean;
   isPostModal: boolean;
+  isSearchModal: boolean;
 }
 
 export interface ACCOUNTBOOK_STATE {
@@ -240,6 +241,14 @@ export interface UPDATE_POST_ACCOUNT_BOOK {
 export interface DETAIL_POST_ACCOUNT_BOOK_DATA {
   user_id: number;
   date: any;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface SEARCH_NAME {
+  name: string;
+  type: string;
   cookie: {
     [x: string]: string;
   };
