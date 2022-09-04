@@ -215,6 +215,8 @@ export const authSlice = createSlice({
     });
     builder.addCase(createProfile.fulfilled, (state, action) => {
       state.myProf = action.payload;
+      state.message = 'ログインしました';
+      state.successOrFailure = true;
     });
     builder.addCase(getMyProfile.fulfilled, (state, action) => {
       state.myProf = action.payload;
