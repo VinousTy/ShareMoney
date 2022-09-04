@@ -120,8 +120,6 @@ const AccountBookList: React.FC = () => {
 
   return (
     <>
-      {authMessage !== '' && <FlashMessage />}
-      {accountBookMessage !== '' && <FlashMessage />}
       {isLoading ? (
         <div className="h-screen">
           <Loading title={'Loading...'} />
@@ -132,6 +130,8 @@ const AccountBookList: React.FC = () => {
             accountBooks.accountBook?.length === 0 && 'h-screen'
           }`}
         >
+          {authMessage !== '' && <FlashMessage />}
+          {accountBookMessage !== '' && <FlashMessage />}
           <h2 className="text-gray-800 text-left text-2xl font-bold ml-8 mt-8">
             <span className="flex items-center">
               <FaListAlt className="text-orange" />

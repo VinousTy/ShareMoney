@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import {
+  editMessage,
   getMyProfile,
   isSignIn,
   selectMessage,
   selectProfile,
 } from '../../features/auth/authSlice';
 import {
+  editAccountBookMessage,
   getSelectDateAccountBook,
   postAccountBookDetail,
   selectAccountBookChart,
@@ -16,7 +18,6 @@ import {
 } from '../../features/accountBook/accountBookSlice';
 import ProfileList from '../../components/profileList/ProfileList';
 import HouseholdBooksList from '../../components/householdBookList/HouseholdBooksList';
-import FlashMessage from '../../components/message/flashMessage/FlashMessage';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
@@ -27,10 +28,12 @@ import {
   selectIsLoading,
 } from '../../features/layout/layoutSlice';
 import Loading from '../../components/loading/Loading';
+import FlashMessage from '../../components/message/flashMessage/FlashMessage';
 
 const MyPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [date, setDate] = useState(new Date()),
+    [flash, setFlash] = useState(false),
     [monthlyIncome, setMonthlyIncome] = useState(0);
   const profile = useSelector(selectProfile),
     accountBook = useSelector(selectAccountBookChart),
@@ -49,8 +52,18 @@ const MyPage: React.FC = () => {
         await dispatch(isSignIn());
       }
       dispatch(isLoadingEnd());
+      if (authMessage !== '') {
+        setFlash(true);
+      } else if (accountBookMessage !== '') {
+        setFlash(true);
+      }
     };
     fetchBootLoader();
+
+    // setTimeout(() => {
+    //   dispatch(editMessage(''));
+    //   dispatch(editAccountBookMessage(''));
+    // }, 6000);
   }, []);
 
   useEffect(() => {
@@ -73,6 +86,7 @@ const MyPage: React.FC = () => {
       }
     };
     fetchBootLoader();
+    setFlash(false);
   }, [dispatch, date]);
 
   useEffect(() => {
@@ -117,6 +131,8 @@ const MyPage: React.FC = () => {
   const selectedYear = String(date.getFullYear());
   const selectedMonth = String(date.getMonth() + 1);
 
+  console.log(flash);
+  console.log(authMessage);
   return (
     <>
       {isLoading ? (
@@ -125,8 +141,7 @@ const MyPage: React.FC = () => {
         </div>
       ) : (
         <>
-          {authMessage !== '' && <FlashMessage />}
-          {accountBookMessage !== '' && <FlashMessage />}
+          {flash && <FlashMessage />}
           <div className="mt-10 md:flex md:items-start">
             <div
               className={`w-10/12 mb-10 pt-2 mx-auto bg-white text-gray-700 rounded md:pt-6 md:h-auto md:w-5/12 md:ml-14 md:mr-14 lg:w-3/12`}
