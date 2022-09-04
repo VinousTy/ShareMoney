@@ -70,7 +70,8 @@ const SignIn: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {message !== '' && <FlashMessage />}
+      {message == 'パスワードの変更が完了しました' && <FlashMessage />}
+      {message == 'パスワードの変更に失敗しました' && <FlashMessage />}
       <div className="w-10/12 md:w-11/12 md:flex bg-white shadow-2xl my-24 mx-auto rounded-3xl lg:w-10/12">
         <div className="mx-auto md:w-7/12 lg:w-6/12 py-8">
           <div className="text-center text-white h-auto rounded">
