@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\PostAccountBook;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -11,6 +12,36 @@ use Tests\TestCase;
 class PostAccountBookTest extends TestCase
 {
   use RefreshDatabase;
+
+  public function testGuestSearchAccountBookIndex()
+  {
+    $response = $this->get(
+      route('postAccountbook.index'),
+    );
+
+    $response->assertStatus(302);
+  }
+
+  public function testAuthSearchAccountBookIndex()
+  {
+
+    $user = User::factory()->create();
+
+    $auth = $this->actingAs($user);
+
+    $accountBook = PostAccountBook::factory()->create();
+
+    $response = $auth->get(route('postAccountbook.index'));
+
+    $response->assertStatus(200)->assertJsonCount(3);
+
+    $response->assertJson(
+      fn (AssertableJson $json) =>
+      $json->whereType('accountBook', 'array')
+        ->whereType('income', 'array')
+        ->whereType('costs', 'array')
+    );
+  }
 
   public function testGuestPostAccountBookCreate()
   {
