@@ -30,7 +30,7 @@ import Loading from '../../components/loading/Loading';
 interface INPUTS {
   id: string;
   date: string;
-  user_id: number;
+  user_id: string;
   monthly_income: number;
   expenses: {
     expenseItem: string;
