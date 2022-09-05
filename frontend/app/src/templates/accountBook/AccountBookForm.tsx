@@ -26,6 +26,7 @@ import {
   selectIsLoading,
 } from '../../features/layout/layoutSlice';
 import Loading from '../../components/loading/Loading';
+import Error from '../error/Error';
 
 interface INPUTS {
   id: string;
@@ -61,7 +62,7 @@ interface PACKET_COSTS {
   };
 }
 
-const AccountBookForm: React.FC = () => {
+const AccountBookForm: React.VFC = () => {
   const dispatch: AppDispatch = useDispatch();
   const accountBook = useSelector(selectAccountBook),
     isLoading = useSelector(selectIsLoading);
@@ -71,7 +72,8 @@ const AccountBookForm: React.FC = () => {
     [addBtn, setAddBtn] = useState(true),
     [editing, setEditing] = useState(false),
     [isAlertmonthlyIncome, setIsAlertmonthlyIncome] = useState(false),
-    [costs, setCosts] = useState([]);
+    [costs, setCosts] = useState([]),
+    [error, setError] = useState(false);
   const history = useHistory();
   const [cookies, setCookies] = useCookies();
   const [tabIndex, setTabIndex] = useState(0);
@@ -135,7 +137,12 @@ const AccountBookForm: React.FC = () => {
     const fetchBootLoader = async () => {
       if (cookies) {
         await dispatch(isSignIn());
-        await dispatch(getMyAccountBook({ id: id, cookie: cookies }));
+        const result = await dispatch(
+          getMyAccountBook({ id: id, cookie: cookies })
+        );
+        if (getMyAccountBook.rejected.match(result)) {
+          setError(true);
+        }
       }
     };
     if (id) {
@@ -235,13 +242,19 @@ const AccountBookForm: React.FC = () => {
     }
   };
 
-  return (
-    <>
-      {isLoading ? (
+  const selectPage = () => {
+    if (error) {
+      return (
+        <Error text={'別のユーザーのページを表示することはできません。'} />
+      );
+    } else if (isLoading) {
+      return (
         <div className="h-screen">
           <Loading title={'送信中...'} />
         </div>
-      ) : (
+      );
+    } else {
+      return (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full py-8 mb-12 md:mb-1">
             <div className="w-10/12 md:w-6/12 mx-auto pt-14 text-center text-white h-auto bg-stone-100 bg-white rounded">
@@ -432,9 +445,11 @@ const AccountBookForm: React.FC = () => {
             </div>
           </div>
         </form>
-      )}
-    </>
-  );
+      );
+    }
+  };
+
+  return <>{selectPage()}</>;
 };
 
 export default AccountBookForm;

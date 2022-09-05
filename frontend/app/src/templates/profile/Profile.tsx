@@ -24,6 +24,7 @@ import {
   selectIsLoading,
 } from '../../features/layout/layoutSlice';
 import Loading from '../../components/loading/Loading';
+import Error from '../error/Error';
 
 interface INPUTS {
   name: string;
@@ -37,7 +38,8 @@ interface INPUTS {
 const Profile: React.FC = () => {
   const [avatarImage, setAvatarImage] = useState<any>(null),
     [validError, setValidError] = useState(false),
-    [image, setImage] = useState<any>(null);
+    [image, setImage] = useState<any>(null),
+    [error, setError] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const userId = useSelector(selectUserId),
     profile = useSelector(selectProfile),
@@ -76,18 +78,19 @@ const Profile: React.FC = () => {
     fileInput?.click();
   };
 
-  const getUserProfile = async () => {
-    await dispatch(getUser(cookies));
-    await dispatch(getMyProfile(cookies));
-  };
-
   useEffect(() => {
     const fetchBootLoader = async () => {
       if (id) {
         await dispatch(isLoadingStart());
         await dispatch(isSignIn());
-        await getUserProfile();
+        await dispatch(getUser(cookies));
+        const result = await dispatch(
+          getMyProfile({ id: id, cookie: cookies })
+        );
         await dispatch(isLoadingEnd());
+        if (getMyProfile.rejected.match(result)) {
+          setError(true);
+        }
       } else if (cookies) {
         await dispatch(isSignIn());
         await dispatch(getUser(cookies));
@@ -146,13 +149,19 @@ const Profile: React.FC = () => {
     }
   };
 
-  return (
-    <>
-      {isLoading ? (
+  const selectPage = () => {
+    if (error) {
+      return (
+        <Error text={'別のユーザーのページを表示することはできません。'} />
+      );
+    } else if (isLoading) {
+      return (
         <div className="h-screen">
           <Loading title={'Loading...'} />
         </div>
-      ) : (
+      );
+    } else {
+      return (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full py-8 mb-12 md:mb-1">
             <div className="w-9/12 md:w-4/12 mx-auto pt-14 text-center text-white h-auto bg-stone-100 bg-white rounded">
@@ -394,9 +403,11 @@ const Profile: React.FC = () => {
             </div>
           </div>
         </form>
-      )}
-    </>
-  );
+      );
+    }
+  };
+
+  return <>{selectPage()}</>;
 };
 
 export default Profile;
