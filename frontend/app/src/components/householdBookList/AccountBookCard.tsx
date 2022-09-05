@@ -20,24 +20,24 @@ import {
 } from '../../features/accountBook/accountBookSlice';
 
 interface PROPS {
-  id: number;
+  id: string;
   date: string;
-  user_id: number;
+  user_id: string;
   costs: {
     date: string;
     expenseItem: string;
-    user_id: number;
+    user_id: string;
     cost: number;
   }[];
   likes: {
-    id: number;
-    user_id: number;
-    post_account_book_id: number;
+    id: string;
+    user_id: string;
+    post_account_book_id: string;
   }[];
   bookmarks: {
-    id: number;
-    user_id: number;
-    post_account_book_id: number;
+    id: string;
+    user_id: string;
+    post_account_book_id: string;
   }[];
   income: number;
   index: number;
