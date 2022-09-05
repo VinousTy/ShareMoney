@@ -8,6 +8,7 @@ import {
   PROFILE_CREATE,
   PROFILE_UPDATE,
   COOKIE,
+  ID_COOKIE,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -152,12 +153,24 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
-export const getMyProfile = createAsyncThunk(
+export const getProfile = createAsyncThunk(
   'profile/get',
   async (cookie: COOKIE) => {
     const res = await axios.get(`${apiUrl}api/profile/`, {
       headers: {
         Authorization: `Bearer ${cookie.Bearer}`,
+      },
+    });
+    return res.data[0];
+  }
+);
+
+export const getMyProfile = createAsyncThunk(
+  'profile/edit',
+  async (data: ID_COOKIE) => {
+    const res = await axios.get(`${apiUrl}api/profile/${data.id}`, {
+      headers: {
+        Authorization: `Bearer ${data.cookie.Bearer}`,
       },
     });
     return res.data[0];
@@ -217,6 +230,9 @@ export const authSlice = createSlice({
       state.myProf = action.payload;
       state.message = 'ログインしました';
       state.successOrFailure = true;
+    });
+    builder.addCase(getProfile.fulfilled, (state, action) => {
+      state.myProf = action.payload;
     });
     builder.addCase(getMyProfile.fulfilled, (state, action) => {
       state.myProf = action.payload;
