@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import {
-  editMessage,
-  getMyProfile,
+  getProfile,
   isSignIn,
   selectMessage,
   selectProfile,
 } from '../../features/auth/authSlice';
 import {
-  editAccountBookMessage,
   getSelectDateAccountBook,
   postAccountBookDetail,
   selectAccountBookChart,
@@ -48,7 +46,7 @@ const MyPage: React.FC = () => {
     const fetchBootLoader = async () => {
       dispatch(isLoadingStart());
       if (cookies) {
-        await dispatch(getMyProfile(cookies));
+        await dispatch(getProfile(cookies));
         await dispatch(isSignIn());
       }
       dispatch(isLoadingEnd());
@@ -59,11 +57,6 @@ const MyPage: React.FC = () => {
       }
     };
     fetchBootLoader();
-
-    // setTimeout(() => {
-    //   dispatch(editMessage(''));
-    //   dispatch(editAccountBookMessage(''));
-    // }, 6000);
   }, []);
 
   useEffect(() => {
