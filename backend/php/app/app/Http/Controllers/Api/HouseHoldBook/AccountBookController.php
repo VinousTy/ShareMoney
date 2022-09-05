@@ -10,11 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 class AccountBookController extends Controller
 {
-  public function index()
-  {
-    $cost = AccountBook::with('expenses')->get();
 
-    return response()->json($cost, 200);
+  public function index($id)
+  {
+    $accountBook = AccountBook::with('expenses')
+      ->where('id', $id)
+      ->get();
+
+    return response()->json($accountBook, 200);
   }
 
   public function create(Request $request)
