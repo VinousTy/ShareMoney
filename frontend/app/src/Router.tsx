@@ -9,6 +9,7 @@ import EmailPost from './templates/auth/EmailPost';
 import PasswordReset from './templates/auth/PasswordReset';
 import SignIn from './templates/auth/SignIn';
 import SignUp from './templates/auth/SignUp';
+import Error from './templates/error/Error';
 import MyPage from './templates/mypage/MyPage';
 import Profile from './templates/profile/Profile';
 import TestPage from './TestPage';
@@ -30,6 +31,7 @@ const Router: React.VFC = () => {
           path="/accountBook/detail(/:id)?"
           component={AccountBookDetail}
         />
+        <Route exact path="*" component={Error} />
       </Switch>
       <Footer />
     </BrowserRouter>
