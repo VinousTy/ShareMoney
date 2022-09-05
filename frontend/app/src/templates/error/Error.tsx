@@ -4,7 +4,11 @@ import { useHistory } from 'react-router-dom';
 import useMedia from 'use-media';
 import error_image from '../../assets/404_error_bro.png';
 
-const Error: React.VFC = () => {
+interface PROPS {
+  text: string;
+}
+
+const Error: React.VFC<PROPS> = (props) => {
   const history = useHistory();
   const isWide = useMedia({ maxWidth: '768px' });
 
@@ -41,9 +45,14 @@ const Error: React.VFC = () => {
         <p className="text-gray-700 pb-1">
           お探しのページは見つかりませんでした。
         </p>
-        <p className="text-gray-700 pb-1">
-          URLが間違っている可能性がございます。
-        </p>
+        {props.text === '' ? (
+          <p className="text-gray-700 pb-1">
+            URLが間違っている可能性がございます。
+          </p>
+        ) : (
+          <p className="text-gray-700 pb-1">{props.text}</p>
+        )}
+
         <p className="text-gray-700">下記リンクからお戻りください。</p>
         <div
           className={`${
