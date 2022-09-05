@@ -19,7 +19,7 @@ export interface AUTH_STATE {
   isEmail: boolean;
   isNotEmail: boolean;
   user: {
-    id: number;
+    id: string;
     email: string;
   };
   myProf: {
@@ -31,7 +31,7 @@ export interface AUTH_STATE {
     composition: string;
     body: string;
     img: any;
-    user_id: number;
+    user_id: string;
   };
   profiles: {
     id: string;
@@ -42,7 +42,7 @@ export interface AUTH_STATE {
     composition: string;
     body: string;
     img: any;
-    user_id: number;
+    user_id: string;
   }[];
   message: any;
   successOrFailure: boolean;
@@ -67,7 +67,7 @@ export interface PROFILE_CREATE {
   composition: string;
   body: string;
   img: any;
-  user_id: number;
+  user_id: string;
   cookie: {
     [x: string]: string;
   };
@@ -82,7 +82,7 @@ export interface PROFILE_UPDATE {
   composition: string;
   body: string;
   img: any;
-  user_id: number;
+  user_id: string;
   cookie: {
     [x: string]: string;
   };
@@ -100,7 +100,7 @@ export interface ACCOUNTBOOK_STATE {
   accountBook: {
     id: string;
     date: string;
-    user_id: number;
+    user_id: string;
     monthly_income: number;
     expenses: {
       expenseItem: string;
@@ -113,7 +113,7 @@ export interface ACCOUNTBOOK_STATE {
     accountBook: {
       id: string;
       date: string;
-      user_id: number;
+      user_id: string;
       monthly_income: number;
       expenses: {
         expenseItem: string;
@@ -132,38 +132,38 @@ export interface ACCOUNTBOOK_STATE {
   };
   accountBooks: {
     accountBook: {
-      id: number;
+      id: string;
       date: string;
-      user_id: number;
+      user_id: string;
       monthly_income: number;
       likes: {
-        id: number;
-        user_id: number;
-        post_account_book_id: number;
+        id: string;
+        user_id: string;
+        post_account_book_id: string;
       }[];
       bookmarks: {
-        id: number;
-        user_id: number;
-        post_account_book_id: number;
+        id: string;
+        user_id: string;
+        post_account_book_id: string;
       }[];
     }[];
     costs: {
       date: string;
       expenseItem: string;
       cost: number;
-      user_id: number;
+      user_id: string;
     }[];
     income: {
       date: string;
       monthly_income: number;
-      user_id: number;
+      user_id: string;
     }[];
   };
   postMyAccountBook: {
     accountBook: {
       id: string;
       date: string;
-      user_id: number;
+      user_id: string;
       monthly_income: number;
       expenses: {
         expenseItem: string;
@@ -203,7 +203,7 @@ export interface UPDATE_ACCOUNT_BOOK {
 }
 
 export interface DELETE_ACCOUNT_BOOK {
-  id: number;
+  id: string;
   date: any;
   cookie: {
     [x: string]: string;
@@ -211,7 +211,7 @@ export interface DELETE_ACCOUNT_BOOK {
 }
 
 export interface DELETE_COST {
-  id: number;
+  id: string;
   cookie: {
     [x: string]: string;
   };
@@ -220,7 +220,7 @@ export interface DELETE_COST {
 export interface POST_ACCOUNT_BOOK {
   date: string;
   monthly_income: number;
-  user_id: number;
+  user_id: string;
   expenses: any;
   cookie: {
     [x: string]: string;
@@ -231,7 +231,7 @@ export interface UPDATE_POST_ACCOUNT_BOOK {
   id: string;
   date: string;
   monthly_income: number;
-  user_id: number;
+  user_id: string;
   expenses: any;
   cookie: {
     [x: string]: string;
@@ -239,7 +239,7 @@ export interface UPDATE_POST_ACCOUNT_BOOK {
 }
 
 export interface DETAIL_POST_ACCOUNT_BOOK_DATA {
-  user_id: number;
+  user_id: string;
   date: any;
   cookie: {
     [x: string]: string;
@@ -255,14 +255,14 @@ export interface SEARCH_NAME {
 }
 
 export interface LIKE_BOOKMARK {
-  post_account_book_id: number;
+  post_account_book_id: string;
   current: {
-    id: number;
-    user_id: number;
-    post_account_book_id: number;
+    id: string;
+    user_id: string;
+    post_account_book_id: string;
   }[];
   income: number;
-  push_icon_user_id: number;
+  push_icon_user_id: string;
   cookie: {
     [x: string]: string;
   };
