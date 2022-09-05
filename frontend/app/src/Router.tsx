@@ -31,7 +31,9 @@ const Router: React.VFC = () => {
           path="/accountBook/detail(/:id)?"
           component={AccountBookDetail}
         />
-        <Route exact path="*" component={Error} />
+        <Route exact path="*">
+          <Error text={''} />
+        </Route>
       </Switch>
       <Footer />
     </BrowserRouter>
