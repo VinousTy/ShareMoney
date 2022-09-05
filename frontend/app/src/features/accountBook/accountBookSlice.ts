@@ -14,6 +14,7 @@ import {
   UPDATE_POST_ACCOUNT_BOOK,
   LIKE_BOOKMARK,
   SEARCH_NAME,
+  DETAIL_DATA,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -100,6 +101,32 @@ const initialState: ACCOUNTBOOK_STATE = {
         date: '',
         monthly_income: 0,
         user_id: '',
+      },
+    ],
+  },
+  accountBookDetail: {
+    profile: [
+      {
+        id: '',
+        name: '',
+        job: '',
+        age: 0,
+        income: '',
+        composition: '',
+        body: '',
+        img: '',
+        user_id: '',
+      },
+    ],
+    costs: [
+      {
+        expenseItem: '',
+        cost: 0,
+      },
+    ],
+    income: [
+      {
+        monthly_income: 0,
       },
     ],
   },
@@ -233,6 +260,25 @@ export const deleteAccountBook = createAsyncThunk(
       {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const accountBookDetail = createAsyncThunk(
+  'get/accountBookDetail',
+  async (data: DETAIL_DATA) => {
+    const res = await axios.post(
+      `${apiUrl}api/detail/accountbook`,
+      {
+        user_id: data.user_id,
+        search_date: data.date,
+      },
+      {
+        headers: {
           Authorization: `Bearer ${data.cookie.Bearer}`,
         },
       }
@@ -630,6 +676,12 @@ export const accountBookSlice = createSlice({
         successOrFailure: true,
       };
     });
+    builder.addCase(accountBookDetail.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accountBookDetail: action.payload,
+      };
+    });
     builder.addCase(getAccountBookList.fulfilled, (state, action) => {
       return {
         ...state,
@@ -682,6 +734,8 @@ export const selectAccountBookChart = (state: RootState) =>
   state.accountBook.accountBookChart;
 export const selectAccountBooks = (state: RootState) =>
   state.accountBook.accountBooks;
+export const selectAccountBookDetail = (state: RootState) =>
+  state.accountBook.accountBookDetail;
 export const selectPostMyAccountBook = (state: RootState) =>
   state.accountBook.postMyAccountBook;
 export const selectAccountBookMessage = (state: RootState) =>

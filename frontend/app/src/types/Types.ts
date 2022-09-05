@@ -159,6 +159,26 @@ export interface ACCOUNTBOOK_STATE {
       user_id: string;
     }[];
   };
+  accountBookDetail: {
+    profile: {
+      id: string;
+      name: string;
+      age: number;
+      job: string;
+      income: string;
+      composition: string;
+      body: string;
+      img: any;
+      user_id: string;
+    }[];
+    costs: {
+      expenseItem: string;
+      cost: number;
+    }[];
+    income: {
+      monthly_income: number;
+    }[];
+  };
   postMyAccountBook: {
     accountBook: {
       id: string;
@@ -197,6 +217,14 @@ export interface UPDATE_ACCOUNT_BOOK {
   id: string;
   date: string;
   monthly_income: number;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface DETAIL_DATA {
+  user_id: string;
+  date: string;
   cookie: {
     [x: string]: string;
   };

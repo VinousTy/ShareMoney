@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import Footer from './components/footer/Footer';
 import Header from './components/header/Header';
+import AccountBookDetail from './templates/accountBook/AccountBookDetail';
 import AccountBookForm from './templates/accountBook/AccountBookForm';
 import AccountBookList from './templates/accountBook/AccountBookList';
 import EmailPost from './templates/auth/EmailPost';
@@ -25,6 +26,10 @@ const Router: React.VFC = () => {
         <Route path="/accountBook/regist(/:id)?" component={AccountBookForm} />
         <Route exact path="/mypage" component={MyPage} />
         <Route exact path="/accountBook/list" component={AccountBookList} />
+        <Route
+          path="/accountBook/detail(/:id)?"
+          component={AccountBookDetail}
+        />
       </Switch>
       <Footer />
     </BrowserRouter>
