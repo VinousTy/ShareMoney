@@ -17,7 +17,7 @@ const initialState: AUTH_STATE = {
   isEmail: false,
   isNotEmail: false,
   user: {
-    id: 0,
+    id: '',
     email: '',
   },
   myProf: {
@@ -29,7 +29,7 @@ const initialState: AUTH_STATE = {
     composition: '',
     body: '',
     img: '',
-    user_id: 0,
+    user_id: '',
   },
   profiles: [
     {
@@ -41,7 +41,7 @@ const initialState: AUTH_STATE = {
       composition: '',
       body: '',
       img: '',
-      user_id: 0,
+      user_id: '',
     },
   ],
   message: '',
