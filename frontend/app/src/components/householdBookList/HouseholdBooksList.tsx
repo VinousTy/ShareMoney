@@ -62,7 +62,7 @@ interface PROPS {
   accountBook: {
     id: string;
     date: string;
-    user_id: number;
+    user_id: string;
     monthly_income: number;
     expenses: {
       expenseItem: string;
@@ -79,7 +79,7 @@ interface PROPS {
     accountBook: {
       id: string;
       date: string;
-      user_id: number;
+      user_id: string;
       monthly_income: number;
       expenses: {
         expenseItem: string;
@@ -117,7 +117,7 @@ interface PACKET {
 interface ITEM {
   id: string;
   date: string;
-  user_id: number;
+  user_id: string;
   monthly_income: number;
   expenses: {
     expenseItem: string;
@@ -213,7 +213,7 @@ const HouseholdBooksList = (props: PROPS) => {
     const packet = {
       date: props.accountBook[0]?.date,
       monthly_income: props.monthlyIncome,
-      user_id: props.accountBook[0]?.user_id,
+      user_id: String(props.accountBook[0]?.user_id),
       cookie: cookies,
       expenses: props.costs,
     };
@@ -222,7 +222,7 @@ const HouseholdBooksList = (props: PROPS) => {
       id: props.postAccountBook.accountBook[0]?.id,
       date: props.accountBook[0]?.date,
       monthly_income: props.monthlyIncome,
-      user_id: props.accountBook[0]?.user_id,
+      user_id: String(props.accountBook[0]?.user_id),
       cookie: cookies,
       expenses: getCostDiff(),
     };

@@ -15,7 +15,7 @@ interface PROPS_PROFILELIST {
   composition: string;
   body: string;
   img: any;
-  user_id: number;
+  user_id: string;
 }
 
 const ProfileList: React.VFC<PROPS_PROFILELIST> = (props) => {
