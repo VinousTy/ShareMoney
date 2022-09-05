@@ -6,7 +6,6 @@ import {
   COOKIE,
   CREATE_ACCOUNT_BOOK,
   UPDATE_ACCOUNT_BOOK,
-  DELETE_COST,
   DATE,
   DELETE_ACCOUNT_BOOK,
   DETAIL_POST_ACCOUNT_BOOK_DATA,
@@ -15,6 +14,7 @@ import {
   LIKE_BOOKMARK,
   SEARCH_NAME,
   DETAIL_DATA,
+  ID_COOKIE,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -192,12 +192,18 @@ export const createAccountBook = createAsyncThunk(
 
 export const getMyAccountBook = createAsyncThunk(
   'get/accountBook',
-  async (cookie: COOKIE) => {
-    const res = await axios.get(`${apiUrl}api/accountbook`, {
-      headers: {
-        Authorization: `Bearer ${cookie.Bearer}`,
+  async (data: ID_COOKIE) => {
+    const res = await axios.post(
+      `${apiUrl}api/accountbook/${data.id}`,
+      {
+        id: data.id,
       },
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
     return res.data;
   }
 );
@@ -324,7 +330,7 @@ export const updateCost = createAsyncThunk(
 
 export const deleteCost = createAsyncThunk(
   'delete/costs',
-  async (data: DELETE_COST) => {
+  async (data: ID_COOKIE) => {
     const res = await axios.post(
       `${apiUrl}api/destroy/expense/${data.id}`,
       { id: data.id },
