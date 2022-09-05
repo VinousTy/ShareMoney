@@ -24,7 +24,7 @@ const initialState: ACCOUNTBOOK_STATE = {
       id: '',
       date: '',
       monthly_income: 0,
-      user_id: 0,
+      user_id: '',
       expenses: [
         {
           expenseItem: '',
@@ -41,7 +41,7 @@ const initialState: ACCOUNTBOOK_STATE = {
         id: '',
         date: '',
         monthly_income: 0,
-        user_id: 0,
+        user_id: '',
         expenses: [
           {
             expenseItem: '',
@@ -67,22 +67,22 @@ const initialState: ACCOUNTBOOK_STATE = {
   accountBooks: {
     accountBook: [
       {
-        id: 0,
+        id: '',
         date: '',
-        user_id: 0,
+        user_id: '',
         monthly_income: 0,
         likes: [
           {
-            id: 0,
-            user_id: 0,
-            post_account_book_id: 0,
+            id: '',
+            user_id: '',
+            post_account_book_id: '',
           },
         ],
         bookmarks: [
           {
-            id: 0,
-            user_id: 0,
-            post_account_book_id: 0,
+            id: '',
+            user_id: '',
+            post_account_book_id: '',
           },
         ],
       },
@@ -92,14 +92,14 @@ const initialState: ACCOUNTBOOK_STATE = {
         date: '',
         expenseItem: '',
         cost: 0,
-        user_id: 0,
+        user_id: '',
       },
     ],
     income: [
       {
         date: '',
         monthly_income: 0,
-        user_id: 0,
+        user_id: '',
       },
     ],
   },
@@ -109,7 +109,7 @@ const initialState: ACCOUNTBOOK_STATE = {
         id: '',
         date: '',
         monthly_income: 0,
-        user_id: 0,
+        user_id: '',
         expenses: [
           {
             expenseItem: '',
