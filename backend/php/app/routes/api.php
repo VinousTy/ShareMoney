@@ -33,7 +33,8 @@ Route::post('password/reset/{token}', [ResetPasswordController::class, 'resetPas
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('user', [UserController::class, 'index']);
-  Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
+  Route::get('profile/', [ProfileController::class, 'index'])->name('profile.index');
+  Route::get('profile/{user}', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::get('profile/list', [ProfileController::class, 'list']);
   Route::post('create/profile', [ProfileController::class, 'create'])->name('profile.create');
   Route::put('update/profile/{id}', [ProfileController::class, 'update']);
