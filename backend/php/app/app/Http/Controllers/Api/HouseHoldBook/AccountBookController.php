@@ -10,6 +10,19 @@ use Illuminate\Support\Facades\Auth;
 
 class AccountBookController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware(function ($request, $next) {
+      $id = $request->route()->parameter('id');
+      if (!is_null($id)) {
+        $userId = AccountBook::findOrFail($id)->user->id;
+        if ($userId !== Auth::id()) {
+          return response()->json(['status' => '404'], 404);
+        }
+      }
+      return $next($request);
+    });
+  }
 
   public function index($id)
   {
