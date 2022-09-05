@@ -77,7 +77,7 @@ const MyPage: React.FC = () => {
         await dispatch(getSelectDateAccountBook(packet));
         await dispatch(
           postAccountBookDetail({
-            user_id: 0,
+            user_id: '',
             date: date,
             cookie: cookies,
           })
@@ -131,8 +131,6 @@ const MyPage: React.FC = () => {
   const selectedYear = String(date.getFullYear());
   const selectedMonth = String(date.getMonth() + 1);
 
-  console.log(flash);
-  console.log(authMessage);
   return (
     <>
       {isLoading ? (
