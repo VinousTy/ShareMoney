@@ -238,7 +238,7 @@ export interface DELETE_ACCOUNT_BOOK {
   };
 }
 
-export interface DELETE_COST {
+export interface ID_COOKIE {
   id: string;
   cookie: {
     [x: string]: string;

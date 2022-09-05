@@ -135,7 +135,7 @@ const AccountBookForm: React.FC = () => {
     const fetchBootLoader = async () => {
       if (cookies) {
         await dispatch(isSignIn());
-        await dispatch(getMyAccountBook(cookies));
+        await dispatch(getMyAccountBook({ id: id, cookie: cookies }));
       }
     };
     if (id) {
