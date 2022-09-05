@@ -23,6 +23,11 @@ const ProfileList: React.VFC<PROPS_PROFILELIST> = (props) => {
   const isWide = useMedia({ maxWidth: '768px' });
   const history = useHistory();
 
+  let id = window.location.pathname.split('/accountBook/detail')[1];
+  if (id !== '') {
+    id = id?.split('/')[1];
+  }
+
   return (
     <>
       <div className="md:flex">
@@ -40,23 +45,23 @@ const ProfileList: React.VFC<PROPS_PROFILELIST> = (props) => {
           <div className="flex items-center ml-20 md:ml-0" data-testid="age">
             <FaAngleDoubleRight className="text-button-color-orange" />
             <span>年齢：</span>
-            {profile?.age}歳
+            {props?.age}歳
           </div>
           <div className="flex items-center ml-20 md:ml-0" data-testid="job">
             <FaAngleDoubleRight className="text-button-color-orange" />
             <span
               className={`${
-                profile?.job == 'ソフトウエア・インターネット・通信' && 'w-20'
+                props?.job == 'ソフトウエア・インターネット・通信' && 'w-20'
               }`}
             >
               職業：
             </span>
-            {profile?.job}
+            {props?.job}
           </div>
           <div className="flex items-center ml-20 md:ml-0" data-testid="income">
             <FaAngleDoubleRight className="text-button-color-orange" />
             <span>年収：</span>
-            {profile?.income}
+            {props?.income}
           </div>
           <div
             className="flex items-center ml-20 md:ml-0"
@@ -64,7 +69,7 @@ const ProfileList: React.VFC<PROPS_PROFILELIST> = (props) => {
           >
             <FaAngleDoubleRight className="text-button-color-orange" />
             <span>世帯：</span>
-            {profile?.composition}
+            {props?.composition}
           </div>
         </div>
       </div>
@@ -78,8 +83,9 @@ const ProfileList: React.VFC<PROPS_PROFILELIST> = (props) => {
           <span className="mr-2 mb-4">ゲストはプロフィール編集できません</span>
         </div>
       )}
-      {profile?.body ==
-      'ゲストユーザーとしてログインしています。ゲストユーザーのため、各種投稿やユーザー情報の変更等の一部機能の使用は制限されております。' ? (
+      {id ||
+      profile?.body ==
+        'ゲストユーザーとしてログインしています。ゲストユーザーのため、各種投稿やユーザー情報の変更等の一部機能の使用は制限されております。' ? (
         <></>
       ) : (
         <div
