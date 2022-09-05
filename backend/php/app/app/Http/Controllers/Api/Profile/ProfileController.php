@@ -4,13 +4,35 @@ namespace App\Http\Controllers\Api\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware(function ($request, $next) {
+      $id = $request->route()->parameter('user');
+      if (!is_null($id)) {
+        $userId = User::findOrFail($id)->id;
+        if ($userId !== Auth::id()) {
+          return response()->json(['status' => '404'], 404);
+        }
+      }
+      return $next($request);
+    });
+  }
+
   public function index()
+  {
+    $profile = Profile::where('user_id', Auth::id())->get();
+
+    return response()->json($profile, 200);
+  }
+
+  public function edit($id)
   {
     $profile = Profile::where('user_id', Auth::id())->get();
 
