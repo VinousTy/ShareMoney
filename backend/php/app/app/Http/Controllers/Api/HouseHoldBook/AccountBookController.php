@@ -11,10 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class AccountBookController extends Controller
 {
 
-  public function index($id)
+  public function index()
   {
     $accountBook = AccountBook::with('expenses')
-      ->where('id', $id)
       ->get();
 
     return response()->json($accountBook, 200);
