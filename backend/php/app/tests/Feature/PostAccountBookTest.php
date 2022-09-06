@@ -109,4 +109,31 @@ class PostAccountBookTest extends TestCase
         ->whereType('totalCost', 'array')
     );
   }
+
+  public function testAuthSearchAccountBookRecomend()
+  {
+
+    $user = User::factory()->create();
+
+    $auth = $this->actingAs($user);
+
+    $profile = Profile::factory()->create();
+
+    $accountBook = PostAccountBook::factory()->create();
+
+    $response = $auth->post(route('postAccountBook.recomend'), [
+      'name' => 'test',
+      'job' => 'その他',
+      'income' => '200~400万円',
+      'composition' => 'その他',
+    ]);
+
+    $response->assertStatus(200);
+
+    $response->assertJson(
+      fn (AssertableJson $json) =>
+      $json->whereType('accountBook', 'array')
+        ->whereType('costs', 'array')
+    );
+  }
 }
