@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('profile/list', [ProfileController::class, 'list']);
   Route::post('create/profile', [ProfileController::class, 'create'])->name('profile.create');
   Route::put('update/profile/{id}', [ProfileController::class, 'update']);
-  Route::post('accountbook/{id}', [AccountBookController::class, 'index'])->name('accountbook.index');
+  Route::get('accountbook', [AccountBookController::class, 'index'])->name('accountbook.index');
   Route::post('create/accountbook', [AccountBookController::class, 'create'])->name('accountbook.create');
   Route::post('edit/accountbook', [AccountBookController::class, 'edit'])->name('accountbook.edit');
   Route::post('detail/accountbook', [AccountBookController::class, 'detail'])->name('accountbook.detail');

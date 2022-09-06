@@ -193,17 +193,11 @@ export const createAccountBook = createAsyncThunk(
 export const getMyAccountBook = createAsyncThunk(
   'get/accountBook',
   async (data: ID_COOKIE) => {
-    const res = await axios.post(
-      `${apiUrl}api/accountbook/${data.id}`,
-      {
-        id: data.id,
+    const res = await axios.get(`${apiUrl}api/accountbook/`, {
+      headers: {
+        Authorization: `Bearer ${data.cookie.Bearer}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${data.cookie.Bearer}`,
-        },
-      }
-    );
+    });
     return res.data;
   }
 );
