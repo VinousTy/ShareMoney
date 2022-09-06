@@ -10,6 +10,7 @@ import PasswordReset from './templates/auth/PasswordReset';
 import SignIn from './templates/auth/SignIn';
 import SignUp from './templates/auth/SignUp';
 import Error from './templates/error/Error';
+import Home from './templates/home/Home';
 import MyPage from './templates/mypage/MyPage';
 import Profile from './templates/profile/Profile';
 import TestPage from './TestPage';
@@ -31,6 +32,7 @@ const Router: React.VFC = () => {
           path="/accountBook/detail(/:id)?"
           component={AccountBookDetail}
         />
+        <Route exact path="/home" component={Home} />
         <Route exact path="*" component={Error} />
       </Switch>
       <Footer />
