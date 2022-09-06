@@ -199,4 +199,50 @@ class PostAccountBookController extends Controller
 
     return response()->json('家計簿を更新しました', 200);
   }
+
+  public function recomend(Request $request)
+  {
+
+    $name = $request->name;
+    $job = $request->job;
+    $income = $request->income;
+    $composition = $request->composition;
+
+    $matchThese = [
+      'profiles.job' => $request->job,
+      'profiles.income' => $request->income,
+      'profiles.composition' => $request->composition,
+    ];
+
+    $satisfyUser = PostAccountBook::with(['likes', 'bookmarks'])
+      ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
+      ->where(function ($query) use ($job, $income, $composition) {
+        $query->where('profiles.job', '=', $job)
+          ->orWhere('profiles.income', '=', $income)
+          ->orWhere('profiles.composition', '=', $composition);
+      })->where(function ($query) use ($name) {
+        $query->where('profiles.name', '<>', $name);
+      })->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
+
+    $satisfyUserCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
+      ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
+      ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
+      ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
+      ->where(function ($query) use ($job, $income, $composition) {
+        $query->where('profiles.job', '=', $job)
+          ->orWhere('profiles.income', '=', $income)
+          ->orWhere('profiles.composition', '=', $composition);
+      })->where(function ($query) use ($name) {
+        $query->where('profiles.name', '<>', $name);
+      })
+      ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
+      ->get();
+
+    if (isset($satisfyUser)) {
+      return response()->json([
+        'accountBook' => $satisfyUser,
+        'costs' => $satisfyUserCosts,
+      ], 200);
+    }
+  }
 }
