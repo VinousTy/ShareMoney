@@ -36,7 +36,5 @@ class AuthenticationTest extends TestCase
         ->whereType('message', 'string')
         ->etc()
     );
-
-    $this->assertAuthenticatedAs($this->user);
   }
 }
