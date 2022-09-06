@@ -41,6 +41,30 @@ describe('Home Components Test Cases', () => {
 
   Modal.setAppElement = () => null;
 
+  it('Should render Loading Component before data is retrieved', async () => {
+    const history = createMemoryHistory();
+    history.push('/home');
+
+    global.matchMedia =
+      global.matchMedia ||
+      function () {
+        return {
+          addListener: jest.fn(),
+          removeListener: jest.fn(),
+        };
+      };
+
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <Home />
+        </Router>
+      </Provider>
+    );
+
+    expect(screen.getByTestId('loading')).toBeTruthy();
+  });
+
   it('Should check if home is rendering all elements correctly', async () => {
     const history = createMemoryHistory();
     history.push('/home');
