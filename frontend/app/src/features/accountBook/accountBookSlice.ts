@@ -159,6 +159,38 @@ const initialState: ACCOUNTBOOK_STATE = {
       },
     ],
   },
+  recomendAccountBooks: {
+    accountBook: [
+      {
+        id: '',
+        date: '',
+        user_id: '',
+        monthly_income: 0,
+        likes: [
+          {
+            id: '',
+            user_id: '',
+            post_account_book_id: '',
+          },
+        ],
+        bookmarks: [
+          {
+            id: '',
+            user_id: '',
+            post_account_book_id: '',
+          },
+        ],
+      },
+    ],
+    costs: [
+      {
+        date: '',
+        expenseItem: '',
+        cost: 0,
+        user_id: '',
+      },
+    ],
+  },
   message: '',
   successOrFailure: true,
 };
@@ -454,6 +486,27 @@ export const updatePostAccountBook = createAsyncThunk(
   }
 );
 
+export const recomendAccountBookList = createAsyncThunk(
+  'recomend/accountBookList',
+  async (data: any) => {
+    const uploadData = new FormData();
+    uploadData.append('name', data.name);
+    uploadData.append('job', data.job);
+    uploadData.append('income', data.income);
+    uploadData.append('composition', data.composition);
+    const res = await axios.post(
+      `${apiUrl}api/recomend/accountbook`,
+      uploadData,
+      {
+        headers: {
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const createPostCost = createAsyncThunk(
   'create/postCosts',
   async (data: any) => {
@@ -711,6 +764,12 @@ export const accountBookSlice = createSlice({
         postMyAccountBook: action.payload,
       };
     });
+    builder.addCase(recomendAccountBookList.fulfilled, (state, action) => {
+      return {
+        ...state,
+        recomendAccountBooks: action.payload,
+      };
+    });
     builder.addCase(patchLiked.fulfilled, (state, action) => {
       return {
         ...state,
@@ -738,6 +797,8 @@ export const selectAccountBookDetail = (state: RootState) =>
   state.accountBook.accountBookDetail;
 export const selectPostMyAccountBook = (state: RootState) =>
   state.accountBook.postMyAccountBook;
+export const selectRecomendAccountBooks = (state: RootState) =>
+  state.accountBook.recomendAccountBooks;
 export const selectAccountBookMessage = (state: RootState) =>
   state.accountBook.message;
 export const selectAccountBookSuccessOrFailure = (state: RootState) =>
