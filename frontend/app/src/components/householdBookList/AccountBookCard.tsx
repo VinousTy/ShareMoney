@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { selectProfiles, selectUserId } from '../../features/auth/authSlice';
@@ -54,9 +54,12 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
   const profiles = useSelector(selectProfiles);
   const isWide = useMedia({ maxWidth: '768px' });
   const history = useHistory();
+  const location = useLocation();
   const [cookies] = useCookies();
 
   let sortCost = [...props.costs];
+
+  const home = location.pathname.includes('/home');
 
   const expenseItemChart: Array<string> = [];
   sortCost
@@ -118,7 +121,9 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
   return (
     <>
       <div
-        className={`bg-white rounded-lg border shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 my-8 md:mx-auto md:w-7/12 md:my-12 lg:w-5/12`}
+        className={`${
+          home ? 'md:mr-10 relative' : 'md:mx-auto'
+        } bg-white rounded-lg border shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 my-8 md:w-7/12 md:my-12 lg:w-5/12`}
       >
         {props.icon && (
           <FaCrown
@@ -202,33 +207,51 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
               </div>
             </div>
             <div className="flex items-center w-full">
-              <div
-                className="flex items-center border border-orange rounded-full cursor-pointer px-2 py-2 bg-header-menu shadow-2xl ml-6 mr-4 my-2"
-                onClick={() => handlerLiked()}
-              >
-                {props.likes?.some((like) => like.user_id === loginUserId) ? (
-                  <AiFillLike className="text-red-400" />
-                ) : (
-                  <AiOutlineLike />
-                )}
-                <span>{props.likes?.length}</span>
-              </div>
-
-              <div
-                className="flex items-center border border-orange rounded-full cursor-pointer px-2 py-2 bg-header-menu shadow-2xl my-2"
-                onClick={() => handlerBookmark()}
-              >
-                {props.bookmarks?.some(
-                  (bookmark) => bookmark.user_id === loginUserId
-                ) ? (
-                  <BsBookmarkFill className="text-green" />
-                ) : (
-                  <BsBookmark />
-                )}
-                <span>{props.bookmarks?.length}</span>
-              </div>
+              {home ? (
+                <div className="py-4 ml-3">
+                  <span className="text-red-400">「いいね!」:&nbsp;</span>
+                  <span
+                    className="font-semibold text-black ml-1"
+                    data-testid="card-like"
+                  >
+                    &nbsp;{props.likes?.length}件
+                  </span>
+                </div>
+              ) : (
+                <div
+                  className="flex items-center border border-orange rounded-full cursor-pointer px-2 py-2 bg-header-menu shadow-2xl ml-6 mr-4 my-2"
+                  onClick={() => handlerLiked()}
+                >
+                  {props.likes?.some((like) => like.user_id === loginUserId) ? (
+                    <AiFillLike className="text-red-400" />
+                  ) : (
+                    <AiOutlineLike />
+                  )}
+                  {/* <AiOutlineLike /> */}
+                  <span>{props.likes?.length}</span>
+                </div>
+              )}
+              {home ? (
+                <></>
+              ) : (
+                <div
+                  className="flex items-center border border-orange rounded-full cursor-pointer px-2 py-2 bg-header-menu shadow-2xl my-2"
+                  onClick={() => handlerBookmark()}
+                >
+                  {props.bookmarks.some(
+                    (bookmark) => bookmark.user_id === loginUserId
+                  ) ? (
+                    <BsBookmarkFill className="text-green" />
+                  ) : (
+                    <BsBookmark />
+                  )}
+                  <span>{props.bookmarks?.length}</span>
+                </div>
+              )}
               <p
-                className={`flex items-center cursor-pointer ml-20 lg:ml-32`}
+                className={`${
+                  home && 'ml-10'
+                } flex items-center cursor-pointer ml-20 lg:ml-32`}
                 onClick={() =>
                   history.push(
                     `/accountBook/detail/${props.user_id}/${props.date}`
