@@ -1,0 +1,31 @@
+.underline {
+  border-bottom: solid 2px rgb(250, 175, 24);
+  font-weight: bold;
+  color: #333;
+}
+
+.disabled {
+  color: gray;
+  opacity: 0.7;
+}
+
+@media screen and (min-width: 768px) {
+  .wrap {
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      margin: 0 2px;
+      background: #ccc;
+      border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+      background: #666;
+    }
+  }
+}
