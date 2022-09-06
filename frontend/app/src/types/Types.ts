@@ -200,6 +200,30 @@ export interface ACCOUNTBOOK_STATE {
       cost: number;
     }[];
   };
+  recomendAccountBooks: {
+    accountBook: {
+      id: string;
+      date: string;
+      user_id: string;
+      monthly_income: number;
+      likes: {
+        id: string;
+        user_id: string;
+        post_account_book_id: string;
+      }[];
+      bookmarks: {
+        id: string;
+        user_id: string;
+        post_account_book_id: string;
+      }[];
+    }[];
+    costs: {
+      date: string;
+      expenseItem: string;
+      cost: number;
+      user_id: string;
+    }[];
+  };
   message: string;
   successOrFailure: boolean;
 }
