@@ -45,28 +45,6 @@ const MyPage: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const fetchBootLoader = async () => {
-      dispatch(isLoadingStart());
-      if (cookies) {
-        await dispatch(getMyProfile(cookies));
-        await dispatch(isSignIn());
-      }
-      dispatch(isLoadingEnd());
-      if (authMessage !== '') {
-        setFlash(true);
-      } else if (accountBookMessage !== '') {
-        setFlash(true);
-      }
-    };
-    fetchBootLoader();
-
-    // setTimeout(() => {
-    //   dispatch(editMessage(''));
-    //   dispatch(editAccountBookMessage(''));
-    // }, 6000);
-  }, []);
-
-  useEffect(() => {
     const packet = {
       date: date,
       cookie: cookies,
@@ -74,6 +52,8 @@ const MyPage: React.FC = () => {
     const fetchBootLoader = async () => {
       dispatch(isLoadingStart());
       if (cookies) {
+        await dispatch(getMyProfile(cookies));
+        await dispatch(isSignIn());
         await dispatch(getSelectDateAccountBook(packet));
         await dispatch(
           postAccountBookDetail({
@@ -83,6 +63,11 @@ const MyPage: React.FC = () => {
           })
         );
         dispatch(isLoadingEnd());
+        if (authMessage !== '') {
+          setFlash(true);
+        } else if (accountBookMessage !== '') {
+          setFlash(true);
+        }
       }
     };
     fetchBootLoader();
