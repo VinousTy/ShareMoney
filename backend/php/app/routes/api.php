@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('create/postAccountBook', [PostAccountBookController::class, 'create'])->name('postAccountBook.create');
   Route::post('update/postAccountBook/{id}', [PostAccountBookController::class, 'update']);
   Route::post('detail/postAccountBook', [PostAccountBookController::class, 'detail'])->name('postAccountBook.detail');
+  Route::post('recomend/accountbook', [PostAccountBookController::class, 'recomend'])->name('postAccountBook.recomend');
   Route::post('create/postExpense', [PostExpenseController::class, 'create'])->name('postExpense.create');
   Route::put('update/postExpense/{id}', [PostExpenseController::class, 'update']);
   Route::post('destroy/postExpense/{id}', [PostExpenseController::class, 'destroy']);
