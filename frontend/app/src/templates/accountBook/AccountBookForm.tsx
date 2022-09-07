@@ -50,7 +50,7 @@ interface COSTS {
 }
 
 interface PACKET_COSTS {
-  account_book_id: string;
+  account_book_id: string | boolean;
   expenses: {
     id: number;
     expenseItem: string;
@@ -71,7 +71,8 @@ const AccountBookForm: React.FC = () => {
     [addBtn, setAddBtn] = useState(true),
     [editing, setEditing] = useState(false),
     [isAlertmonthlyIncome, setIsAlertmonthlyIncome] = useState(false),
-    [costs, setCosts] = useState([]);
+    [costs, setCosts] = useState([]),
+    [valid, setValid] = useState(false);
   const history = useHistory();
   const [cookies, setCookies] = useCookies();
   const [tabIndex, setTabIndex] = useState(0);
@@ -194,24 +195,28 @@ const AccountBookForm: React.FC = () => {
     };
 
     const updatePacketCost: PACKET_COSTS = {
-      account_book_id: editAccountBook[0]?.id,
+      account_book_id: editAccountBook !== undefined && editAccountBook[0]?.id,
       expenses: [],
       cookie: cookies,
     };
 
-    editAccountBook[0]?.expenses.filter((expense) => {
-      array.forEach((cost) => {
-        if (cost.expenseItem === expense.expenseItem) {
-          updatePacketCost.expenses.push(cost);
-        }
+    if (editAccountBook !== undefined) {
+      editAccountBook[0]?.expenses.filter((expense) => {
+        array.forEach((cost) => {
+          if (cost.expenseItem === expense.expenseItem) {
+            updatePacketCost.expenses.push(cost);
+          }
+        });
       });
-    });
+    }
 
     function getTagDiff() {
       const same = costs?.filter((cost: COST) => {
-        return editAccountBook[0]?.expenses.find(
-          (expense) => expense.expenseItem === cost.expenseItem
-        );
+        if (editAccountBook !== undefined) {
+          return editAccountBook[0]?.expenses.find(
+            (expense) => expense.expenseItem === cost.expenseItem
+          );
+        }
       });
       const sameIds = same.map((_item: COST) => _item.expenseItem);
 
@@ -221,17 +226,25 @@ const AccountBookForm: React.FC = () => {
     }
 
     if (id) {
-      await dispatch(isLoadingStart());
-      await dispatch(updateAccountBook(updatePacketAccountBook));
-      await dispatch(postCosts(createPacketCost));
-      await dispatch(updateCost(updatePacketCost));
-      await dispatch(isLoadingEnd());
-      await history.push('/mypage');
+      if (!costs.length) {
+        setValid(true);
+      } else {
+        await dispatch(isLoadingStart());
+        await dispatch(updateAccountBook(updatePacketAccountBook));
+        await dispatch(postCosts(createPacketCost));
+        await dispatch(updateCost(updatePacketCost));
+        await dispatch(isLoadingEnd());
+        await history.push('/mypage');
+      }
     } else {
-      await dispatch(isLoadingStart());
-      await dispatch(createAccountBook(createPacketAccountBook));
-      await dispatch(isLoadingEnd());
-      await history.push('/mypage');
+      if (!costs.length) {
+        setValid(true);
+      } else {
+        await dispatch(isLoadingStart());
+        await dispatch(createAccountBook(createPacketAccountBook));
+        await dispatch(isLoadingEnd());
+        await history.push('/mypage');
+      }
     }
   };
 
@@ -314,7 +327,12 @@ const AccountBookForm: React.FC = () => {
                 </TabList>
                 <TabPanel>
                   <div className="px-8 py-8">
-                    <CostArea costs={costs} setCosts={setCosts} />
+                    <CostArea
+                      costs={costs}
+                      setCosts={setCosts}
+                      valid={valid}
+                      setValid={setValid}
+                    />
                   </div>
                 </TabPanel>
                 <TabPanel className="px-8">
@@ -418,7 +436,8 @@ const AccountBookForm: React.FC = () => {
               </Tabs>
               <div className="pb-6 mt-12">
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleSubmit(onSubmit)}
                   className="px-20 py-2.5 relative rounded group font-medium text-white inline-block"
                   data-testid="button-submit"
                 >
