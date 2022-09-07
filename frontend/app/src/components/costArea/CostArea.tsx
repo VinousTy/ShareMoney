@@ -43,6 +43,8 @@ interface PROPS {
     cost: string;
   }[];
   setCosts: Dispatch<SetStateAction<never[]>>;
+  valid: boolean;
+  setValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CostArea = (props: PROPS) => {
@@ -98,6 +100,7 @@ const CostArea = (props: PROPS) => {
         setIsAlertCost(false);
       }
     }
+    props.setValid(false);
   };
 
   const editCost = (index: number, expenseItem: string, cost: string) => {
@@ -208,6 +211,11 @@ const CostArea = (props: PROPS) => {
           {errors.expenseItem && (
             <p className="text-red-500 text-xs mt-3 italic" role="alert">
               {errors.expenseItem.message}
+            </p>
+          )}
+          {props.valid && (
+            <p className="text-red-500 text-xs mt-3 italic" role="alert">
+              最低でも1つ以上の費目・費用を追加してください
             </p>
           )}
         </div>
