@@ -7,7 +7,7 @@ interface PROPS {
 }
 
 const PieChart: React.VFC<PROPS> = (props) => {
-  const pieChart = props.costs.length > 1 && (
+  const pieChart = props.costs.length >= 1 && (
     <Pie
       data={{
         labels: props.expenseItem,
