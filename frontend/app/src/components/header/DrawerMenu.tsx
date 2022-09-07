@@ -26,11 +26,23 @@ const DrawerMenu: React.VFC = () => {
     dispatch(isToggleDrawer());
   };
 
+  const pageTransition = (pass: string) => {
+    if (profile === undefined) {
+      alert('プロフィールの登録を行ってください');
+      dispatch(isToggleDrawer());
+    } else {
+      history.push(`/${pass}`);
+    }
+  };
+
   const headerMenu = () => {
     if (signIn) {
       return (
         <>
-          <li className={styles.nav_item}>
+          <li
+            className={styles.nav_item}
+            onClick={() => pageTransition('mypage')}
+          >
             <span className={styles.cp_link}>
               <HomeIcon />
               <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
@@ -38,7 +50,10 @@ const DrawerMenu: React.VFC = () => {
               </button>
             </span>
           </li>
-          <li className={styles.nav_item}>
+          <li
+            className={styles.nav_item}
+            onClick={() => pageTransition('accountBook/list')}
+          >
             <span className={styles.cp_link}>
               <SearchIcon />
               <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
@@ -46,7 +61,10 @@ const DrawerMenu: React.VFC = () => {
               </button>
             </span>
           </li>
-          <li className={styles.nav_item}>
+          <li
+            className={styles.nav_item}
+            onClick={() => pageTransition('home')}
+          >
             <span className={styles.cp_link}>
               <span className="flex items-center">
                 <FaCrown />
@@ -56,7 +74,20 @@ const DrawerMenu: React.VFC = () => {
               </span>
             </span>
           </li>
-          <li className={styles.nav_item}>
+          <li
+            className={styles.nav_item}
+            onClick={() => pageTransition('bookmark/accountBook/list')}
+          >
+            <span className={styles.cp_link}>
+              <span className="flex items-center">
+                <BsBookmarkFill />
+                <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                  保存した家計簿
+                </button>
+              </span>
+            </span>
+          </li>
+          <li className={styles.nav_item} onClick={() => logout()}>
             <span className={styles.cp_link}>
               <ExitToAppIcon />
               <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
