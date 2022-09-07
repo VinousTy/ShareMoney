@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 import { AppDispatch } from '../../app/store';
 import {
   isDeleteModalClose,
+  isLoadingEnd,
+  isLoadingStart,
   isPostModalClose,
   selectIsDeleteModal,
   selectIsPostModal,
@@ -111,9 +113,11 @@ const Modals: React.VFC<PROPS> = (props) => {
             onClick={
               props.type === 'delete'
                 ? async () => {
+                    await dispatch(isLoadingStart());
                     await dispatch(props.func(props.packet));
                     await dispatch(isDeleteModalClose());
                     await history.push(`${props.path}`);
+                    await dispatch(isLoadingEnd());
                   }
                 : async () => {
                     postAccountBook();
