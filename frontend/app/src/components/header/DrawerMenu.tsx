@@ -11,9 +11,14 @@ import {
   selectIsDrawer,
 } from '../../features/layout/layoutSlice';
 import { useHistory } from 'react-router-dom';
+import { selectIsSignIn } from '../../features/auth/authSlice';
+import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
+import { FaCrown } from 'react-icons/fa';
 
 const DrawerMenu: React.VFC = () => {
   const dispatch: AppDispatch = useDispatch();
+  const signIn = useSelector(selectIsSignIn);
   const drawer = useSelector(selectIsDrawer);
   const history = useHistory();
 
@@ -22,45 +27,92 @@ const DrawerMenu: React.VFC = () => {
   };
 
   const headerMenu = () => {
-    return (
-      <>
-        <li className={styles.nav_item} onClick={() => history.push('/signup')}>
-          <span className={styles.cp_link}>
-            <PersonAddIcon />
-            <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
-              新規登録
-            </button>
-          </span>
-        </li>
-        <li className={styles.nav_item} onClick={() => history.push('/signin')}>
-          <span className={styles.cp_link}>
-            <ExitToAppIcon />
-            <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
-              ログイン
-            </button>
-          </span>
-        </li>
-        <li className={styles.nav_item}>
-          <span className={styles.cp_link}>
-            <AccountCircleIcon />
-            <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
-              ゲストログイン
-            </button>
-          </span>
-        </li>
-        <li
-          className={styles.nav_item}
-          onClick={() => history.push('/contact')}
-        >
-          <span className={styles.cp_link}>
-            <ContactMailIcon />
-            <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
-              お問い合わせ
-            </button>
-          </span>
-        </li>
-      </>
-    );
+    if (signIn) {
+      return (
+        <>
+          <li className={styles.nav_item}>
+            <span className={styles.cp_link}>
+              <HomeIcon />
+              <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                マイページ
+              </button>
+            </span>
+          </li>
+          <li className={styles.nav_item}>
+            <span className={styles.cp_link}>
+              <SearchIcon />
+              <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                家計簿一覧
+              </button>
+            </span>
+          </li>
+          <li className={styles.nav_item}>
+            <span className={styles.cp_link}>
+              <span className="flex items-center">
+                <FaCrown />
+                <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                  ランキング
+                </button>
+              </span>
+            </span>
+          </li>
+          <li className={styles.nav_item}>
+            <span className={styles.cp_link}>
+              <ExitToAppIcon />
+              <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                ログアウト
+              </button>
+            </span>
+          </li>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <li
+            className={styles.nav_item}
+            onClick={() => history.push('/signup')}
+          >
+            <span className={styles.cp_link}>
+              <PersonAddIcon />
+              <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                新規登録
+              </button>
+            </span>
+          </li>
+          <li
+            className={styles.nav_item}
+            onClick={() => history.push('/signin')}
+          >
+            <span className={styles.cp_link}>
+              <ExitToAppIcon />
+              <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                ログイン
+              </button>
+            </span>
+          </li>
+          <li className={styles.nav_item}>
+            <span className={styles.cp_link}>
+              <AccountCircleIcon />
+              <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                ゲストログイン
+              </button>
+            </span>
+          </li>
+          <li
+            className={styles.nav_item}
+            onClick={() => history.push('/contact')}
+          >
+            <span className={styles.cp_link}>
+              <ContactMailIcon />
+              <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                お問い合わせ
+              </button>
+            </span>
+          </li>
+        </>
+      );
+    }
   };
 
   return (

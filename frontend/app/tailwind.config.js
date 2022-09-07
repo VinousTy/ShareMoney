@@ -20,6 +20,7 @@ module.exports = {
         'thin-silver': '#C0C0C0',
         'bronze': '#964d04',
         'thin-bronze': '#c47222',
+        'header-menu': '#fbf6f0',
       },
     },
   },
