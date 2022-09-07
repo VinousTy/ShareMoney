@@ -51,6 +51,16 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
     setTooltip(!tooltip);
   }, [setTooltip, tooltip]);
 
+  const pageTransition = (pass: string) => {
+    if (profile === undefined) {
+      alert('プロフィールの登録を行ってください');
+      setTooltip(!tooltip);
+    } else {
+      history.push(`/${pass}`);
+      setTooltip(!tooltip);
+    }
+  };
+
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
       <div className={`${classes.root} pt-4 cursor-pointer`}>
@@ -66,7 +76,7 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
           <li className="leading-6 border-b border-gray-300 my-2">
             <span
               className="hover:text-button-color-orange-hover transition"
-              onClick={() => history.push('/mypage')}
+              onClick={() => pageTransition('mypage')}
             >
               <HomeIcon />
               マイページ
@@ -75,7 +85,7 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
           <li className="leading-6 border-b border-gray-300 my-2">
             <span
               className="hover:text-button-color-orange-hover transition flex items-center"
-              onClick={() => history.push('/accountBook/regist')}
+              onClick={() => pageTransition('accountBook/regist')}
             >
               <AiFillFileAdd />
               <span>家計簿追加</span>
@@ -84,7 +94,7 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
           <li className="leading-6 border-b border-gray-300 my-2">
             <span
               className="hover:text-button-color-orange-hover transition"
-              onClick={() => history.push('/accountBook/list')}
+              onClick={() => pageTransition('accountBook/list')}
             >
               <SearchIcon />
               一覧
@@ -93,7 +103,7 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
           <li className="leading-6 border-b border-gray-300 my-2">
             <span
               className="hover:text-button-color-orange-hover transition flex items-center"
-              onClick={() => history.push('/home')}
+              onClick={() => pageTransition('home')}
             >
               <FaCrown />
               <span>ランキング</span>

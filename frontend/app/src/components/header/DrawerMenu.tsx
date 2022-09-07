@@ -11,7 +11,7 @@ import {
   selectIsDrawer,
 } from '../../features/layout/layoutSlice';
 import { useHistory } from 'react-router-dom';
-import { selectIsSignIn } from '../../features/auth/authSlice';
+import { selectIsSignIn, selectProfile } from '../../features/auth/authSlice';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import { FaCrown } from 'react-icons/fa';
@@ -19,6 +19,7 @@ import { FaCrown } from 'react-icons/fa';
 const DrawerMenu: React.VFC = () => {
   const dispatch: AppDispatch = useDispatch();
   const signIn = useSelector(selectIsSignIn);
+  const profile = useSelector(selectProfile);
   const drawer = useSelector(selectIsDrawer);
   const history = useHistory();
 
@@ -26,11 +27,23 @@ const DrawerMenu: React.VFC = () => {
     dispatch(isToggleDrawer());
   };
 
+  const pageTransition = (pass: string) => {
+    if (profile === undefined) {
+      alert('プロフィールの登録を行ってください');
+      dispatch(isToggleDrawer());
+    } else {
+      history.push(`/${pass}`);
+    }
+  };
+
   const headerMenu = () => {
     if (signIn) {
       return (
         <>
-          <li className={styles.nav_item}>
+          <li
+            className={styles.nav_item}
+            onClick={() => pageTransition('mypage')}
+          >
             <span className={styles.cp_link}>
               <HomeIcon />
               <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
@@ -38,7 +51,10 @@ const DrawerMenu: React.VFC = () => {
               </button>
             </span>
           </li>
-          <li className={styles.nav_item}>
+          <li
+            className={styles.nav_item}
+            onClick={() => pageTransition('accountBook/list')}
+          >
             <span className={styles.cp_link}>
               <SearchIcon />
               <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
@@ -46,7 +62,10 @@ const DrawerMenu: React.VFC = () => {
               </button>
             </span>
           </li>
-          <li className={styles.nav_item}>
+          <li
+            className={styles.nav_item}
+            onClick={() => pageTransition('home')}
+          >
             <span className={styles.cp_link}>
               <span className="flex items-center">
                 <FaCrown />
