@@ -597,6 +597,18 @@ export const postAccountBookDetail = createAsyncThunk(
   }
 );
 
+export const getBookmarkAccountBook = createAsyncThunk(
+  'get/bookmarkAccountBook',
+  async (cookie: COOKIE) => {
+    const res = await axios.get(`${apiUrl}api/bookmark/accountbook`, {
+      headers: {
+        Authorization: `Bearer ${cookie.Bearer}`,
+      },
+    });
+    return res.data;
+  }
+);
+
 export const patchLiked = createAsyncThunk(
   'post/like',
   async (data: LIKE_BOOKMARK) => {
@@ -768,6 +780,12 @@ export const accountBookSlice = createSlice({
       return {
         ...state,
         recomendAccountBooks: action.payload,
+      };
+    });
+    builder.addCase(getBookmarkAccountBook.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accountBooks: action.payload,
       };
     });
     builder.addCase(patchLiked.fulfilled, (state, action) => {
