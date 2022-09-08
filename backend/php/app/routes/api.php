@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('destroy/postExpense/{id}', [PostExpenseController::class, 'destroy']);
   Route::post('like', [LikeController::class, 'like']);
   Route::post('destroy/like', [LikeController::class, 'destroy']);
+  Route::get('bookmark/accountbook', [BookmarkController::class, 'index']);
   Route::post('bookmark', [BookmarkController::class, 'bookmark']);
   Route::post('destroy/bookmark', [BookmarkController::class, 'destroy']);
 });

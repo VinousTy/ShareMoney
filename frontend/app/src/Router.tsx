@@ -5,6 +5,7 @@ import Header from './components/header/Header';
 import AccountBookDetail from './templates/accountBook/AccountBookDetail';
 import AccountBookForm from './templates/accountBook/AccountBookForm';
 import AccountBookList from './templates/accountBook/AccountBookList';
+import BookmarkAccountBookList from './templates/accountBook/BookmarkAccountBookList';
 import EmailPost from './templates/auth/EmailPost';
 import PasswordReset from './templates/auth/PasswordReset';
 import SignIn from './templates/auth/SignIn';
@@ -33,6 +34,11 @@ const Router: React.VFC = () => {
           component={AccountBookDetail}
         />
         <Route exact path="/home" component={Home} />
+        <Route
+          exact
+          path="/bookmark/accountBook/list"
+          component={BookmarkAccountBookList}
+        />
         <Route exact path="*" component={Error} />
       </Switch>
       <Footer />
