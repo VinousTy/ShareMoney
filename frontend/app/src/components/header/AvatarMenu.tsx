@@ -12,6 +12,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import { FaCrown } from 'react-icons/fa';
 import { AiFillFileAdd } from 'react-icons/ai';
+import { BsBookmarkFill } from 'react-icons/bs';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -107,6 +108,15 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
             >
               <FaCrown />
               <span>ランキング</span>
+            </span>
+          </li>
+          <li className="leading-6 border-b border-gray-300 my-2">
+            <span
+              className="hover:text-button-color-orange-hover transition flex items-center"
+              onClick={() => pageTransition('bookmark/accountBook/list')}
+            >
+              <BsBookmarkFill />
+              <span>保存した家計簿</span>
             </span>
           </li>
           <li className="leading-6 border-b border-gray-300 my-2">

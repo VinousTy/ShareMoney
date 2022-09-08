@@ -15,6 +15,7 @@ import { selectIsSignIn, selectProfile } from '../../features/auth/authSlice';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import { FaCrown } from 'react-icons/fa';
+import { BsBookmarkFill } from 'react-icons/bs';
 
 const DrawerMenu: React.VFC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -71,6 +72,19 @@ const DrawerMenu: React.VFC = () => {
                 <FaCrown />
                 <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
                   ランキング
+                </button>
+              </span>
+            </span>
+          </li>
+          <li
+            className={styles.nav_item}
+            onClick={() => pageTransition('bookmark/accountBook/list')}
+          >
+            <span className={styles.cp_link}>
+              <span className="flex items-center">
+                <BsBookmarkFill />
+                <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
+                  保存した家計簿
                 </button>
               </span>
             </span>
