@@ -55,11 +55,19 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
   const isWide = useMedia({ maxWidth: '768px' });
   const history = useHistory();
   const location = useLocation();
+  const search = useLocation().search;
   const [cookies] = useCookies();
+
+  const query = new URLSearchParams(search);
+  const query_name = query.get('name');
+  const query_income = query.get('income');
+  const query_job = query.get('job');
+  const query_composition = query.get('composition');
 
   let sortCost = [...props.costs];
 
   const home = location.pathname.includes('/home');
+  const bookmark = location.pathname.includes('/bookmark');
 
   const expenseItemChart: Array<string> = [];
   sortCost
@@ -96,7 +104,27 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
   }, [costs]);
 
   const handlerLiked = async () => {
+    let name = '';
+    let type = '';
+    if (query_name) {
+      name = unescape(String(query_name));
+      type = 'username';
+    } else if (query_income) {
+      name = unescape(String(query_income));
+      type = 'income';
+    } else if (query_job) {
+      name = unescape(String(query_job));
+      type = 'job';
+    } else if (query_composition) {
+      name = unescape(String(query_composition));
+      type = 'composition';
+    } else if (bookmark) {
+      name = 'bookmark';
+      type = 'bookmark';
+    }
     const packet = {
+      name: name,
+      type: type,
       post_account_book_id: props.id,
       current: props.likes,
       push_icon_user_id: loginUserId,
@@ -107,7 +135,27 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
   };
 
   const handlerBookmark = async () => {
+    let name = '';
+    let type = '';
+    if (query_name) {
+      name = unescape(String(query_name));
+      type = 'username';
+    } else if (query_income) {
+      name = unescape(String(query_income));
+      type = 'income';
+    } else if (query_job) {
+      name = unescape(String(query_job));
+      type = 'job';
+    } else if (query_composition) {
+      name = unescape(String(query_composition));
+      type = 'composition';
+    } else if (bookmark) {
+      name = 'bookmark';
+      type = 'bookmark';
+    }
     const packet = {
+      name: name,
+      type: type,
       post_account_book_id: props.id,
       current: props.bookmarks,
       push_icon_user_id: loginUserId,
