@@ -23,6 +23,28 @@ class BookmarkTest extends TestCase
     $response->assertStatus(302);
   }
 
+  public function testBookmarkIndex()
+  {
+    $user = User::factory()->create();
+
+    $auth = $this->actingAs($user);
+
+    $postAccountBook = PostAccountBook::factory()->create();
+
+    $bookmark = Bookmark::factory()->create();
+
+    $response = $this->get(route('bookmark/index'));
+
+    $response->assertStatus(200);
+    $this->assertEquals(1, Bookmark::count());
+
+    $response->assertJson(
+      fn (AssertableJson $json) =>
+      $json->whereType('accountBook', 'array')
+        ->whereType('costs', 'array')
+    );
+  }
+
   public function testBookmarkCreate()
   {
     $user = User::factory()->create();
