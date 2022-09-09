@@ -630,7 +630,143 @@ export const patchLiked = createAsyncThunk(
         'post_account_book_id',
         String(data.post_account_book_id)
       );
-      const res = await axios.post(`${apiUrl}api/like`, uploadData, {
+      if (data.type === 'username') {
+        const res = await axios.post(
+          `${apiUrl}api/like?name=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else if (data.type === 'income') {
+        const res = await axios.post(
+          `${apiUrl}api/like?income=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else if (data.type === 'job') {
+        const res = await axios.post(
+          `${apiUrl}api/like?job=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else if (data.type === 'composition') {
+        const res = await axios.post(
+          `${apiUrl}api/like?composition=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else if (data.type === 'bookmark') {
+        const res = await axios.post(
+          `${apiUrl}api/like?bookmark=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else {
+        const res = await axios.post(`${apiUrl}api/like`, uploadData, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        });
+        return res.data;
+      }
+    }
+    uploadData.append('user_id', String(data.push_icon_user_id));
+    uploadData.append(
+      'post_account_book_id',
+      String(data.post_account_book_id)
+    );
+    if (data.type === 'username') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/like?name=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'income') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/like?income=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'job') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/like?job=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'composition') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/like?composition=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'bookmark') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/like?bookmark=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else {
+      const res = await axios.post(`${apiUrl}api/destroy/like`, uploadData, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${data.cookie.Bearer}`,
@@ -638,18 +774,6 @@ export const patchLiked = createAsyncThunk(
       });
       return res.data;
     }
-    uploadData.append('user_id', String(data.push_icon_user_id));
-    uploadData.append(
-      'post_account_book_id',
-      String(data.post_account_book_id)
-    );
-    const res = await axios.post(`${apiUrl}api/destroy/like`, uploadData, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${data.cookie.Bearer}`,
-      },
-    });
-    return res.data;
   }
 );
 
@@ -674,28 +798,154 @@ export const patchBookmark = createAsyncThunk(
         'post_account_book_id',
         String(data.post_account_book_id)
       );
-
-      const res = await axios.post(`${apiUrl}api/bookmark`, uploadData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${data.cookie.Bearer}`,
-        },
-      });
-      return res.data;
+      if (data.type === 'username') {
+        const res = await axios.post(
+          `${apiUrl}api/bookmark?name=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else if (data.type === 'income') {
+        const res = await axios.post(
+          `${apiUrl}api/bookmark?income=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else if (data.type === 'job') {
+        const res = await axios.post(
+          `${apiUrl}api/bookmark?job=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else if (data.type === 'composition') {
+        const res = await axios.post(
+          `${apiUrl}api/bookmark?composition=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else if (data.type === 'bookmark') {
+        const res = await axios.post(
+          `${apiUrl}api/bookmark?bookmark=${data.name}`,
+          uploadData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${data.cookie.Bearer}`,
+            },
+          }
+        );
+        return res.data;
+      } else {
+        const res = await axios.post(`${apiUrl}api/bookmark`, uploadData, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        });
+        return res.data;
+      }
     }
     uploadData.append('user_id', String(data.push_icon_user_id));
     uploadData.append(
       'post_account_book_id',
       String(data.post_account_book_id)
     );
-
-    const res = await axios.post(`${apiUrl}api/destroy/bookmark`, uploadData, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${data.cookie.Bearer}`,
-      },
-    });
-    return res.data;
+    if (data.type === 'username') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/bookmark?name=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'income') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/bookmark?income=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'job') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/bookmark?job=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'composition') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/bookmark?composition=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else if (data.type === 'bookmark') {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/bookmark?bookmark=${data.name}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    } else {
+      const res = await axios.post(
+        `${apiUrl}api/destroy/bookmark`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.cookie.Bearer}`,
+          },
+        }
+      );
+      return res.data;
+    }
   }
 );
 
