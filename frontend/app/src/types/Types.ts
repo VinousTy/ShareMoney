@@ -307,6 +307,8 @@ export interface SEARCH_NAME {
 }
 
 export interface LIKE_BOOKMARK {
+  name: string;
+  type: string;
   post_account_book_id: string;
   current: {
     id: string;
