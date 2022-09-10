@@ -19,7 +19,7 @@ const Error: React.VFC = () => {
               alt="ログイン画面へようこそ"
             />
             <a
-              className="text-gray-500 text-gray-700 text-xs"
+              className="text-gray-400 text-xs"
               href="https://storyset.com/user"
             >
               User illustrations by Storyset
@@ -70,7 +70,7 @@ const Error: React.VFC = () => {
           />
           <a
             href="https://storyset.com/online"
-            className="text-story-set text-xs text-gray-700"
+            className="text-xs text-gray-400"
           >
             Online illustrations by Storyset
           </a>
