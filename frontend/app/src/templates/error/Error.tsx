@@ -1,4 +1,5 @@
 import React from 'react';
+import { useCookies } from 'react-cookie';
 import { BsFillArrowRightCircleFill } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 import useMedia from 'use-media';
@@ -7,6 +8,7 @@ import error_image from '../../assets/404_error_bro.png';
 const Error: React.VFC = () => {
   const history = useHistory();
   const isWide = useMedia({ maxWidth: '768px' });
+  const [cookies] = useCookies();
 
   return (
     <div className="w-10/12 md:w-11/12 md:flex md:items-center bg-white shadow-2xl my-24 mx-auto rounded-3xl lg:w-10/12">
@@ -45,21 +47,39 @@ const Error: React.VFC = () => {
           URLが間違っている可能性がございます。
         </p>
         <p className="text-gray-700">下記リンクからお戻りください。</p>
-        <div
-          className={`${
-            isWide
-              ? 'flex items-center justify-center mt-6 pb-10'
-              : 'flex items-center justify-center mt-10 pb-10'
-          }`}
-        >
-          <BsFillArrowRightCircleFill />
-          <p
-            className="text-blue-600 underline ... cursor-pointer hover:text-red-500 transition-all pl-2"
-            onClick={() => history.push('/mypage')}
+        {cookies.Bearer !== undefined ? (
+          <div
+            className={`${
+              isWide
+                ? 'flex items-center justify-center mt-6 pb-10'
+                : 'flex items-center justify-center mt-10 pb-10'
+            }`}
           >
-            マイページへ
-          </p>
-        </div>
+            <BsFillArrowRightCircleFill />
+            <p
+              className="text-blue-600 underline ... cursor-pointer hover:text-red-500 transition-all pl-2"
+              onClick={() => history.push('/mypage')}
+            >
+              マイページへ
+            </p>
+          </div>
+        ) : (
+          <div
+            className={`${
+              isWide
+                ? 'flex items-center justify-center mt-6 pb-10'
+                : 'flex items-center justify-center mt-10 pb-10'
+            }`}
+          >
+            <BsFillArrowRightCircleFill />
+            <p
+              className="text-blue-600 underline ... cursor-pointer hover:text-red-500 transition-all pl-2"
+              onClick={() => history.push('/signin')}
+            >
+              ログインページへ
+            </p>
+          </div>
+        )}
       </div>
       {!isWide && (
         <div className="w-8/12 rounded-r-3xl text-center">
