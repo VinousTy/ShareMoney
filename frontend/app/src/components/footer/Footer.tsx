@@ -4,55 +4,68 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import LockIcon from '@material-ui/icons/Lock';
 import useMedia from 'use-media';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo__footer.png';
+import { useSelector } from 'react-redux';
+import { selectIsSignIn } from '../../features/auth/authSlice';
+import BottomNav from './BottomNav';
 
 const Footer: React.FC = () => {
+  const location = useLocation();
   const isWide = useMedia({ maxWidth: '768px' });
+  const signIn = useSelector(selectIsSignIn);
   const history = useHistory();
 
   const footerMenu = () => {
-    return (
-      <div className="mx-auto text-white items-center">
-        <h1>
-          <img src={logo} className={`${styles.logo} cursor-pointer mt-4`} />
-        </h1>
-        <nav className="md:flex items-center justify-between">
-          <ul className={styles.nav_box}>
-            <li
-              className="cursor-pointer"
-              onClick={() => history.push('/terms')}
-            >
-              <a className={`${styles.nav} inline-block px-3 pb-1`}>利用規約</a>
-            </li>
-            <li
-              className="cursor-pointer"
-              onClick={() => history.push('/privacy')}
-            >
-              <a className={`${styles.nav} inline-block px-3 py-1`}>
-                プライバシーポリシー
-              </a>
-            </li>
-            <li>
-              <Link
-                to="/contact"
-                className={`${styles.nav} inline-block px-3 py-1`}
+    if (
+      (signIn && location.pathname.indexOf('/mypage')) ||
+      location.pathname === '/mypage'
+    ) {
+      return <BottomNav />;
+    } else if (signIn) {
+      return <BottomNav />;
+    } else {
+      return (
+        <div className="mx-auto text-white items-center">
+          <h1>
+            <img src={logo} className={`${styles.logo} cursor-pointer mt-4`} />
+          </h1>
+          <nav className="md:flex items-center justify-between">
+            <ul className={styles.nav_box}>
+              <li
+                className="cursor-pointer"
+                onClick={() => history.push('/terms')}
               >
-                お問い合わせ
-              </Link>
-            </li>
-          </ul>
-          <div
-            className={`${styles.nav_box} text-xs pb-2 flex items-center justify-center`}
-          >
-            copylight&copy;2022{' '}
-            {/* <span className={styles.nav_box__logo}>Share Money</span> */}
-            <img className="w-24" src={logo} alt="" />
-          </div>
-        </nav>
-      </div>
-    );
+                <a className={`${styles.nav} inline-block px-3 pb-1`}>
+                  利用規約
+                </a>
+              </li>
+              <li
+                className="cursor-pointer"
+                onClick={() => history.push('/privacy')}
+              >
+                <a className={`${styles.nav} inline-block px-3 py-1`}>
+                  プライバシーポリシー
+                </a>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className={`${styles.nav} inline-block px-3 py-1`}
+                >
+                  お問い合わせ
+                </Link>
+              </li>
+            </ul>
+            <div className={styles.nav_box}>
+              copylight&copy;2022{' '}
+              <span className={styles.nav_box__logo}>DeskTravel</span>
+            </div>
+          </nav>
+        </div>
+      );
+    }
   };
 
   return (
