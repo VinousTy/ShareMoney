@@ -249,7 +249,7 @@ const SignUp: React.FC = () => {
               data-testid="img"
             />
             <a
-              className="text-story-set text-xs text-gray-700"
+              className="text-story-set text-xs"
               href="https://storyset.com/user"
             >
               User illustrations by Storyset
