@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Auth.module.scss';
 import { AppDispatch } from '../../app/store';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -23,7 +23,8 @@ const apiUrl = process.env.REACT_APP_DEV_API_URL;
 const SignUp: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const history = useHistory();
-  const [loginError, setLoginError] = useState(false);
+  const [loginError, setLoginError] = useState(false),
+    [loginUrl, setLoginUrl] = useState(null);
   const [cookies, setCookie] = useCookies();
   const isWide = useMedia({ maxWidth: '768px' });
 
@@ -34,6 +35,25 @@ const SignUp: React.FC = () => {
     reset,
     formState: { errors },
   } = useForm<INPUTS>();
+
+  useEffect(() => {
+    fetch(`${apiUrl}api/auth`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Something went wrong!');
+      })
+      .then((data) => {
+        setLoginUrl(data.url);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   const regUser = async (data: INPUTS) => {
     const reg: any = await dispatch(
@@ -225,19 +245,23 @@ const SignUp: React.FC = () => {
                 >
                   <span className="flex justify-center font-normal sm:justify-center md:justify-center lg:justify-center">
                     <BsGoogle className="mt-1 mr-2 sm:mr-4 lg:mr-3" />
-                    <a href="#">Googleアカウントで登録</a>
+                    {loginUrl != null ? (
+                      <a href={loginUrl}>Googleアカウントで登録</a>
+                    ) : (
+                      <span
+                        onClick={() =>
+                          alert(
+                            '認証エラーのため、少し時間を開けてから再度お試しください'
+                          )
+                        }
+                      >
+                        Googleアカウントで登録
+                      </span>
+                    )}
                   </span>
                 </button>
               </div>
             </div>
-            <div
-              className="mb-6"
-              onClick={() =>
-                alert(
-                  '現在ツイッター認証は行えません。別のログイン方法をお試しください。'
-                )
-              }
-            ></div>
           </div>
         </div>
         {!isWide && (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Auth.module.scss';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
@@ -30,7 +30,8 @@ const SignIn: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const message = useSelector(selectMessage);
   const history = useHistory();
-  const [loginError, setLoginError] = useState(false);
+  const [loginError, setLoginError] = useState(false),
+    [loginUrl, setLoginUrl] = useState(null);
   const [cookies, setCookie] = useCookies();
   const isWide = useMedia({ maxWidth: '768px' });
 
@@ -40,6 +41,25 @@ const SignIn: React.FC = () => {
     reset,
     formState: { errors },
   } = useForm<INPUTS>();
+
+  useEffect(() => {
+    fetch(`${apiUrl}api/auth`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Something went wrong!');
+      })
+      .then((data) => {
+        setLoginUrl(data.url);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   const onSubmit: SubmitHandler<INPUTS> = async (data) => {
     const res = await axios
@@ -189,7 +209,19 @@ const SignIn: React.FC = () => {
                 >
                   <span className="flex justify-center font-normal sm:justify-center md:justify-center lg:justify-center">
                     <BsGoogle className="mt-1 mr-2 sm:mr-4 lg:mr-3" />
-                    <a href="#">Googleアカウントでログイン</a>
+                    {loginUrl != null ? (
+                      <a href={loginUrl}>Googleアカウントでログイン</a>
+                    ) : (
+                      <span
+                        onClick={() =>
+                          alert(
+                            '認証エラーのため、少し時間を開けてから再度お試しください'
+                          )
+                        }
+                      >
+                        Googleアカウントでログイン
+                      </span>
+                    )}
                   </span>
                 </button>
               </div>
