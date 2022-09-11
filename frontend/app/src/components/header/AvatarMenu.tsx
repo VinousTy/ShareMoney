@@ -6,13 +6,19 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
-import { selectProfile } from '../../features/auth/authSlice';
+import {
+  editMessage,
+  isSignOut,
+  isSuccessOrFailure,
+  selectProfile,
+} from '../../features/auth/authSlice';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import { FaCrown } from 'react-icons/fa';
 import { AiFillFileAdd } from 'react-icons/ai';
 import { BsBookmarkFill } from 'react-icons/bs';
+import { useCookies } from 'react-cookie';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,6 +48,7 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
   const dispatch: AppDispatch = useDispatch();
   const profile = useSelector(selectProfile);
   const [tooltip, setTooltip] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies();
   const history = useHistory();
 
   const handleTooltipClose = useCallback(() => {
@@ -60,6 +67,14 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
       history.push(`/${pass}`);
       setTooltip(!tooltip);
     }
+  };
+
+  const logout = async () => {
+    await dispatch(isSignOut());
+    await removeCookie('Bearer');
+    await dispatch(editMessage('ログアウトしました'));
+    await dispatch(isSuccessOrFailure(true));
+    await history.push('/signin');
   };
 
   return (
@@ -120,7 +135,10 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
             </span>
           </li>
           <li className="leading-6 border-b border-gray-300 my-2">
-            <span className="hover:text-button-color-orange-hover transition">
+            <span
+              className="hover:text-button-color-orange-hover transition"
+              onClick={() => logout()}
+            >
               <ExitToAppIcon />
               ログアウト
             </span>
