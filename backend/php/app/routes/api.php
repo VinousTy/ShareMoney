@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\Auth\GoogleLoginController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
@@ -30,6 +31,8 @@ Route::post("/register", [RegisterController::class, "register"]);
 Route::post("/login", [LoginController::class, "login"])->name('login');
 Route::post('password/request', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.request');
 Route::post('password/reset/{token}', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
+Route::get('auth', [GoogleLoginController::class, 'redirect']);
+Route::get('auth/callback', [GoogleLoginController::class, 'callback']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('user', [UserController::class, 'index']);
