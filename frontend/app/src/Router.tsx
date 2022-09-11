@@ -14,6 +14,7 @@ import GoogleCallback from './templates/auth/GoogleCallback';
 import PasswordReset from './templates/auth/PasswordReset';
 import SignIn from './templates/auth/SignIn';
 import SignUp from './templates/auth/SignUp';
+import Contact from './templates/contact/Contact';
 import Error from './templates/error/Error';
 import Home from './templates/home/Home';
 import MyPage from './templates/mypage/MyPage';
@@ -108,6 +109,7 @@ const Router: React.VFC = () => {
             <Redirect to="/signin" />
           )}
         </Route>
+        <Route exact path="/contact" component={Contact} />
         <Route exact path="*" component={Error} />
       </Switch>
       <Footer />
