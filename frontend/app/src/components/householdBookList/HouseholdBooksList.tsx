@@ -16,7 +16,7 @@ import clsx from 'clsx';
 import { useCookies } from 'react-cookie';
 import { IoMdWallet } from 'react-icons/io';
 import { AppDispatch } from '../../app/store';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   isDeleteModalOpen,
   isLoadingEnd,
@@ -34,6 +34,8 @@ import {
 } from '../../features/accountBook/accountBookSlice';
 import PieChart from '../chart/PieChart';
 import useMedia from 'use-media';
+import Swal from 'sweetalert2';
+import { selectProfile } from '../../features/auth/authSlice';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -136,6 +138,7 @@ interface DELETE {
 const HouseholdBooksList = (props: PROPS) => {
   const classes = useStyles();
   const dispatch: AppDispatch = useDispatch();
+  const profile = useSelector(selectProfile);
   const [cookies] = useCookies();
   const [sortCosts, setSortCosts] = useState<Array<COSTS>>([]),
     [costs, setCosts] = useState<number[]>([]),
@@ -200,13 +203,27 @@ const HouseholdBooksList = (props: PROPS) => {
   };
 
   const shareHistory = async () => {
-    setShareOpen(true);
-    setTitle('公開');
-    setBody('当月の家計簿を公開します');
-    setSubText('(既に当月の家計簿が公開済みの場合は更新されます)');
-    setBtnText('OK');
-    setPath('/accountBook/list');
-    await dispatch(isPostModalOpen());
+    if (
+      profile?.body ===
+      'ゲストユーザーとしてログインしています。ゲストユーザーのため、各種投稿やユーザー情報の変更等の一部機能の使用は制限されております。'
+    ) {
+      Swal.fire({
+        icon: 'error',
+        title: '機能制限',
+        text: 'ゲストは家計簿をシェアすることができません。',
+        color: '#333',
+        background: '#fbf6f0',
+        confirmButtonColor: '#ffa45b',
+      });
+    } else {
+      setShareOpen(true);
+      setTitle('公開');
+      setBody('当月の家計簿を公開します');
+      setSubText('(既に当月の家計簿が公開済みの場合は更新されます)');
+      setBtnText('OK');
+      setPath('/accountBook/list');
+      await dispatch(isPostModalOpen());
+    }
   };
 
   const createShareAccountBook = async () => {
