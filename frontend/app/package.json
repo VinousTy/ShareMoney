@@ -18,6 +18,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-tabs": "^2.3.4",
     "axios": "^0.27.2",
+    "emailjs-com": "^3.2.0",
     "msw": "^0.45.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "react": "^17.0.2",
