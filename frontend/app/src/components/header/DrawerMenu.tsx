@@ -11,21 +11,37 @@ import {
   selectIsDrawer,
 } from '../../features/layout/layoutSlice';
 import { useHistory } from 'react-router-dom';
-import { selectIsSignIn, selectProfile } from '../../features/auth/authSlice';
+import {
+  editMessage,
+  isSignOut,
+  isSuccessOrFailure,
+  selectIsSignIn,
+  selectProfile,
+} from '../../features/auth/authSlice';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import { FaCrown } from 'react-icons/fa';
 import { BsBookmarkFill } from 'react-icons/bs';
+import { useCookies } from 'react-cookie';
 
 const DrawerMenu: React.VFC = () => {
   const dispatch: AppDispatch = useDispatch();
   const signIn = useSelector(selectIsSignIn);
   const profile = useSelector(selectProfile);
   const drawer = useSelector(selectIsDrawer);
+  const [cookies, setCookie, removeCookie] = useCookies();
   const history = useHistory();
 
   const toggleOpen = () => {
     dispatch(isToggleDrawer());
+  };
+
+  const logout = async () => {
+    await dispatch(isSignOut());
+    await removeCookie('Bearer');
+    await dispatch(editMessage('ログアウトしました'));
+    await dispatch(isSuccessOrFailure(true));
+    await history.push('/signin');
   };
 
   const pageTransition = (pass: string) => {
@@ -89,7 +105,7 @@ const DrawerMenu: React.VFC = () => {
               </span>
             </span>
           </li>
-          <li className={styles.nav_item}>
+          <li className={styles.nav_item} onClick={() => logout()}>
             <span className={styles.cp_link}>
               <ExitToAppIcon />
               <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
