@@ -58,9 +58,8 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
             </ul>
-            <div className={styles.nav_box}>
-              copylight&copy;2022{' '}
-              <span className={styles.nav_box__logo}>DeskTravel</span>
+            <div className="pb-2 text-xs flex items-center justify-center">
+              copylight&copy;2022 <img className="w-28" src={logo} alt="" />
             </div>
           </nav>
         </div>
