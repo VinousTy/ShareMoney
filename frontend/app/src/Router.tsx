@@ -10,6 +10,7 @@ import AccountBookForm from './templates/accountBook/AccountBookForm';
 import AccountBookList from './templates/accountBook/AccountBookList';
 import BookmarkAccountBookList from './templates/accountBook/BookmarkAccountBookList';
 import EmailPost from './templates/auth/EmailPost';
+import GoogleCallback from './templates/auth/GoogleCallback';
 import PasswordReset from './templates/auth/PasswordReset';
 import SignIn from './templates/auth/SignIn';
 import SignUp from './templates/auth/SignUp';
@@ -51,6 +52,13 @@ const Router: React.VFC = () => {
         <Route path={'/password/reset(/?token=)?'}>
           {!signIn && cookies.Bearer === undefined ? (
             <PasswordReset />
+          ) : (
+            <Redirect to="/mypage" />
+          )}
+        </Route>
+        <Route path="/auth/google">
+          {!signIn && cookies.Bearer === undefined ? (
+            <GoogleCallback />
           ) : (
             <Redirect to="/mypage" />
           )}
