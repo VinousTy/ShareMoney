@@ -62,17 +62,19 @@ const MyPage: React.FC = () => {
             cookie: cookies,
           })
         );
-        dispatch(isLoadingEnd());
-        if (authMessage !== '') {
-          setFlash(true);
-        } else if (accountBookMessage !== '') {
-          setFlash(true);
-        }
       }
+      dispatch(isLoadingEnd());
     };
     fetchBootLoader();
-    setFlash(false);
   }, [dispatch, date]);
+
+  useEffect(() => {
+    if (authMessage !== '') {
+      setFlash(true);
+    } else if (accountBookMessage !== '') {
+      setFlash(true);
+    }
+  }, [authMessage, accountBookMessage]);
 
   useEffect(() => {
     if (profile === undefined) {
@@ -105,12 +107,14 @@ const MyPage: React.FC = () => {
     const year = date.getFullYear();
     const month = date.getMonth() - 1;
     setDate(new Date(year, month));
+    setFlash(false);
   };
 
   const nextMonth = () => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     setDate(new Date(year, month));
+    setFlash(false);
   };
 
   const selectedYear = String(date.getFullYear());
