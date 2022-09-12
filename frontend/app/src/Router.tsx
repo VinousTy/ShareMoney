@@ -18,6 +18,7 @@ import Contact from './templates/contact/Contact';
 import Error from './templates/error/Error';
 import Home from './templates/home/Home';
 import MyPage from './templates/mypage/MyPage';
+import PrivacyPolicy from './templates/privacyPolicy/PrivacyPolicy';
 import Profile from './templates/profile/Profile';
 import TestPage from './TestPage';
 
@@ -110,6 +111,7 @@ const Router: React.VFC = () => {
           )}
         </Route>
         <Route exact path="/contact" component={Contact} />
+        <Route exact path="/privacy" component={PrivacyPolicy} />
         <Route exact path="*" component={Error} />
       </Switch>
       <Footer />
