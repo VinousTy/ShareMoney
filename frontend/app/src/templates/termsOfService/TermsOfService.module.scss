@@ -1,0 +1,8 @@
+.brackets li {
+  list-style-type: none;
+  counter-increment: cnt;
+
+  &:before {
+    content: '(' counter(cnt) ') ';
+  }
+}
