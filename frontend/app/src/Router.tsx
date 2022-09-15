@@ -21,6 +21,7 @@ import MyPage from './templates/mypage/MyPage';
 import PrivacyPolicy from './templates/privacyPolicy/PrivacyPolicy';
 import Profile from './templates/profile/Profile';
 import TermsOfService from './templates/termsOfService/TermsOfService';
+import Top from './templates/top/Top';
 import TestPage from './TestPage';
 
 const Router: React.VFC = () => {
@@ -31,6 +32,13 @@ const Router: React.VFC = () => {
     <BrowserRouter>
       <Header />
       <Switch>
+        <Route exact path="/">
+          {!signIn && cookies.Bearer === undefined ? (
+            <Top />
+          ) : (
+            <Redirect to="/mypage" />
+          )}
+        </Route>
         <Route exact path="/signup">
           {!signIn && cookies.Bearer === undefined ? (
             <SignUp />

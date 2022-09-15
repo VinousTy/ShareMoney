@@ -91,6 +91,7 @@ export interface PROFILE_UPDATE {
 export interface LAYOUT_STATE {
   isLoading: boolean;
   isDrawer: boolean;
+  isGuestLoginModal: boolean;
   isDeleteModal: boolean;
   isPostModal: boolean;
   isSearchModal: boolean;
