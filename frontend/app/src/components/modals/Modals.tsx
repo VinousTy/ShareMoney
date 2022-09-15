@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { AppDispatch } from '../../app/store';
 import {
   isDeleteModalClose,
+  isGuestLoginModalClose,
   isLoadingEnd,
   isLoadingStart,
   isPostModalClose,
   selectIsDeleteModal,
+  selectIsGuestLoginModal,
   selectIsPostModal,
 } from '../../features/layout/layoutSlice';
 import { CgDanger } from 'react-icons/cg';
@@ -67,26 +69,50 @@ interface PROPS {
 }
 const Modals: React.VFC<PROPS> = (props) => {
   const dispatch: AppDispatch = useDispatch();
-  const isDeleteOpen = useSelector(selectIsDeleteModal);
-  const isPostOpen = useSelector(selectIsPostModal);
+  const isGuestLoginOpen = useSelector(selectIsGuestLoginModal),
+    isDeleteOpen = useSelector(selectIsDeleteModal),
+    isPostOpen = useSelector(selectIsPostModal);
   const history = useHistory();
   const isWide = useMedia({ maxWidth: '768px' });
 
-  const postAccountBook = async () => {
-    await props.func();
-    await dispatch(isPostModalClose());
-    await history.push(`${props.path}`);
+  const allocationModalType = (): boolean => {
+    if (props.type === 'delete') {
+      return isDeleteOpen;
+    } else if (props.type === 'share') {
+      return isPostOpen;
+    } else if (props.type === 'guestLogin') {
+      return isGuestLoginOpen;
+    }
+    return false;
+  };
+
+  const allocationClickEvent = async () => {
+    if (props.type === 'delete') {
+      await dispatch(isLoadingStart());
+      await dispatch(props.func(props.packet));
+      await dispatch(isDeleteModalClose());
+      await history.push(`${props.path}`);
+      await dispatch(isLoadingEnd());
+    } else if (props.type === 'share') {
+      await props.func();
+      await dispatch(isPostModalClose());
+      await history.push(`${props.path}`);
+    } else if (props.type === 'guestLogin') {
+      await props.func(props.packet);
+      await dispatch(isGuestLoginModalClose());
+      await history.push(`${props.path}`);
+    }
   };
 
   Modal.setAppElement('#root');
 
-  console.log(props.packet);
   return (
     <Modal
-      isOpen={props.type === 'delete' ? isDeleteOpen : isPostOpen}
+      isOpen={allocationModalType()}
       onRequestClose={async () => {
         await dispatch(isDeleteModalClose());
         await dispatch(isPostModalClose());
+        await dispatch(isGuestLoginModalClose());
       }}
       style={isWide ? customStyles_sm : customStyles}
     >
@@ -110,19 +136,7 @@ const Modals: React.VFC<PROPS> = (props) => {
                 ? 'bg-red-500 hover:bg-red-600 border-red-600'
                 : 'bg-button-color-orange hover:bg-button-color-orange-hover border-button-color-orange-shadow'
             }`}
-            onClick={
-              props.type === 'delete'
-                ? async () => {
-                    await dispatch(isLoadingStart());
-                    await dispatch(props.func(props.packet));
-                    await dispatch(isDeleteModalClose());
-                    await history.push(`${props.path}`);
-                    await dispatch(isLoadingEnd());
-                  }
-                : async () => {
-                    postAccountBook();
-                  }
-            }
+            onClick={() => allocationClickEvent()}
           >
             {props.btnText}
           </button>
