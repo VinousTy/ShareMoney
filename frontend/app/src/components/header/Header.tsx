@@ -42,6 +42,12 @@ const Header: React.VFC = () => {
   const location = useLocation();
   const isWide = useMedia({ maxWidth: '768px' });
 
+  let id = window.location.pathname.split('/profile')[1];
+  if (id !== '') {
+    id = id?.split('/')[1];
+  }
+  const path = location.pathname.includes('/profile');
+
   const pageTransition = () => {
     if (
       location.pathname.includes('/home') ||
@@ -53,10 +59,20 @@ const Header: React.VFC = () => {
       history.push('/home');
     } else if (location.pathname.includes('/profile')) {
       return null;
-    } else if (signIn === true) {
+    } else if (signIn) {
       history.push('/home');
-    } else if (signIn === false) {
+    } else if (!signIn) {
       history.push('/');
+    }
+  };
+
+  const headerMenu = () => {
+    if (isWide && path && id === '') {
+      return <></>;
+    } else if (isWide) {
+      return <DrawerMenu />;
+    } else {
+      return <HeaderMenus />;
     }
   };
 
@@ -68,7 +84,8 @@ const Header: React.VFC = () => {
             <img src={logo} className="cursor-pointer w-32 md:w-40" />
           </h1>
           <div className={classes.iconButtons}>
-            {isWide ? <DrawerMenu /> : <HeaderMenus />}
+            {headerMenu()}
+            {/* {isWide ? <DrawerMenu /> : <HeaderMenus />} */}
           </div>
         </Toolbar>
       </AppBar>
