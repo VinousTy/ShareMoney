@@ -47,4 +47,29 @@ class PostAccountBook extends Model
   {
     return $this->hasMany(Bookmark::class);
   }
+
+  public function scopeJoinProfiles($query)
+  {
+    return $query->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id');
+  }
+
+  public function scopeSearchName($query, $name)
+  {
+    return $query->where('profiles.name', '=', $name);
+  }
+
+  public function scopeSearchIncome($query, $income)
+  {
+    return $query->where('profiles.income', '=', $income);
+  }
+
+  public function scopeSearchJob($query, $job)
+  {
+    return $query->where('profiles.job', '=', $job);
+  }
+
+  public function scopeSearchComposition($query, $composition)
+  {
+    return $query->where('profiles.composition', '=', $composition);
+  }
 }
