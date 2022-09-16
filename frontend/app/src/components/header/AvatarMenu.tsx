@@ -84,10 +84,11 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
           <Avatar alt="who?" src={profile?.img} />
           <ArrowDropDownIcon className={classes.arrowIcon} />
         </div>
+        {/* {tooltip && ( */}
         <ul
           className={`${
-            tooltip && 'opacity-100'
-          } opacity-0 z-50 absolute w-48 top-16 right-0 bg-header-menu py-2 px-4 text-gray-600 rounded-xl shadow-xl leading-6 transition`}
+            tooltip ? 'opacity-100 visible' : 'opacity-0 invisible'
+          } z-50 absolute w-48 top-16 right-0 bg-header-menu py-2 px-4 text-gray-600 rounded-xl shadow-xl leading-6 transition`}
         >
           <li className="leading-6 border-b border-gray-300 my-2">
             <span
@@ -144,6 +145,7 @@ const AvatarMenu: React.FC<PROPS> = (props) => {
             </span>
           </li>
         </ul>
+        {/* )} */}
       </div>
     </ClickAwayListener>
   );
