@@ -133,9 +133,9 @@ const AccountBookForm: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch(isSignIn());
     const fetchBootLoader = async () => {
       if (cookies) {
-        await dispatch(isSignIn());
         await dispatch(getMyAccountBook({ id: id, cookie: cookies }));
       }
     };
@@ -305,7 +305,7 @@ const AccountBookForm: React.FC = () => {
                       className={clsx([
                         tabIndex === 0
                           ? 'text-black font-bold border-b-2 border-orange'
-                          : 'text-disabled opacity-70',
+                          : 'text-disabled text-silver opacity-70',
                       ])}
                       data-testid="cost-title"
                     >
@@ -317,7 +317,7 @@ const AccountBookForm: React.FC = () => {
                       className={clsx([
                         tabIndex === 1
                           ? 'text-black font-bold border-b-2 border-orange'
-                          : 'text-disabled opacity-70',
+                          : 'text-disabled text-silver opacity-70',
                       ])}
                       data-testid="income-title"
                     >
