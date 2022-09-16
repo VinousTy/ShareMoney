@@ -17,12 +17,26 @@ const Footer: React.FC = () => {
   const signIn = useSelector(selectIsSignIn);
   const history = useHistory();
 
-  const footerMenu = () => {
-    if (
-      (signIn && location.pathname.indexOf('/mypage')) ||
-      location.pathname === '/mypage'
-    ) {
-      return <BottomNav />;
+  let id = window.location.pathname.split('/profile')[1];
+  if (id !== '') {
+    id = id?.split('/')[1];
+  }
+  const path = location.pathname.includes('/profile');
+
+  const footerMenuSm = () => {
+    if (signIn && path && id === '') {
+      return (
+        <div className="mx-auto text-white items-center">
+          <h1>
+            <img src={logo} className={`${styles.logo} cursor-pointer mt-4`} />
+          </h1>
+          <nav className="md:flex items-center justify-between">
+            <div className="pb-2 text-xs flex items-center justify-center">
+              copylight&copy;2022 <img className="w-28" src={logo} alt="" />
+            </div>
+          </nav>
+        </div>
+      );
     } else if (signIn) {
       return <BottomNav />;
     } else {
@@ -67,11 +81,22 @@ const Footer: React.FC = () => {
     }
   };
 
-  return (
-    <footer className="bg-thin-black">
-      {isWide ? (
-        footerMenu()
-      ) : (
+  const footerMenu = () => {
+    if (signIn && path && id === '') {
+      return (
+        <div className="container mx-auto text-center text-white">
+          <h1 className="pt-14">
+            <img src={logo} className="cursor-pointer mx-auto w-64" />
+          </h1>
+          <nav className="mx-auto text-center">
+            <div className="pb-2 text-xs flex items-center justify-center">
+              copylight&copy;2022 <img className="w-28" src={logo} alt="" />
+            </div>
+          </nav>
+        </div>
+      );
+    } else {
+      return (
         <div className="container mx-auto text-center text-white">
           <h1 className="pt-14">
             <img src={logo} className="cursor-pointer mx-auto w-64" />
@@ -108,7 +133,13 @@ const Footer: React.FC = () => {
             </div>
           </nav>
         </div>
-      )}
+      );
+    }
+  };
+
+  return (
+    <footer className="bg-thin-black">
+      {isWide ? footerMenuSm() : footerMenu()}
     </footer>
   );
 };
