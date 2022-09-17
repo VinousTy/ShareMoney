@@ -33,10 +33,8 @@ class BookmarkController extends Controller
 
   public function bookmark(Request $request)
   {
-    Bookmark::create([
-      'user_id' => $request->user_id,
-      'post_account_book_id' => $request->post_account_book_id,
-    ]);
+
+    Auth::user()->bookmark($request->post_account_book_id);
 
     $name = $request->name;
     $income = $request->income;
@@ -192,10 +190,7 @@ class BookmarkController extends Controller
 
   public function destroy(Request $request)
   {
-    $matchThese = ['user_id' => $request->user_id, 'post_account_book_id' => $request->post_account_book_id];
-    $bookmark = Bookmark::where($matchThese)->first();
-
-    $bookmark->delete();
+    Auth::user()->unBookmark($request->post_account_book_id);
 
     $name = $request->name;
     $income = $request->income;

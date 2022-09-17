@@ -20,10 +20,7 @@ class LikeController extends Controller
 
   public function like(Request $request)
   {
-    $like = Like::create([
-      'user_id' => $request->user_id,
-      'post_account_book_id' => $request->post_account_book_id,
-    ]);
+    Auth::user()->like($request->post_account_book_id);
 
     $name = $request->name;
     $income = $request->income;
@@ -179,10 +176,7 @@ class LikeController extends Controller
 
   public function destroy(Request $request)
   {
-    $matchThese = ['user_id' => $request->user_id, 'post_account_book_id' => $request->post_account_book_id];
-    $like = Like::where($matchThese)->first();
-
-    $like->delete();
+    Auth::user()->unLike($request->post_account_book_id);
 
     $name = $request->name;
     $income = $request->income;

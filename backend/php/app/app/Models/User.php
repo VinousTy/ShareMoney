@@ -64,4 +64,72 @@ class User extends Authenticatable
   {
     return $this->hasOne(Profile::class);
   }
+
+  public function postLikes()
+  {
+    return $this->belongsToMany(PostAccountBook::class, 'likes', 'user_id', 'post_account_book_id')->withTimestamps();
+  }
+
+  public function postBookmarks()
+  {
+    return $this->belongsToMany(PostAccountBook::class, 'bookmarks', 'user_id', 'post_account_book_id')->withTimestamps();
+  }
+
+  public function isLike($postId)
+  {
+    return $this->postLikes()->where('post_account_book_id', $postId)->exists();
+  }
+
+  public function like($postId)
+  {
+    $exist = $this->isLike($postId);
+
+    if ($exist) {
+      return false;
+    } else {
+      $this->postLikes()->attach($postId);
+      return true;
+    }
+  }
+
+  public function unLike($postId)
+  {
+    $exist = $this->isLike($postId);
+
+    if ($exist) {
+      $this->postLikes()->detach($postId);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public function isBookmark($postId)
+  {
+    return $this->postBookmarks()->where('post_account_book_id', $postId)->exists();
+  }
+
+  public function bookmark($postId)
+  {
+    $exist = $this->isBookmark($postId);
+
+    if ($exist) {
+      return false;
+    } else {
+      $this->postBookmarks()->attach($postId);
+      return true;
+    }
+  }
+
+  public function unBookmark($postId)
+  {
+    $exist = $this->isBookmark($postId);
+
+    if ($exist) {
+      $this->postBookmarks()->detach($postId);
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
