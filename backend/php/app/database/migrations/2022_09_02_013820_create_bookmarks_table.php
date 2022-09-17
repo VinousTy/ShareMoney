@@ -14,7 +14,7 @@ class CreateBookmarksTable extends Migration
   public function up()
   {
     Schema::create('bookmarks', function (Blueprint $table) {
-      $table->uuid('id')->primary();
+      $table->id();
       $table->uuid('user_id');
       $table->foreign('user_id')
         ->references("id")
