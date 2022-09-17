@@ -69,7 +69,11 @@ const MyPage: React.FC = () => {
   }, [dispatch, date]);
 
   useEffect(() => {
-    if (authMessage !== '') {
+    if (accountBookMessage === '家計簿をシェアしました') {
+      setFlash(false);
+    } else if (accountBookMessage === '家計簿を更新しました') {
+      setFlash(false);
+    } else if (authMessage !== '') {
       setFlash(true);
     } else if (accountBookMessage !== '') {
       setFlash(true);

@@ -37,7 +37,8 @@ interface NAME {
 
 const AccountBookList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const [name, setName] = useState('');
+  const [name, setName] = useState(''),
+    [flash, setFlash] = useState(false);
   const accountBooks = useSelector(selectAccountBooks),
     isLoading = useSelector(selectIsLoading),
     authMessage = useSelector(selectMessage),
@@ -102,6 +103,12 @@ const AccountBookList: React.FC = () => {
     fetchBootLoader();
   }, [dispatch, history]);
 
+  useEffect(() => {
+    if (accountBookMessage !== '') {
+      setFlash(true);
+    }
+  }, [authMessage, accountBookMessage]);
+
   const searchOnName = async () => {
     await dispatch(isLoadingStart());
     if (name === '') {
@@ -130,8 +137,7 @@ const AccountBookList: React.FC = () => {
             accountBooks.accountBook?.length === 0 && 'h-screen'
           }`}
         >
-          {authMessage !== '' && <FlashMessage />}
-          {accountBookMessage !== '' && <FlashMessage />}
+          {flash && <FlashMessage />}
           <h2 className="text-gray-800 text-left text-2xl font-bold ml-8 mt-8">
             <span className="flex items-center">
               <FaListAlt className="text-orange" />
