@@ -15,17 +15,6 @@ class Bookmark extends Model
     'post_account_book_id'
   ];
 
-  public $incrementing = false;
-
-  protected $keyType = 'string';
-
-  protected static function booted()
-  {
-    static::creating(function (Bookmark $model) {
-      empty($model->id) && $model->id = Str::uuid();
-    });
-  }
-
   public function postAccountBooks()
   {
     return $this->belongsTo(PostAccountBook::class);
