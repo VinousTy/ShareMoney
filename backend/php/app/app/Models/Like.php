@@ -15,17 +15,6 @@ class Like extends Model
     'post_account_book_id'
   ];
 
-  public $incrementing = false;
-
-  protected $keyType = 'string';
-
-  protected static function booted()
-  {
-    static::creating(function (Like $model) {
-      empty($model->id) && $model->id = Str::uuid();
-    });
-  }
-
   public function postAccountBooks()
   {
     return $this->belongsTo(PostAccountBook::class);
