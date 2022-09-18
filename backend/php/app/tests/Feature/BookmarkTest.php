@@ -45,34 +45,7 @@ class BookmarkTest extends TestCase
     );
   }
 
-  public function testBookmarkCreate()
-  {
-    $user = User::factory()->create();
-
-    $auth = $this->actingAs($user);
-
-    $postAccountBook = PostAccountBook::factory()->create();
-
-    $response = $this->post(
-      route('bookmark/create'),
-      [
-        'user_id' => $user->id,
-        'post_account_book_id' => $postAccountBook->id,
-      ]
-    );
-
-    $response->assertStatus(200);
-    $this->assertEquals(1, Bookmark::count());
-
-    $response->assertJson(
-      fn (AssertableJson $json) =>
-      $json->whereType('accountBook', 'array')
-        ->whereType('income', 'array')
-        ->whereType('costs', 'array')
-    );
-  }
-
-  public function testBookmarkDestroy()
+  public function testBookmark()
   {
     $user = User::factory()->create();
 
