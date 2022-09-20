@@ -50,7 +50,7 @@ class BookmarkController extends Controller
         ->groupBy('date', 'user_id')
         ->get();
 
-      $costs = PostAccountBook::join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
+      $costs = PostAccountBook::joinPostExpenses()
         ->selectRaw('date ,expenseItem, user_id, sum(cost) as cost')
         ->groupBy('date', 'expenseItem', 'user_id')
         ->get();
@@ -63,24 +63,12 @@ class BookmarkController extends Controller
     } else if (!empty($name)) {
 
       $queryUserAccountBook = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-        ->where('profiles.name', '=', $name)
+        ->searchName($name)
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $queryUserIncome = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-        ->where('profiles.name', '=', $name)
-        ->groupBy('post_account_books.date', 'post_account_books.user_id')
-        ->get();
+      $queryUserIncome = Profile::searchIncomeName($name)->get();
 
-      $queryUserCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.name', '=', $name)
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
-        ->get();
+      $queryUserCosts = Profile::searchCostName($name)->get();
 
       return response()->json([
         'accountBook' => $queryUserAccountBook,
@@ -90,23 +78,12 @@ class BookmarkController extends Controller
     } else if (!empty($income)) {
 
       $queryIncomeAccountBook = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-        ->where('profiles.income', '=', $income)
+        ->searchIncome($income)
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $queryIncome = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-        ->where('profiles.income', '=', $income)
-        ->groupBy('post_account_books.date', 'post_account_books.user_id')
-        ->get();
+      $queryIncome = Profile::searchIncome($income)->get();
 
-      $queryIncomeCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.income', '=', $income)
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
+      $queryIncomeCosts = Profile::searchCostIncome($income)
         ->get();
 
       return response()->json([
@@ -117,24 +94,12 @@ class BookmarkController extends Controller
     } else if (!empty($job)) {
 
       $queryJobAccountBook = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-        ->where('profiles.job', '=', $job)
+        ->searchJob($job)
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $queryJobIncome = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-        ->where('profiles.job', '=', $job)
-        ->groupBy('post_account_books.date', 'post_account_books.user_id')
-        ->get();
+      $queryJobIncome = Profile::searchJobIncome($job)->get();
 
-      $queryJobCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.job', '=', $job)
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
-        ->get();
+      $queryJobCosts = Profile::searchJobCost($job)->get();
 
       return response()->json([
         'accountBook' => $queryJobAccountBook,
@@ -144,24 +109,12 @@ class BookmarkController extends Controller
     } else if (!empty($composition)) {
 
       $queryCompositionAccountBook = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-        ->where('profiles.composition', '=', $composition)
+        ->searchComposition($composition)
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $queryCompositionIncome = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-        ->where('profiles.composition', '=', $composition)
-        ->groupBy('post_account_books.date', 'post_account_books.user_id')
-        ->get();
+      $queryCompositionIncome = Profile::searchCompositionIncome($composition)->get();
 
-      $queryCompositionCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.composition', '=', $composition)
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
-        ->get();
+      $queryCompositionCosts = Profile::searchCompositionCost($composition)->get();
 
       return response()->json([
         'accountBook' => $queryCompositionAccountBook,
@@ -171,15 +124,11 @@ class BookmarkController extends Controller
     } else if (!empty($bookmark)) {
 
       $bookmarkAccountBooks = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('bookmarks', 'post_account_books.id', '=', 'bookmarks.post_account_book_id')
-        ->where('bookmarks.user_id', Auth::id())
+        ->joinBookmarks()
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $bookmarkCosts = Bookmark::join('post_account_books', 'post_account_books.id', '=', 'bookmarks.post_account_book_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('bookmarks.user_id', Auth::id())
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
+      $bookmarkCosts = Bookmark::loginUserBookmark()
+        // ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
         ->get();
     }
     return response()->json([
@@ -196,9 +145,9 @@ class BookmarkController extends Controller
     $income = $request->income;
     $job = $request->job;
     $composition = $request->composition;
-    $book = $request->bookmark;
+    $bookmark = $request->bookmark;
 
-    if (empty($name || $income || $job || $composition || $book)) {
+    if (empty($name || $income || $job || $composition || $bookmark)) {
       $accountBook = PostAccountBook::with(['likes', 'bookmarks'])
         ->get();
 
@@ -206,7 +155,7 @@ class BookmarkController extends Controller
         ->groupBy('date', 'user_id')
         ->get();
 
-      $costs = PostAccountBook::join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
+      $costs = PostAccountBook::joinPostExpenses()
         ->selectRaw('date ,expenseItem, user_id, sum(cost) as cost')
         ->groupBy('date', 'expenseItem', 'user_id')
         ->get();
@@ -219,23 +168,13 @@ class BookmarkController extends Controller
     } else if (!empty($name)) {
 
       $queryUserAccountBook = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-        ->where('profiles.name', '=', $name)
+        ->searchName($name)
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $queryUserIncome = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-        ->where('profiles.name', '=', $name)
-        ->groupBy('post_account_books.date', 'post_account_books.user_id')
+      $queryUserIncome = Profile::searchIncomeName($name)
         ->get();
 
-      $queryUserCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.name', '=', $name)
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
+      $queryUserCosts = Profile::searchCostName($name)
         ->get();
 
       return response()->json([
@@ -246,23 +185,12 @@ class BookmarkController extends Controller
     } else if (!empty($income)) {
 
       $queryIncomeAccountBook = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-        ->where('profiles.income', '=', $income)
+        ->searchIncome($income)
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $queryIncome = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-        ->where('profiles.income', '=', $income)
-        ->groupBy('post_account_books.date', 'post_account_books.user_id')
-        ->get();
+      $queryIncome = Profile::searchIncome($income)->get();
 
-      $queryIncomeCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.income', '=', $income)
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
+      $queryIncomeCosts = Profile::searchCostIncome($income)
         ->get();
 
       return response()->json([
@@ -273,24 +201,12 @@ class BookmarkController extends Controller
     } else if (!empty($job)) {
 
       $queryJobAccountBook = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-        ->where('profiles.job', '=', $job)
+        ->searchJob($job)
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $queryJobIncome = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-        ->where('profiles.job', '=', $job)
-        ->groupBy('post_account_books.date', 'post_account_books.user_id')
-        ->get();
+      $queryJobIncome = Profile::searchJobIncome($job)->get();
 
-      $queryJobCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.job', '=', $job)
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
-        ->get();
+      $queryJobCosts = Profile::searchJobCost($job)->get();
 
       return response()->json([
         'accountBook' => $queryJobAccountBook,
@@ -300,43 +216,25 @@ class BookmarkController extends Controller
     } else if (!empty($composition)) {
 
       $queryCompositionAccountBook = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-        ->where('profiles.composition', '=', $composition)
+        ->searchComposition($composition)
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $queryCompositionIncome = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-        ->where('profiles.composition', '=', $composition)
-        ->groupBy('post_account_books.date', 'post_account_books.user_id')
-        ->get();
+      $queryCompositionIncome = Profile::searchCompositionIncome($composition)->get();
 
-      $queryCompositionCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
-        ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.composition', '=', $composition)
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
-        ->get();
+      $queryCompositionCosts = Profile::searchCompositionCost($composition)->get();
 
       return response()->json([
         'accountBook' => $queryCompositionAccountBook,
         'income' => $queryCompositionIncome,
         'costs' =>  $queryCompositionCosts
       ], 200);
-    } else if (!empty($book)) {
+    } else if (!empty($bookmark)) {
 
       $bookmarkAccountBooks = PostAccountBook::with(['likes', 'bookmarks'])
-        ->join('bookmarks', 'post_account_books.id', '=', 'bookmarks.post_account_book_id')
-        ->where('bookmarks.user_id', Auth::id())
+        ->joinBookmarks()
         ->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-      $bookmarkCosts = Bookmark::join('post_account_books', 'post_account_books.id', '=', 'bookmarks.post_account_book_id')
-        ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
-        ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('bookmarks.user_id', Auth::id())
-        ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
-        ->get();
+      $bookmarkCosts = Bookmark::loginUserBookmark()->get();
     }
     return response()->json([
       'accountBook' => $bookmarkAccountBooks,
