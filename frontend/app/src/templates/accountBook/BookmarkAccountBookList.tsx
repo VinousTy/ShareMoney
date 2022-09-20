@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from './AccountBookList.module.scss';
 import { AppDispatch } from '../../app/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProfiles, isSignIn } from '../../features/auth/authSlice';
+import { getProfiles, getUser, isSignIn } from '../../features/auth/authSlice';
 import {
   getBookmarkAccountBook,
   selectAccountBooks,
@@ -28,6 +28,7 @@ const BookmarkAccountBookList: React.FC = () => {
     const fetchBootLoader = async () => {
       await dispatch(isLoadingStart());
       await dispatch(isSignIn());
+      await dispatch(getUser(cookies));
       await dispatch(getBookmarkAccountBook(cookies));
       await dispatch(getProfiles(cookies));
       await dispatch(isLoadingEnd());
