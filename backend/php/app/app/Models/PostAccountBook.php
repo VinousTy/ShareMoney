@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class PostAccountBook extends Model
@@ -53,23 +54,49 @@ class PostAccountBook extends Model
     return $query->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id');
   }
 
+  public function scopeJoinPostExpenses($query)
+  {
+    return $query->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id');
+  }
+
+  public function scopeJoinBookmarks($query)
+  {
+    return $query->join('bookmarks', 'post_account_books.id', '=', 'bookmarks.post_account_book_id')
+      ->where('bookmarks.user_id', Auth::id());
+  }
+
   public function scopeSearchName($query, $name)
   {
-    return $query->where('profiles.name', '=', $name);
+    return $query->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
+      ->where('profiles.name', '=', $name);
   }
 
   public function scopeSearchIncome($query, $income)
   {
-    return $query->where('profiles.income', '=', $income);
+    return $query->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
+      ->where('profiles.income', '=', $income);
   }
 
   public function scopeSearchJob($query, $job)
   {
-    return $query->where('profiles.job', '=', $job);
+    return $query->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
+      ->where('profiles.job', '=', $job);
   }
 
   public function scopeSearchComposition($query, $composition)
   {
-    return $query->where('profiles.composition', '=', $composition);
+    return $query->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
+      ->where('profiles.composition', '=', $composition);
+  }
+
+  public function scopeSatisfyUserQuery($query, $name, $income, $job, $composition)
+  {
+    return $query->where(function ($query) use ($job, $income, $composition) {
+      $query->where('profiles.job', '=', $job)
+        ->orWhere('profiles.income', '=', $income)
+        ->orWhere('profiles.composition', '=', $composition);
+    })->where(function ($query) use ($name) {
+      $query->where('profiles.name', '<>', $name);
+    })->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
   }
 }
