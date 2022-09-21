@@ -123,13 +123,13 @@ class PostAccountBookController extends Controller
     $postAccountBook = PostAccountBook::where($matchThese)
       ->get();
 
-    $costs = PostAccountBook::joinPostExpense()
+    $costs = PostAccountBook::joinPostExpenses()
       ->selectRaw('post_expenses.expenseItem, sum(cost) as cost')
       ->where($matchThese)
       ->groupBy('expenseItem')
       ->get();
 
-    $totalCost = PostAccountBook::joinPostExpense()
+    $totalCost = PostAccountBook::joinPostExpenses()
       ->selectRaw('sum(post_expenses.cost) as cost')
       ->where($matchThese)
       ->get();
@@ -169,9 +169,26 @@ class PostAccountBookController extends Controller
 
     $satisfyUser = PostAccountBook::with(['likes', 'bookmarks'])
       ->joinProfiles()
-      ->satisfyUserQuery($name, $job, $income, $composition);
+      ->where(function ($query) use ($job, $income, $composition) {
+        $query->where('profiles.job', '=', $job)
+          ->orWhere('profiles.income', '=', $income)
+          ->orWhere('profiles.composition', '=', $composition);
+      })->where(function ($query) use ($name) {
+        $query->where('profiles.name', '<>', $name);
+      })->get(['post_account_books.id', 'post_account_books.user_id', 'post_account_books.date', 'post_account_books.monthly_income']);
 
-    $satisfyUserCosts = Profile::satisfyUserCosts($name, $income, $job, $composition)
+    $satisfyUserCosts = Profile::join('users', 'profiles.user_id', '=', 'users.id')
+      ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
+      ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
+      ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
+      ->where(function ($query) use ($job, $income, $composition) {
+        $query->where('profiles.job', '=', $job)
+          ->orWhere('profiles.income', '=', $income)
+          ->orWhere('profiles.composition', '=', $composition);
+      })->where(function ($query) use ($name) {
+        $query->where('profiles.name', '<>', $name);
+      })
+      ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id')
       ->get();
 
     if (isset($satisfyUser)) {
