@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
+import { useLocation } from 'react-router-dom';
 
 interface PROPS {
   expenseItem: string[];
@@ -7,10 +8,17 @@ interface PROPS {
 }
 
 const PieChart: React.VFC<PROPS> = (props) => {
+  const location = useLocation();
+
+  const label = props.expenseItem.slice(0, 3);
+  label[label.length] = '...';
+  const list = location.pathname.includes('/accountBook/list');
+  const home = location.pathname.includes('/accountBook/home');
+
   const pieChart = props.costs.length >= 1 && (
     <Pie
       data={{
-        labels: props.expenseItem,
+        labels: list || home ? label : props.expenseItem,
         datasets: [
           {
             data: [...props.costs],
