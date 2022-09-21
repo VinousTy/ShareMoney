@@ -15,6 +15,7 @@ import {
   SEARCH_NAME,
   DETAIL_DATA,
   ID_COOKIE,
+  COMMENT_DATA,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -191,6 +192,14 @@ const initialState: ACCOUNTBOOK_STATE = {
       },
     ],
   },
+  comments: [
+    {
+      id: '',
+      body: '',
+      user_id: '',
+      post_account_book_id: '',
+    },
+  ],
   message: '',
   successOrFailure: true,
 };
@@ -949,6 +958,45 @@ export const patchBookmark = createAsyncThunk(
   }
 );
 
+export const getComments = createAsyncThunk(
+  'comment/get',
+  async (data: COMMENT_DATA) => {
+    const res = await axios.post(
+      `${apiUrl}api/comment`,
+      {
+        user_id: data.user_id,
+        post_account_book_id: data.post_account_book_id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const postComment = createAsyncThunk(
+  'comment/post',
+  async (data: COMMENT_DATA) => {
+    const res = await axios.post(
+      `${apiUrl}api/create/comment`,
+      {
+        body: data.body,
+        user_id: data.user_id,
+        post_account_book_id: data.post_account_book_id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const accountBookSlice = createSlice({
   name: 'accountBook',
   initialState,
@@ -1050,6 +1098,18 @@ export const accountBookSlice = createSlice({
         accountBooks: action.payload,
       };
     });
+    builder.addCase(getComments.fulfilled, (state, action) => {
+      return {
+        ...state,
+        comments: action.payload.comment,
+      };
+    });
+    builder.addCase(postComment.fulfilled, (state, action) => {
+      return {
+        ...state,
+        comments: [...state.comments, action.payload.comment],
+      };
+    });
   },
 });
 
@@ -1067,6 +1127,7 @@ export const selectPostMyAccountBook = (state: RootState) =>
   state.accountBook.postMyAccountBook;
 export const selectRecomendAccountBooks = (state: RootState) =>
   state.accountBook.recomendAccountBooks;
+export const selectComments = (state: RootState) => state.accountBook.comments;
 export const selectAccountBookMessage = (state: RootState) =>
   state.accountBook.message;
 export const selectAccountBookSuccessOrFailure = (state: RootState) =>
