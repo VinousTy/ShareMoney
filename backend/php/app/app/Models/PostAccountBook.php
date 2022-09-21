@@ -39,6 +39,11 @@ class PostAccountBook extends Model
     return $this->hasMany(PostExpense::class);
   }
 
+  public function comments()
+  {
+    return $this->hasMany(Comment::class);
+  }
+
   public function likes()
   {
     return $this->hasMany(Like::class);

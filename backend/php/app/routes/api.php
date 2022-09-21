@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\HouseHoldBook\AccountBookController;
 use App\Http\Controllers\Api\HouseHoldBook\BookmarkController;
+use App\Http\Controllers\Api\HouseHoldBook\CommentController;
 use App\Http\Controllers\Api\HouseHoldBook\ExpenseController;
 use App\Http\Controllers\Api\HouseHoldBook\LikeController;
 use App\Http\Controllers\Api\HouseHoldBook\PostAccountBookController;
@@ -57,6 +58,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('create/postExpense', [PostExpenseController::class, 'create'])->name('postExpense.create');
   Route::put('update/postExpense/{id}', [PostExpenseController::class, 'update']);
   Route::post('destroy/postExpense/{id}', [PostExpenseController::class, 'destroy']);
+  Route::post('comment', [CommentController::class, 'index'])->name('comment.index');
+  Route::post('create/comment', [CommentController::class, 'create'])->name('comment.create');
   Route::post('like', [LikeController::class, 'like'])->name('like/create');
   Route::post('destroy/like', [LikeController::class, 'destroy'])->name('like/destroy');
   Route::get('bookmark/accountbook', [BookmarkController::class, 'index'])->name('bookmark/index');

@@ -225,6 +225,12 @@ export interface ACCOUNTBOOK_STATE {
       user_id: string;
     }[];
   };
+  comments: {
+    id: string;
+    body: string;
+    user_id: string;
+    post_account_book_id: string;
+  }[];
   message: string;
   successOrFailure: boolean;
 }
@@ -318,6 +324,15 @@ export interface LIKE_BOOKMARK {
   }[];
   income: number;
   push_icon_user_id: string;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface COMMENT_DATA {
+  body: string;
+  user_id: string;
+  post_account_book_id: string;
   cookie: {
     [x: string]: string;
   };
