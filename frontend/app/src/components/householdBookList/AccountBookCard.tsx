@@ -44,6 +44,10 @@ interface PROPS {
   icon: boolean;
 }
 
+interface HISTORY_STATE {
+  id: string;
+}
+
 const AccountBookCard: React.FC<PROPS> = (props) => {
   const dispatch: AppDispatch = useDispatch();
   const [income, setIncome] = useState(0),
@@ -164,6 +168,10 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
     };
 
     await dispatch(patchBookmark(packet));
+  };
+
+  const historyState: HISTORY_STATE = {
+    id: props.id,
   };
 
   return (
@@ -302,7 +310,8 @@ const AccountBookCard: React.FC<PROPS> = (props) => {
                 } flex items-center cursor-pointer ml-20 lg:ml-32`}
                 onClick={() =>
                   history.push(
-                    `/accountBook/detail/${props.user_id}/${props.date}`
+                    `/accountBook/detail/${props.user_id}/${props.date}`,
+                    historyState
                   )
                 }
               >
