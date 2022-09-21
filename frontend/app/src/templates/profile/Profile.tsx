@@ -155,7 +155,7 @@ const Profile: React.FC = () => {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full py-8 mb-12 md:mb-1">
-            <div className="w-9/12 md:w-4/12 mx-auto pt-14 text-center text-white h-auto bg-stone-100 bg-white rounded">
+            <div className="w-9/12 md:w-4/12 mx-auto pt-14 text-center text-silver h-auto bg-stone-100 bg-white rounded">
               <h2
                 className="mb-10 text-black text-xl font-bold"
                 data-testid="title"
