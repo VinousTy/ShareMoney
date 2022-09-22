@@ -33,6 +33,7 @@ jobs:
       - run:
           working_directory: ./frontend/app
           command: npm install --save --legacy-peer-deps
+          command: npm install --save --legacy-peer-deps chart.js@latest
       - save_cache:
           key: v1-dependencies-{{ checksum "./frontend/app/package-lock.json" }}
           paths:
