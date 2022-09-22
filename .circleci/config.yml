@@ -24,7 +24,7 @@ jobs:
           command: vendor/bin/phpunit tests
   frontend_test:
     docker:
-      - image: circleci/node:16.14.2
+      - image: cimg/node:16.17.0
     steps:
       - checkout
       - restore_cache:
