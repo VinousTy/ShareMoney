@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  backend_test:
     docker:
       - image: circleci/php:7.4-node-browsers
     steps:
@@ -22,3 +22,31 @@ jobs:
           name: php test
           working_directory: ./backend/php/app
           command: vendor/bin/phpunit tests
+  frontend_test:
+    docker:
+      - image: cimg/node:16.17.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "./frontend/app/package-lock.json" }}
+      - run:
+          working_directory: ./frontend/app
+          command: npm install --save --legacy-peer-deps
+      - run:
+          working_directory: ./frontend/app
+          command: npm install --save --legacy-peer-deps chart.js@latest
+      - save_cache:
+          key: v1-dependencies-{{ checksum "./frontend/app/package-lock.json" }}
+          paths:
+            - ./frontend/app/node_modules
+      - run:
+          working_directory: ./frontend/app
+          command: npm test
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - backend_test
+      - frontend_test
