@@ -10,12 +10,12 @@ jobs:
           working_directory: ./backend/php/app
           command: sudo composer self-update --1
       - restore_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-v1-{{ checksum "./backend/php/app/composer.lock" }}
       - run:
           working_directory: ./backend/php/app
           command: composer install -n --prefer-dist
       - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-v1-{{ checksum "./backend/php/app/composer.lock" }}
           paths:
             - ./backend/php/app/vendor
       - run:
