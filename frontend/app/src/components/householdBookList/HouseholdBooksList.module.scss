@@ -3,17 +3,6 @@
   color: #333;
 }
 
-.underline {
-  border-bottom: solid 2px rgb(250, 175, 24);
-  font-weight: bold;
-  color: #333;
-}
-
-.disabled {
-  color: gray;
-  opacity: 0.7;
-}
-
 .container_tab::after {
   content: '';
   display: block;
