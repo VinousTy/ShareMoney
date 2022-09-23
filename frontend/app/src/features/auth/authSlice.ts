@@ -107,7 +107,6 @@ export const getUser = createAsyncThunk('get/user', async (cookie: COOKIE) => {
 export const createProfile = createAsyncThunk(
   'profile/post',
   async (profile: PROFILE_CREATE) => {
-    console.log(profile);
     const uploadData = new FormData();
     uploadData.append('name', profile.name);
     uploadData.append('age', String(profile.age));
