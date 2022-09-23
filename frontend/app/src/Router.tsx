@@ -22,7 +22,6 @@ import PrivacyPolicy from './templates/privacyPolicy/PrivacyPolicy';
 import Profile from './templates/profile/Profile';
 import TermsOfService from './templates/termsOfService/TermsOfService';
 import Top from './templates/top/Top';
-import TestPage from './TestPage';
 
 const Router: React.VFC = () => {
   const signIn = useSelector(selectIsSignIn);

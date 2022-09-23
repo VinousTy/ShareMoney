@@ -177,13 +177,15 @@ const DrawerMenu: React.VFC = () => {
           className={`${styles.hamburger_bar} ${drawer && styles.is_active}`}
         ></span>
       </button>
-      {drawer && (
-        <div className={`${styles.nav_wrapper} ${drawer && styles.fade}`}>
-          <nav className={styles.header_nav}>
-            <ul className={styles.nav_list}>{headerMenu()}</ul>
-          </nav>
-        </div>
-      )}
+      <div
+        className={`${styles.nav_wrapper} ${
+          drawer ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+      >
+        <nav className={styles.header_nav}>
+          <ul className={styles.nav_list}>{headerMenu()}</ul>
+        </nav>
+      </div>
     </div>
   );
 };

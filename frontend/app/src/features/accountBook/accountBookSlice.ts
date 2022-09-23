@@ -217,7 +217,6 @@ export const createAccountBook = createAsyncThunk(
       })
       .then((res) => {
         uploadData.append('expenses', JSON.stringify(data.expenses));
-        console.log(res.data);
         uploadData.append('account_book_id', res.data.id);
         axios.post(`${apiUrl}api/create/expense`, uploadData, {
           headers: {
@@ -329,7 +328,6 @@ export const accountBookDetail = createAsyncThunk(
 );
 
 export const postCosts = createAsyncThunk('post/costs', async (data: any) => {
-  console.log(data);
   const uploadData = new FormData();
   uploadData.append('expenses', JSON.stringify(data.expenses));
   uploadData.append('account_book_id', data.account_book_id);
@@ -456,7 +454,6 @@ export const createPostAccountBook = createAsyncThunk(
         },
       })
       .then((res) => {
-        console.log(res.data.post_account_book.id);
         uploadData.append('expenses', JSON.stringify(data.expenses));
         uploadData.append(
           'post_account_book_id',

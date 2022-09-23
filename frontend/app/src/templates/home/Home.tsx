@@ -99,7 +99,9 @@ const Home: React.FC = () => {
                 <Tab className="bg-transparent cursor-pointer w-22 mx-auto">
                   <div
                     className={clsx([
-                      tabIndex === 0 ? styles.underline : styles.disabled,
+                      tabIndex === 0
+                        ? 'text-black font-bold border-b-2 border-orange'
+                        : 'text-disabled text-silver opacity-70',
                     ])}
                     data-testid="post-title"
                   >
@@ -109,7 +111,9 @@ const Home: React.FC = () => {
                 <Tab className="bg-transparent cursor-pointer w-22 mx-auto">
                   <div
                     className={clsx([
-                      tabIndex === 1 ? styles.underline : styles.disabled,
+                      tabIndex === 1
+                        ? 'text-black font-bold border-b-2 border-orange'
+                        : 'text-disabled text-silver opacity-70',
                     ])}
                     data-testid="bookmark-title"
                   >
