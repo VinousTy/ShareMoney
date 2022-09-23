@@ -401,7 +401,9 @@ const HouseholdBooksList = (props: PROPS) => {
           <Tab className="bg-transparent cursor-pointer w-22 mx-auto">
             <div
               className={clsx([
-                tabIndex === 0 ? styles.underline : styles.disabled,
+                tabIndex === 0
+                  ? 'text-black font-bold border-b-2 border-orange'
+                  : 'text-disabled text-silver opacity-70',
               ])}
               data-testid="post-title"
             >
@@ -411,7 +413,9 @@ const HouseholdBooksList = (props: PROPS) => {
           <Tab className="bg-transparent cursor-pointer w-22 mx-auto">
             <div
               className={clsx([
-                tabIndex === 1 ? styles.underline : styles.disabled,
+                tabIndex === 1
+                  ? 'text-black font-bold border-b-2 border-orange'
+                  : 'text-disabled text-silver opacity-70',
               ])}
               data-testid="bookmark-title"
             >
@@ -489,7 +493,6 @@ const HouseholdBooksList = (props: PROPS) => {
                   component="nav"
                   className={classes.root}
                   aria-label="mailbox folders"
-                  // key={props.id}
                 >
                   <Divider />
                   <ListItem className={styles.cost} button divider>
@@ -518,7 +521,7 @@ const HouseholdBooksList = (props: PROPS) => {
                             <ListItemText primary={book.date} />
                             <Grid>
                               <ListItemText>
-                                <div className={styles.btn}>
+                                <div>
                                   <button
                                     className="text-blue-500 underline ... cursor-pointer hover:text-blue-300 transition-all"
                                     onClick={() =>
