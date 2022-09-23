@@ -252,13 +252,6 @@ const Profile: React.FC = () => {
                     {errors.age.message}
                   </p>
                 )}
-                {/* {validError && (
-              <p className="text-red-500 text-xs italic" role="alert">
-                入力された値が不正です。
-                <br />
-                1~100までの整数で入力してください。
-              </p>
-            )} */}
               </div>
               <div className="mb-6">
                 <div className="text-left ml-6 sm:ml-10 md:ml-9 text-gray-700 mb-1 pl-1">
