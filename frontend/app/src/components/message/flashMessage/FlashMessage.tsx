@@ -42,7 +42,6 @@ const FlashMessage: React.VFC = () => {
             duration: 5000,
           });
     }
-    console.log('done');
   };
 
   !isLoading &&
