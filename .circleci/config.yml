@@ -77,8 +77,4 @@ workflows:
           cluster: 'sharemoney-cluster'
           service-name: 'service'
           container-image-name-updates: 'container=laravel_container,tag=${CIRCLE_SHA1}'
-          filters:
-            branches:
-              only:
-                - main
       - frontend_test
