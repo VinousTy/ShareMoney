@@ -1,11 +1,18 @@
 version: 2.1
 
+orbs:
+  aws-ecr: circleci/aws-ecr@8.1.0
+  aws-ecs: circleci/aws-ecs@3.1.0
+
 jobs:
   backend_test:
     docker:
       - image: circleci/php:7.4-node-browsers
     steps:
       - checkout
+      - run:
+          name: base64 decode env file
+          command: echo $ENV_FILE | base64 -di > .env
       - run:
           working_directory: ./backend/php/app
           command: sudo composer self-update --1
@@ -49,4 +56,29 @@ workflows:
   build:
     jobs:
       - backend_test
+      - aws-ecr/build-and-push-image:
+          requires:
+            - backend_test
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          path: './backend/php'
+          region: '${AWS_REGION}'
+          registry-id: AWS_ECR_REGISTRY_ID
+          repo: 'householdbook-web-back'
+          tag: '${CIRCLE_SHA1}'
+          filters:
+            branches:
+              only:
+                - main
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          family: 'task'
+          cluster: 'sharemoney-cluster'
+          service-name: 'service'
+          container-image-name-updates: 'container=laravel_container,tag=${CIRCLE_SHA1}'
+          filters:
+            branches:
+              only:
+                - main
       - frontend_test
