@@ -11,6 +11,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: base64 decode env file
+          command: echo $ENV_FILE | base64 -di > .env
+      - run:
           working_directory: ./backend/php/app
           command: sudo composer self-update --1
       - restore_cache:
@@ -61,7 +64,7 @@ workflows:
           path: './backend/php'
           region: '${AWS_REGION}'
           registry-id: AWS_ECR_REGISTRY_ID
-          repo: 'ci_demo_app'
+          repo: 'householdbook-web-back'
           tag: '${CIRCLE_SHA1}'
           filters:
             branches:
@@ -70,9 +73,9 @@ workflows:
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          family: 'laravel-task'
-          cluster: 'laravel-cluster'
-          service-name: 'laravel-service'
+          family: 'task'
+          cluster: 'sharemoney-cluster'
+          service-name: 'service'
           container-image-name-updates: 'container=laravel_container,tag=${CIRCLE_SHA1}'
           filters:
             branches:
