@@ -15,4 +15,15 @@ RUN apt-get update \
     && apt-get install -y libpq-dev \
     && docker-php-ext-install pdo_mysql pdo_pgsql mysqli 
 RUN echo "alias ll='ls -la'" >> ~/.bashrc && . ~/.bashrc
-WORKDIR /var/www/html/app
+
+WORKDIR /var/www/html/
+
+COPY . .
+
+WORKDIR app
+
+RUN composer install && \ 
+		php artisan cache:clear && \
+		php artisan config:clear && \
+		php artisan config:cache && \
+		chmod -R 777 storage
