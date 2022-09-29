@@ -1,5 +1,9 @@
 version: 2.1
 
+orbs:
+  aws-ecr: circleci/aws-ecr@8.1.0
+  aws-ecs: circleci/aws-ecs@3.1.0
+
 jobs:
   backend_test:
     docker:
@@ -49,4 +53,29 @@ workflows:
   build:
     jobs:
       - backend_test
+      - aws-ecr/build-and-push-image:
+          requires:
+            - build
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          path: './backend/php'
+          region: '${AWS_REGION}'
+          registry-id: AWS_ECR_REGISTRY_ID
+          repo: 'ci_demo_app'
+          tag: '${CIRCLE_SHA1}'
+          filters:
+            branches:
+              only:
+                - main
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          family: 'laravel-task'
+          cluster: 'laravel-cluster'
+          service-name: 'laravel-service'
+          container-image-name-updates: 'container=laravel_container,tag=${CIRCLE_SHA1}'
+          filters:
+            branches:
+              only:
+                - main
       - frontend_test
