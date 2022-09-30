@@ -5,7 +5,7 @@
 
 ## アプリ概要
 
-URL ▶
+URL ▶ <a href="https://share-mny.com/" target="_blank" rel="noopener noreferrer">https://share-mny.com/</a>
 <br>
 <br>
 
@@ -31,7 +31,7 @@ URL ▶
 
 ## 各種機能について
 
-### 1. 新規ユーザー登録　　& ログインページ
+### 1. 新規ユーザー登録 & ログインページ
 
 - メールアドレスでの登録以外にも Google 認証も可能です
 - 試使用としてゲストログインも可能です
@@ -41,7 +41,7 @@ URL ▶
 <br>
 <br>
 
-### 2. プロフィール登録　　& 変更ページ
+### 2. プロフィール登録 & 変更ページ
 
 - プロフィールの登録・変更を行うことが可能です
 - 登録した内容は他のユーザーから閲覧されます
@@ -51,7 +51,7 @@ URL ▶
 <br>
 <br>
 
-### 3. レコメンド　　& お気に入りページ
+### 3. レコメンド & お気に入りページ
 
 - あなたへおすすめのユーザーを表示します
 - 人気の投稿がランキング形式で表示します
@@ -71,7 +71,7 @@ URL ▶
 <br>
 <br>
 
-### 5. 投稿家計簿一覧　　& 投稿家計簿検索ページ
+### 5. 投稿家計簿一覧 & 投稿家計簿検索ページ
 
 - 投稿した家計簿を一覧で表示します
 - ユーザー名・年収・職業・世帯構成で検索することが可能です
@@ -81,7 +81,7 @@ URL ▶
 <br>
 <br>
 
-### 6. 家計簿投稿　＆　編集ページ
+### 6. 家計簿投稿 ＆　編集ページ
 
 - 各支出を詳細に投稿することが可能です
 - 支出・収入をタブによって切り替えて投稿可能です
@@ -115,21 +115,32 @@ URL ▶
 
 ### フロントエンド
 
-- 言語: JavaScript/TypeScript
-- フレームワーク: React.js(ReduxToolKit)
-- UI ライブラリ: TailwindCSS
+- 言語: JavaScript/TypeScript 4.7.4
+- フレームワーク: React.js(ReduxToolKit) 17.0.2
+- UI ライブラリ: TailwindCSS 2.2
 
 ### バックエンド
 
-- 言語: PHP
-- フレームワーク: Laravel
-- DB: MySQL
+- 言語: PHP 7.4
+- フレームワーク: Laravel 8.83.23
+- DB: MySQL 5.7
 
 ### インフラ
 
 - Docker/Docker-Compose
-- AWS
+- CircleCi
+- AWS(Route53, CloudFront, S3, ACM, VPC, ALB, ECS, Fargate, ECR, RDS)
+
+<br>
+<br>
+
+## インフラ構成図
+
+<img width="638" alt="構成図" src="https://user-images.githubusercontent.com/87213148/193205719-19da2de8-806a-49a3-99fb-69c4c07de5fa.png">
+
+<br>
+<br>
 
 ## ER 図
 
-<img width="638" alt="ER図" src="https://user-images.githubusercontent.com/87213148/191644199-cec3207c-ff7d-4285-af97-22f38dc99a9f.png">
+<img width="638" alt="ER図" src="https://user-images.githubusercontent.com/87213148/193206224-00b6b152-24de-4632-b970-528710c3301f.png">
