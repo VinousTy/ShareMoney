@@ -13,6 +13,7 @@ import {
 import { useHistory } from 'react-router-dom';
 import {
   editMessage,
+  isSignIn,
   isSignOut,
   isSuccessOrFailure,
   selectIsSignIn,
@@ -23,6 +24,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import { FaCrown } from 'react-icons/fa';
 import { BsBookmarkFill } from 'react-icons/bs';
 import { useCookies } from 'react-cookie';
+import axios from 'axios';
+
+const guestPassword = String(process.env.REACT_APP_GUEST_PASSWORD);
+const apiUrl = process.env.REACT_APP_DEV_API_URL;
 
 const DrawerMenu: React.VFC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -51,6 +56,37 @@ const DrawerMenu: React.VFC = () => {
     } else {
       history.push(`/${pass}`);
     }
+  };
+
+  const guestLogin = async () => {
+    const auth = {
+      email: 'guest@example.com',
+      password: guestPassword,
+    };
+    await axios
+      .post(
+        `${apiUrl}api/login`,
+        {
+          email: auth.email,
+          password: auth.password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then((res) => {
+        setCookie('Bearer', res.data.access_token);
+        dispatch(isSignIn());
+        dispatch(isSuccessOrFailure(true));
+        dispatch(editMessage('ゲストユーザーとしてログインしました'));
+        history.push('/mypage');
+      })
+      .catch((e) => {
+        console.log(e);
+        alert('ログインに失敗しました。時間をおいてから再度お試しください。');
+      });
   };
 
   const headerMenu = () => {
@@ -140,7 +176,7 @@ const DrawerMenu: React.VFC = () => {
               </button>
             </span>
           </li>
-          <li className={styles.nav_item}>
+          <li className={styles.nav_item} onClick={() => guestLogin()}>
             <span className={styles.cp_link}>
               <AccountCircleIcon />
               <button className="bg-transparent font-semibold py-1 mr-2 rounded-lg">
