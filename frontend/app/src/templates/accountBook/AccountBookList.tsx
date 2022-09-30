@@ -3,6 +3,7 @@ import styles from './AccountBookList.module.scss';
 import { AppDispatch } from '../../app/store';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  getMyProfile,
   getProfiles,
   getUser,
   isSignIn,
@@ -78,6 +79,7 @@ const AccountBookList: React.FC = () => {
       }
       await dispatch(isLoadingStart());
       await dispatch(getUser(cookies));
+      await dispatch(getMyProfile(cookies));
       if (
         (cookies && query_name) ||
         query_income ||
