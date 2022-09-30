@@ -16,8 +16,6 @@ RUN apt-get update \
     && docker-php-ext-install pdo_mysql pdo_pgsql mysqli 
 RUN echo "alias ll='ls -la'" >> ~/.bashrc && . ~/.bashrc
 
-WORKDIR /var/www/html/
-
 COPY . .
 
 WORKDIR app
