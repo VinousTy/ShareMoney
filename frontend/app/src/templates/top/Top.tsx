@@ -5,6 +5,7 @@ import top_image_second from '../../assets/top_2.jpg';
 import top_image_third from '../../assets/top_3.jpg';
 import house_hold_book from '../../assets/householdbooks.png';
 import logo_fixed from '../../assets/logo__fixed.png';
+import share from '../../assets/share.jpg';
 import search from '../../assets/search.jpg';
 import rank from '../../assets/ranking.jpg';
 import { useHistory } from 'react-router-dom';
@@ -201,7 +202,7 @@ const Top: React.VFC = () => {
               <div className={styles.function_content_imgframe}>
                 <img
                   className={styles.function_content_imgframe_img}
-                  src={search}
+                  src={share}
                   alt=""
                 />
               </div>
