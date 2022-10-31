@@ -64,7 +64,7 @@ workflows:
           path: './backend/php'
           region: '${AWS_REGION}'
           registry-id: AWS_ECR_REGISTRY_ID
-          repo: 'householdbook-web-back'
+          repo: '${REPO_NAME_BACK}'
           tag: '${CIRCLE_SHA1}'
           filters:
             branches:
@@ -73,9 +73,9 @@ workflows:
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          family: 'task'
-          cluster: 'sharemoney-cluster'
-          service-name: 'service'
+          family: '${FAMILY_NAME}'
+          cluster: '${CLUSTER_NAME}'
+          service-name: '${SERVICE_NAME}'
           container-image-name-updates: 'container=laravel_container,tag=${CIRCLE_SHA1}'
           filters:
             branches:
