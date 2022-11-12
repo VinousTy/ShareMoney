@@ -56,7 +56,7 @@ URL ▶ <a href="https://share-mny.com/" target="_blank" rel="noopener noreferre
 - あなたへおすすめのユーザーを表示します
 - 人気の投稿がランキング形式で表示します
 
-<img src="https://user-images.githubusercontent.com/87213148/191399264-76e32cdb-0f8b-47c5-b578-6947d8caa856.png" width="600px">
+<img src="https://user-images.githubusercontent.com/87213148/201472441-727e40a6-9c36-4c68-b8d0-a7912ca3dd70.png" width="600px">
 
 <br>
 <br>
@@ -66,7 +66,7 @@ URL ▶ <a href="https://share-mny.com/" target="_blank" rel="noopener noreferre
 - 登録した家計簿を表示します
 - 登録した家計簿の履歴を表示します
 
-<img src="https://user-images.githubusercontent.com/87213148/191389386-6307e18d-10f4-420d-9cac-3e38538a3821.png" width="600px">
+<img src="https://user-images.githubusercontent.com/87213148/201472481-10cce16d-5b6c-4c2f-a966-8bff523824d2.png" width="600px">
 
 <br>
 <br>
@@ -76,7 +76,7 @@ URL ▶ <a href="https://share-mny.com/" target="_blank" rel="noopener noreferre
 - 投稿した家計簿を一覧で表示します
 - ユーザー名・年収・職業・世帯構成で検索することが可能です
 
-<img src="https://user-images.githubusercontent.com/87213148/191399461-6dcc1b4f-2f08-4e93-abe4-aa250a59c6d1.png" width="600px">
+<img src="https://user-images.githubusercontent.com/87213148/201472465-020f53d0-df5a-4049-b75c-57efd27eccd7.png" width="600px">
 
 <br>
 <br>
@@ -86,7 +86,7 @@ URL ▶ <a href="https://share-mny.com/" target="_blank" rel="noopener noreferre
 - 各支出を詳細に投稿することが可能です
 - 支出・収入をタブによって切り替えて投稿可能です
 
-<img src="https://user-images.githubusercontent.com/87213148/191399686-689e3faa-4558-47a5-bdf9-044a3a3d210a.png" width="600px">
+<img src="https://user-images.githubusercontent.com/87213148/201472520-6b43b2a9-67fa-4892-b2d1-14f41e2ec062.png" width="600px">
 
 <br>
 <br>
@@ -96,7 +96,7 @@ URL ▶ <a href="https://share-mny.com/" target="_blank" rel="noopener noreferre
 - 投稿に紐づいたアイテムを表示します
 - 「コメント」をつけることが可能です
 
-<img src="https://user-images.githubusercontent.com/87213148/191457888-43992592-70f2-4efc-9a66-440c78c9de73.png" width="600px">
+<img src="https://user-images.githubusercontent.com/87213148/201472405-613dbdde-7c81-4984-bab7-d5f6ca9cec66.png" width="600px">
 
 <br>
 <br>
@@ -106,7 +106,7 @@ URL ▶ <a href="https://share-mny.com/" target="_blank" rel="noopener noreferre
 - 別ユーザの保存した家計簿を表示します
 - 別ユーザからは閲覧不可となります
 
-<img src="https://user-images.githubusercontent.com/87213148/191479210-9bf119d2-f2d8-4678-9c29-3b0eb566b9b8.png" width="600px">
+<img src="https://user-images.githubusercontent.com/87213148/201472665-1d328b6a-7652-4538-9622-d731b10501fd.png" width="600px">
 
 <br>
 <br>
@@ -143,4 +143,4 @@ URL ▶ <a href="https://share-mny.com/" target="_blank" rel="noopener noreferre
 
 ## ER 図
 
-<img width="638" alt="ER図" src="https://user-images.githubusercontent.com/87213148/193206224-00b6b152-24de-4632-b970-528710c3301f.png">
+<img width="638" alt="ER図" src="https://user-images.githubusercontent.com/87213148/201473070-a07a4964-94ed-4a62-8964-8854506cbd92.png">
