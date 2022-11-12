@@ -12,6 +12,7 @@ import {
 import {
   accountBookDetail,
   getComments,
+  getNotify,
   postComment,
   selectAccountBookDetail,
   selectComments,
@@ -114,6 +115,7 @@ const AccountBookDetail: React.FC = () => {
     const fetchBootLoader = async () => {
       if (cookies) {
         await dispatch(isSignIn());
+        await dispatch(getNotify(cookies));
         await dispatch(
           accountBookDetail({
             user_id: id,

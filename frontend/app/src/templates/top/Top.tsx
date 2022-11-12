@@ -166,7 +166,7 @@ const Top: React.VFC = () => {
           <br />
           そのため、新生活や結婚などライフイベントの変化時にかかる実際に発生した
           <span className="text-orange">「生の費用」</span>
-          をなるべく見える化することで、お金に対する不安の軽減・対策を講じる講じることができます。
+          をなるべく見える化することで、お金に対する不安の軽減・対策を講じることができます。
         </p>
         <div className={`${styles.solution_button_box} ${styles.item_11}`}>
           <button

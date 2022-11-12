@@ -231,6 +231,15 @@ export interface ACCOUNTBOOK_STATE {
     user_id: string;
     post_account_book_id: string;
   }[];
+  notify: [
+    {
+      id: string;
+      user_id: string;
+      post_account_book_id: string;
+      date: string;
+      created_at: string;
+    }
+  ][];
   message: string;
   successOrFailure: boolean;
 }
@@ -333,6 +342,13 @@ export interface COMMENT_DATA {
   body: string;
   user_id: string;
   post_account_book_id: string;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+export interface NOTIFICATION_DATA {
+  id: string;
   cookie: {
     [x: string]: string;
   };

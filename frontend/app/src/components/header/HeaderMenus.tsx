@@ -14,6 +14,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { AppDispatch } from '../../app/store';
 import AvatarMenu from './AvatarMenu';
+import NotifyMenu from './NotifyMenu';
 
 const guestPassword = String(process.env.REACT_APP_GUEST_PASSWORD);
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -59,13 +60,15 @@ const HeaderMenus: React.VFC = () => {
   const headerMenu = () => {
     if (signIn && location.pathname.includes('/profile')) {
       return (
-        <li>
+        <li className="flex items-center">
+          <NotifyMenu />
           <AvatarMenu pass={'profile'} />
         </li>
       );
     } else if (signIn) {
       return (
-        <li>
+        <li className="flex items-center">
+          <NotifyMenu />
           <AvatarMenu pass="" />
         </li>
       );

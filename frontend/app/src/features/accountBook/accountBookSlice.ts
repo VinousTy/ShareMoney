@@ -16,6 +16,7 @@ import {
   DETAIL_DATA,
   ID_COOKIE,
   COMMENT_DATA,
+  NOTIFICATION_DATA,
 } from '../../types/Types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
@@ -199,6 +200,17 @@ const initialState: ACCOUNTBOOK_STATE = {
       user_id: '',
       post_account_book_id: '',
     },
+  ],
+  notify: [
+    [
+      {
+        id: '',
+        user_id: '',
+        post_account_book_id: '',
+        date: '',
+        created_at: '',
+      },
+    ],
   ],
   message: '',
   successOrFailure: true,
@@ -994,6 +1006,36 @@ export const postComment = createAsyncThunk(
   }
 );
 
+export const getNotify = createAsyncThunk(
+  'notify/get',
+  async (cookie: COOKIE) => {
+    const res = await axios.get(`${apiUrl}api/user/notify`, {
+      headers: {
+        Authorization: `Bearer ${cookie.Bearer}`,
+      },
+    });
+    return res.data;
+  }
+);
+
+export const deleteNotify = createAsyncThunk(
+  'notify/delete',
+  async (data: NOTIFICATION_DATA) => {
+    const res = await axios.post(
+      `${apiUrl}api/user/unNotify`,
+      {
+        id: data.id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${data.cookie.Bearer}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const accountBookSlice = createSlice({
   name: 'accountBook',
   initialState,
@@ -1107,6 +1149,12 @@ export const accountBookSlice = createSlice({
         comments: [...state.comments, action.payload.comment],
       };
     });
+    builder.addCase(getNotify.fulfilled, (state, action) => {
+      return {
+        ...state,
+        notify: [action.payload],
+      };
+    });
   },
 });
 
@@ -1125,6 +1173,7 @@ export const selectPostMyAccountBook = (state: RootState) =>
 export const selectRecomendAccountBooks = (state: RootState) =>
   state.accountBook.recomendAccountBooks;
 export const selectComments = (state: RootState) => state.accountBook.comments;
+export const selectNotify = (state: RootState) => state.accountBook.notify;
 export const selectAccountBookMessage = (state: RootState) =>
   state.accountBook.message;
 export const selectAccountBookSuccessOrFailure = (state: RootState) =>

@@ -10,6 +10,7 @@ import {
 } from '../../features/auth/authSlice';
 import {
   getBookmarkAccountBook,
+  getNotify,
   selectAccountBooks,
 } from '../../features/accountBook/accountBookSlice';
 import { useCookies } from 'react-cookie';
@@ -33,6 +34,7 @@ const BookmarkAccountBookList: React.FC = () => {
     const fetchBootLoader = async () => {
       await dispatch(isLoadingStart());
       await dispatch(isSignIn());
+      await dispatch(getNotify(cookies));
       await dispatch(getUser(cookies));
       await dispatch(getMyProfile(cookies));
       await dispatch(getBookmarkAccountBook(cookies));
