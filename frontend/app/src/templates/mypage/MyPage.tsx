@@ -10,6 +10,7 @@ import {
 } from '../../features/auth/authSlice';
 import {
   editAccountBookMessage,
+  getNotify,
   getSelectDateAccountBook,
   postAccountBookDetail,
   selectAccountBookChart,
@@ -54,6 +55,7 @@ const MyPage: React.FC = () => {
       if (cookies) {
         await dispatch(getMyProfile(cookies));
         await dispatch(isSignIn());
+        await dispatch(getNotify(cookies));
         await dispatch(getSelectDateAccountBook(packet));
         await dispatch(
           postAccountBookDetail({
