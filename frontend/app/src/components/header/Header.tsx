@@ -9,6 +9,7 @@ import useMedia from 'use-media';
 import DrawerMenu from './DrawerMenu';
 import { useSelector } from 'react-redux';
 import { selectIsSignIn } from '../../features/auth/authSlice';
+import NotifyMenu from './NotifyMenu';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,6 +70,13 @@ const Header: React.VFC = () => {
   const headerMenu = () => {
     if (isWide && path && id === '') {
       return <></>;
+    } else if (isWide && signIn) {
+      return (
+        <div className="flex items-center">
+          <NotifyMenu />
+          <DrawerMenu />
+        </div>
+      );
     } else if (isWide) {
       return <DrawerMenu />;
     } else {

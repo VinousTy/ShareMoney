@@ -10,6 +10,7 @@ import {
 } from '../../features/auth/authSlice';
 import {
   getAccountBookList,
+  getNotify,
   recomendAccountBookList,
   selectAccountBooks,
   selectRecomendAccountBooks,
@@ -57,6 +58,7 @@ const Home: React.FC = () => {
       await dispatch(isLoadingStart());
       if (cookies) {
         await dispatch(getMyProfile(cookies));
+        await dispatch(getNotify(cookies));
         await dispatch(getProfiles(cookies));
         await dispatch(getAccountBookList(cookies));
         await dispatch(isSignIn());

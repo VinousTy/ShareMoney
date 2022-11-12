@@ -65,4 +65,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('bookmark/accountbook', [BookmarkController::class, 'index'])->name('bookmark/index');
   Route::post('bookmark', [BookmarkController::class, 'bookmark'])->name('bookmark/create');
   Route::post('destroy/bookmark', [BookmarkController::class, 'destroy'])->name('bookmark/destroy');
+  Route::get('user/notify', [UserController::class, 'notify'])->name('user/notify');
+  Route::post('user/unNotify', [UserController::class, 'unNotify'])->name('user/unNotify');
 });
