@@ -11,6 +11,7 @@ import {
 } from '../../features/auth/authSlice';
 import {
   getAccountBookList,
+  getNotify,
   searchGetAccountBook,
   selectAccountBookMessage,
   selectAccountBooks,
@@ -79,6 +80,7 @@ const AccountBookList: React.FC = () => {
       }
       await dispatch(isLoadingStart());
       await dispatch(getUser(cookies));
+      await dispatch(getNotify(cookies));
       await dispatch(getMyProfile(cookies));
       if (
         (cookies && query_name) ||
