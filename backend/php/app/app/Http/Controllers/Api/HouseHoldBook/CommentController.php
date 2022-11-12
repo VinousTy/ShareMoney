@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\HouseHoldBook;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Notifications\InformationNotification;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -14,7 +15,7 @@ class CommentController extends Controller
       ->get();
 
     return response()->json([
-      'comment' => $comments
+      'comment' => $comments,
     ], 200);
   }
 
@@ -30,8 +31,16 @@ class CommentController extends Controller
       'post_account_book_id' => $request->post_account_book_id,
     ]);
 
+    $user = $comment->postAccountBook->user;
+    $postAccountBook = $comment->postAccountBook;
+    $comment = $comment;
+
+    $user->notify(
+      new InformationNotification($user, $postAccountBook, $comment)
+    );
+
     return response()->json([
-      'comment' => $comment
+      'comment' => $comment,
     ], 200);
   }
 }
