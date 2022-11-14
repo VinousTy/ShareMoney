@@ -165,7 +165,7 @@ const AccountBookList: React.FC = () => {
               onClick={searchOnName}
             />
           </form>
-          <SearchModal />
+          <SearchModal setName={setName} />
           <div className="m-3">
             <button
               className="w-20 h-20 shadow-lg bg-button-color-orange text-white rounded-full hover:bg-button-color-orange-hover transition-all border-button-color-orange-shadow fixed bottom-24 right-8 text-center md:right-16"
