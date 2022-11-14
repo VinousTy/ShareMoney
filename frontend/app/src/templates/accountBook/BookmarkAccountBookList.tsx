@@ -16,7 +16,6 @@ import {
 import { useCookies } from 'react-cookie';
 import { BsBookmarkFill } from 'react-icons/bs';
 import AccountBookCard from '../../components/householdBookList/AccountBookCard';
-import SearchModal from '../../components/modals/SearchModal';
 import {
   isLoadingEnd,
   isLoadingStart,
@@ -80,7 +79,6 @@ const BookmarkAccountBookList: React.FC = () => {
               保存した家計簿はありません
             </div>
           )}
-          <SearchModal />
           <div className={`${styles.flex_container} mx-4`}>
             <div
               className={`${styles.flex_container} md:flex md:flex-wrap md:justify-around`}
