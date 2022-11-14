@@ -34,7 +34,11 @@ interface SEARCH_DATA {
   type: string;
 }
 
-const SearchModal: React.FC = () => {
+interface PROPS {
+  setName: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SearchModal = (props: PROPS) => {
   const dispatch: AppDispatch = useDispatch();
   const isOpen = useSelector(selectIsSearchModal),
     isLoading = useSelector(selectIsLoading);
@@ -72,6 +76,7 @@ const SearchModal: React.FC = () => {
       await dispatch(getAccountBookList(cookies));
       await history.push(`/accountBook/list`);
     }
+    props.setName('');
     await dispatch(isLoadingEnd());
     await dispatch(isSearchModalClose());
   };
