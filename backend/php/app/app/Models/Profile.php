@@ -43,7 +43,7 @@ class Profile extends Model
     return $query->join('users', 'profiles.user_id', '=', 'users.id')
       ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
       ->selectRaw('post_account_books.date, post_account_books.user_id, sum(post_account_books.monthly_income) as monthly_income')
-      ->where('profiles.name', '=', $name)
+      ->where('profiles.name', 'like', "%$name%")
       ->groupBy('post_account_books.date', 'post_account_books.user_id');
   }
 
@@ -54,7 +54,7 @@ class Profile extends Model
         ->join('post_account_books', 'users.id', '=', 'post_account_books.user_id')
         ->join('post_expenses', 'post_account_books.id', '=', 'post_expenses.post_account_book_id')
         ->selectRaw('post_account_books.date ,post_expenses.expenseItem, post_account_books.user_id, sum(post_expenses.cost) as cost')
-        ->where('profiles.name', '=', $name)
+        ->where('profiles.name', 'like', "%$name%")
         ->groupBy('post_account_books.date', 'post_expenses.expenseItem', 'post_account_books.user_id');
     } else {
       return $query->join('users', 'profiles.user_id', '=', 'users.id')
