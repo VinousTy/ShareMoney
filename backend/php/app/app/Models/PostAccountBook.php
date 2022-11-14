@@ -73,7 +73,7 @@ class PostAccountBook extends Model
   public function scopeSearchName($query, $name)
   {
     return $query->join('profiles', 'post_account_books.user_id', '=', 'profiles.user_id')
-      ->where('profiles.name', '=', $name);
+      ->where('profiles.name', 'like', "%$name%");
   }
 
   public function scopeSearchIncome($query, $income)
