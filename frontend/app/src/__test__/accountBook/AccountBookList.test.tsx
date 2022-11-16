@@ -40,147 +40,147 @@ describe('AccountBookList Components Test Cases', () => {
   });
   Modal.setAppElement = () => null;
 
-  it('Should render Loading Component before data is retrieved', async () => {
-    const history = createMemoryHistory();
-    history.push('/accountBook/list');
+  // it('Should render Loading Component before data is retrieved', async () => {
+  //   const history = createMemoryHistory();
+  //   history.push('/accountBook/list');
 
-    server.use(
-      rest.get(`${apiUrl}api/profile/list`, (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json({
-            id: '1',
-            name: 'user',
-            job: '不動産',
-            age: 21,
-            income: '0~200万円',
-            composition: '1人暮らし',
-            body: 'test',
-            img: '',
-            user_id: 1,
-          })
-        );
-      })
-    );
+  //   server.use(
+  //     rest.get(`${apiUrl}api/profile/list`, (req, res, ctx) => {
+  //       return res(
+  //         ctx.status(200),
+  //         ctx.json({
+  //           id: '1',
+  //           name: 'user',
+  //           job: '不動産',
+  //           age: 21,
+  //           income: '0~200万円',
+  //           composition: '1人暮らし',
+  //           body: 'test',
+  //           img: '',
+  //           user_id: 1,
+  //         })
+  //       );
+  //     })
+  //   );
 
-    global.matchMedia =
-      global.matchMedia ||
-      function () {
-        return {
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-        };
-      };
+  //   global.matchMedia =
+  //     global.matchMedia ||
+  //     function () {
+  //       return {
+  //         addListener: jest.fn(),
+  //         removeListener: jest.fn(),
+  //       };
+  //     };
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <AccountBookList />
-        </Router>
-      </Provider>
-    );
+  //   render(
+  //     <Provider store={store}>
+  //       <Router history={history}>
+  //         <AccountBookList />
+  //       </Router>
+  //     </Provider>
+  //   );
 
-    expect(screen.getByTestId('loading')).toBeTruthy();
-  });
+  //   expect(screen.getByTestId('loading')).toBeTruthy();
+  // });
 
-  it('Should render AccountBook Component before data is retrieved', async () => {
-    const history = createMemoryHistory();
-    history.push('/accountBook/list');
+  // it('Should render AccountBook Component before data is retrieved', async () => {
+  //   const history = createMemoryHistory();
+  //   history.push('/accountBook/list');
 
-    server.use(
-      rest.get(`${apiUrl}api/profile/list`, (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json([
-            {
-              id: '1',
-              name: 'user',
-              job: '不動産',
-              age: 21,
-              income: '0~200万円',
-              composition: '1人暮らし',
-              body: 'test',
-              img: '',
-              user_id: 1,
-            },
-          ])
-        );
-      })
-    );
+  //   server.use(
+  //     rest.get(`${apiUrl}api/profile/list`, (req, res, ctx) => {
+  //       return res(
+  //         ctx.status(200),
+  //         ctx.json([
+  //           {
+  //             id: '1',
+  //             name: 'user',
+  //             job: '不動産',
+  //             age: 21,
+  //             income: '0~200万円',
+  //             composition: '1人暮らし',
+  //             body: 'test',
+  //             img: '',
+  //             user_id: 1,
+  //           },
+  //         ])
+  //       );
+  //     })
+  //   );
 
-    server.use(
-      rest.get(`${apiUrl}api/accountbook/list`, (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json([
-            {
-              accountBook: [
-                {
-                  id: 1,
-                  date: '2022-08',
-                  user_id: 1,
-                  monthly_income: 100000,
-                  likes: [
-                    {
-                      id: 1,
-                      user_id: 1,
-                      post_account_book_id: 1,
-                    },
-                  ],
-                  bookmarks: [
-                    {
-                      id: 1,
-                      user_id: 1,
-                      post_account_book_id: 1,
-                    },
-                  ],
-                },
-              ],
-              costs: [
-                {
-                  date: '2022-08',
-                  expenseItem: '住居費',
-                  cost: 10000,
-                  user_id: 1,
-                },
-              ],
-              income: [
-                {
-                  date: '2022-08',
-                  monthly_income: 100000,
-                  user_id: 1,
-                },
-              ],
-            },
-          ])
-        );
-      })
-    );
+  //   server.use(
+  //     rest.get(`${apiUrl}api/accountbook/list`, (req, res, ctx) => {
+  //       return res(
+  //         ctx.status(200),
+  //         ctx.json([
+  //           {
+  //             accountBook: [
+  //               {
+  //                 id: 1,
+  //                 date: '2022-08',
+  //                 user_id: 1,
+  //                 monthly_income: 100000,
+  //                 likes: [
+  //                   {
+  //                     id: 1,
+  //                     user_id: 1,
+  //                     post_account_book_id: 1,
+  //                   },
+  //                 ],
+  //                 bookmarks: [
+  //                   {
+  //                     id: 1,
+  //                     user_id: 1,
+  //                     post_account_book_id: 1,
+  //                   },
+  //                 ],
+  //               },
+  //             ],
+  //             costs: [
+  //               {
+  //                 date: '2022-08',
+  //                 expenseItem: '住居費',
+  //                 cost: 10000,
+  //                 user_id: 1,
+  //               },
+  //             ],
+  //             income: [
+  //               {
+  //                 date: '2022-08',
+  //                 monthly_income: 100000,
+  //                 user_id: 1,
+  //               },
+  //             ],
+  //           },
+  //         ])
+  //       );
+  //     })
+  //   );
 
-    global.matchMedia =
-      global.matchMedia ||
-      function () {
-        return {
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-        };
-      };
+  //   global.matchMedia =
+  //     global.matchMedia ||
+  //     function () {
+  //       return {
+  //         addListener: jest.fn(),
+  //         removeListener: jest.fn(),
+  //       };
+  //     };
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <AccountBookList />
-        </Router>
-      </Provider>
-    );
+  //   render(
+  //     <Provider store={store}>
+  //       <Router history={history}>
+  //         <AccountBookList />
+  //       </Router>
+  //     </Provider>
+  //   );
 
-    await waitFor(() => {
-      expect(screen.findByTestId('search-input')).toBeTruthy();
-      expect(screen.findByTestId('search-button')).toBeTruthy();
-      expect(screen.findByTestId('card-age')).toBeTruthy();
-      expect(screen.findByTestId('card-job')).toBeTruthy();
-      expect(screen.findByTestId('card-income')).toBeTruthy();
-      expect(screen.findByTestId('card-composition')).toBeTruthy();
-    });
-  });
+  //   await waitFor(() => {
+  //     expect(screen.findByTestId('search-input')).toBeTruthy();
+  //     expect(screen.findByTestId('search-button')).toBeTruthy();
+  //     expect(screen.findByTestId('card-age')).toBeTruthy();
+  //     expect(screen.findByTestId('card-job')).toBeTruthy();
+  //     expect(screen.findByTestId('card-income')).toBeTruthy();
+  //     expect(screen.findByTestId('card-composition')).toBeTruthy();
+  //   });
+  // });
 });

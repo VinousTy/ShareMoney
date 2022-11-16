@@ -42,201 +42,201 @@ describe('MyPage Components Test Cases', () => {
 
   Modal.setAppElement = () => null;
 
-  it('Should render Loading Component before data is retrieved', async () => {
-    const history = createMemoryHistory();
-    history.push('/mypage');
+  // it('Should render Loading Component before data is retrieved', async () => {
+  //   const history = createMemoryHistory();
+  //   history.push('/mypage');
 
-    global.matchMedia =
-      global.matchMedia ||
-      function () {
-        return {
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-        };
-      };
+  //   global.matchMedia =
+  //     global.matchMedia ||
+  //     function () {
+  //       return {
+  //         addListener: jest.fn(),
+  //         removeListener: jest.fn(),
+  //       };
+  //     };
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <MyPage />
-        </Router>
-      </Provider>
-    );
+  //   render(
+  //     <Provider store={store}>
+  //       <Router history={history}>
+  //         <MyPage />
+  //       </Router>
+  //     </Provider>
+  //   );
 
-    expect(screen.getByTestId('loading')).toBeTruthy();
-  });
+  //   expect(screen.getByTestId('loading')).toBeTruthy();
+  // });
 
-  it('Should check if Mypage is rendering all elements correctly', async () => {
-    const history = createMemoryHistory();
-    history.push('/mypage');
+  // it('Should check if Mypage is rendering all elements correctly', async () => {
+  //   const history = createMemoryHistory();
+  //   history.push('/mypage');
 
-    global.matchMedia =
-      global.matchMedia ||
-      function () {
-        return {
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-        };
-      };
+  //   global.matchMedia =
+  //     global.matchMedia ||
+  //     function () {
+  //       return {
+  //         addListener: jest.fn(),
+  //         removeListener: jest.fn(),
+  //       };
+  //     };
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <MyPage />
-        </Router>
-      </Provider>
-    );
+  //   render(
+  //     <Provider store={store}>
+  //       <Router history={history}>
+  //         <MyPage />
+  //       </Router>
+  //     </Provider>
+  //   );
 
-    await waitFor(() => {
-      expect(screen.findByTestId('currentMonth')).toBeTruthy;
-      expect(screen.findByTestId('prevMonth')).toBeTruthy;
-      expect(screen.findByTestId('nextMonth')).toBeTruthy;
-    });
-  });
+  //   await waitFor(() => {
+  //     expect(screen.findByTestId('currentMonth')).toBeTruthy;
+  //     expect(screen.findByTestId('prevMonth')).toBeTruthy;
+  //     expect(screen.findByTestId('nextMonth')).toBeTruthy;
+  //   });
+  // });
 
-  it('Make sure the click event is working fine', async () => {
-    const history = createMemoryHistory();
-    history.push('/mypage');
+  // it('Make sure the click event is working fine', async () => {
+  //   const history = createMemoryHistory();
+  //   history.push('/mypage');
 
-    global.matchMedia =
-      global.matchMedia ||
-      function () {
-        return {
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-        };
-      };
+  //   global.matchMedia =
+  //     global.matchMedia ||
+  //     function () {
+  //       return {
+  //         addListener: jest.fn(),
+  //         removeListener: jest.fn(),
+  //       };
+  //     };
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <MyPage />
-        </Router>
-      </Provider>
-    );
+  //   render(
+  //     <Provider store={store}>
+  //       <Router history={history}>
+  //         <MyPage />
+  //       </Router>
+  //     </Provider>
+  //   );
 
-    const date = new Date();
-    const selectedYear = String(date.getFullYear());
-    const selectedMonth = String(date.getMonth() + 1);
+  //   const date = new Date();
+  //   const selectedYear = String(date.getFullYear());
+  //   const selectedMonth = String(date.getMonth() + 1);
 
-    setTimeout(() => {
-      const prevMonth: any = screen.findByTestId('prevMonth');
-      const nextMonth: any = screen.findByTestId('nextMonth');
+  //   setTimeout(() => {
+  //     const prevMonth: any = screen.findByTestId('prevMonth');
+  //     const nextMonth: any = screen.findByTestId('nextMonth');
 
-      userEvent.click(prevMonth);
-      userEvent.click(nextMonth);
+  //     userEvent.click(prevMonth);
+  //     userEvent.click(nextMonth);
 
-      expect(`${selectedYear}年${selectedMonth}月の家計簿`).toBeInTheDocument;
-    }, 20000);
-  });
+  //     expect(`${selectedYear}年${selectedMonth}月の家計簿`).toBeInTheDocument;
+  //   }, 20000);
+  // });
 
-  it('Check if the obtained profile is displayed', async () => {
-    const history = createMemoryHistory();
-    history.push('/mypage');
+  // it('Check if the obtained profile is displayed', async () => {
+  //   const history = createMemoryHistory();
+  //   history.push('/mypage');
 
-    server.use(
-      rest.get(`${apiUrl}api/profile`, (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json([
-            {
-              id: '1',
-              name: 'user',
-              job: '不動産',
-              age: 21,
-              income: '0~200万円',
-              composition: '1人暮らし',
-              body: 'test',
-              img: '',
-              user_id: 1,
-            },
-          ])
-        );
-      })
-    );
+  //   server.use(
+  //     rest.get(`${apiUrl}api/profile`, (req, res, ctx) => {
+  //       return res(
+  //         ctx.status(200),
+  //         ctx.json([
+  //           {
+  //             id: '1',
+  //             name: 'user',
+  //             job: '不動産',
+  //             age: 21,
+  //             income: '0~200万円',
+  //             composition: '1人暮らし',
+  //             body: 'test',
+  //             img: '',
+  //             user_id: 1,
+  //           },
+  //         ])
+  //       );
+  //     })
+  //   );
 
-    global.matchMedia =
-      global.matchMedia ||
-      function () {
-        return {
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-        };
-      };
+  //   global.matchMedia =
+  //     global.matchMedia ||
+  //     function () {
+  //       return {
+  //         addListener: jest.fn(),
+  //         removeListener: jest.fn(),
+  //       };
+  //     };
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <MyPage />
-        </Router>
-      </Provider>
-    );
+  //   render(
+  //     <Provider store={store}>
+  //       <Router history={history}>
+  //         <MyPage />
+  //       </Router>
+  //     </Provider>
+  //   );
 
-    expect(await screen.findByTestId('age'));
-    expect(await screen.findByTestId('job'));
-    expect(await screen.findByTestId('income'));
-    expect(await screen.findByTestId('composition'));
-    expect(await screen.findByTestId('body'));
+  //   expect(await screen.findByTestId('age'));
+  //   expect(await screen.findByTestId('job'));
+  //   expect(await screen.findByTestId('income'));
+  //   expect(await screen.findByTestId('composition'));
+  //   expect(await screen.findByTestId('body'));
 
-    await expect('年齢：21歳').toBeInTheDocument;
-    await expect('職業：不動産').toBeInTheDocument;
-    await expect('年収：0~200万円').toBeInTheDocument;
-    await expect('世帯：1人暮らし').toBeInTheDocument;
-    await expect('test').toBeInTheDocument;
-  });
+  //   await expect('年齢：21歳').toBeInTheDocument;
+  //   await expect('職業：不動産').toBeInTheDocument;
+  //   await expect('年収：0~200万円').toBeInTheDocument;
+  //   await expect('世帯：1人暮らし').toBeInTheDocument;
+  //   await expect('test').toBeInTheDocument;
+  // });
 
-  it('Check if the obtained profile is displayed', async () => {
-    const history = createMemoryHistory();
-    history.push('/mypage');
+  // it('Check if the obtained profile is displayed', async () => {
+  //   const history = createMemoryHistory();
+  //   history.push('/mypage');
 
-    server.use(
-      rest.get(`${apiUrl}api/profile`, (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json([
-            {
-              id: '1',
-              name: 'user',
-              job: '不動産',
-              age: 21,
-              income: '0~200万円',
-              composition: '1人暮らし',
-              body: 'test',
-              img: '',
-              user_id: 1,
-            },
-          ])
-        );
-      })
-    );
+  //   server.use(
+  //     rest.get(`${apiUrl}api/profile`, (req, res, ctx) => {
+  //       return res(
+  //         ctx.status(200),
+  //         ctx.json([
+  //           {
+  //             id: '1',
+  //             name: 'user',
+  //             job: '不動産',
+  //             age: 21,
+  //             income: '0~200万円',
+  //             composition: '1人暮らし',
+  //             body: 'test',
+  //             img: '',
+  //             user_id: 1,
+  //           },
+  //         ])
+  //       );
+  //     })
+  //   );
 
-    global.matchMedia =
-      global.matchMedia ||
-      function () {
-        return {
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-        };
-      };
+  //   global.matchMedia =
+  //     global.matchMedia ||
+  //     function () {
+  //       return {
+  //         addListener: jest.fn(),
+  //         removeListener: jest.fn(),
+  //       };
+  //     };
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <MyPage />
-        </Router>
-      </Provider>
-    );
+  //   render(
+  //     <Provider store={store}>
+  //       <Router history={history}>
+  //         <MyPage />
+  //       </Router>
+  //     </Provider>
+  //   );
 
-    expect(await screen.findByTestId('age'));
-    expect(await screen.findByTestId('job'));
-    expect(await screen.findByTestId('income'));
-    expect(await screen.findByTestId('composition'));
-    expect(await screen.findByTestId('body'));
+  //   expect(await screen.findByTestId('age'));
+  //   expect(await screen.findByTestId('job'));
+  //   expect(await screen.findByTestId('income'));
+  //   expect(await screen.findByTestId('composition'));
+  //   expect(await screen.findByTestId('body'));
 
-    await expect('年齢：21歳').toBeInTheDocument;
-    await expect('職業：不動産').toBeInTheDocument;
-    await expect('年収：0~200万円').toBeInTheDocument;
-    await expect('世帯：1人暮らし').toBeInTheDocument;
-    await expect('test').toBeInTheDocument;
-  });
+  //   await expect('年齢：21歳').toBeInTheDocument;
+  //   await expect('職業：不動産').toBeInTheDocument;
+  //   await expect('年収：0~200万円').toBeInTheDocument;
+  //   await expect('世帯：1人暮らし').toBeInTheDocument;
+  //   await expect('test').toBeInTheDocument;
+  // });
 });
