@@ -67,7 +67,7 @@ const NotifyMenu: React.VFC = () => {
                     className="leading-6 border-b border-gray-300 my-2 hover:text-button-color-orange-hover transition cursor-pointer"
                     onClick={() =>
                       pageTransition(
-                        `accountBook/detail/${ntf.user_id}/${ntf.date}`,
+                        `accountBook/detail/${ntf.user_id}/${ntf.date}/${ntf.post_account_book_id}`,
                         ntf.id
                       )
                     }
