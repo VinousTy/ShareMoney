@@ -56,10 +56,6 @@ interface COSTS {
   cost: number;
 }
 
-interface HISTORY_STATE {
-  id: string;
-}
-
 const AccountBookDetail: React.FC = () => {
   const classes = useStyles();
   const dispatch: AppDispatch = useDispatch();
@@ -77,7 +73,6 @@ const AccountBookDetail: React.FC = () => {
   const comments = useSelector(selectComments);
   const [cookies, setCookie] = useCookies();
   const isWide = useMedia({ maxWidth: '768px' });
-  const { state } = useLocation<HISTORY_STATE>();
 
   let id = window.location.pathname.split('/accountBook/detail')[1];
   if (id !== '') {
@@ -89,6 +84,13 @@ const AccountBookDetail: React.FC = () => {
   )[1];
   if (search_date !== '') {
     search_date = search_date?.split('/')[1];
+  }
+
+  let post_id = window.location.pathname.split(
+    `/accountBook/detail/${id}/${search_date}`
+  )[1];
+  if (post_id !== '') {
+    post_id = post_id?.split('/')[1];
   }
 
   const array: Array<number> = [];
@@ -129,7 +131,7 @@ const AccountBookDetail: React.FC = () => {
           getComments({
             body: '',
             user_id: id,
-            post_account_book_id: state.id,
+            post_account_book_id: post_id,
             cookie: cookies,
           })
         );
@@ -158,7 +160,7 @@ const AccountBookDetail: React.FC = () => {
       postComment({
         body: text,
         user_id: profile.user_id,
-        post_account_book_id: state.id,
+        post_account_book_id: post_id,
         cookie: cookies,
       })
     );
@@ -356,7 +358,7 @@ const AccountBookDetail: React.FC = () => {
                       'ゲストユーザーとしてログインしています。ゲストユーザーのため、各種投稿やユーザー情報の変更等の一部機能の使用は制限されております。' ? (
                         <textarea
                           disabled={true}
-                          className="flex-auto w-8/12 py-2 bg-thin-black rounded outline-none border border-gray-500"
+                          className="flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-9/12 py-2 px-3 mb-5"
                           rows={1}
                           placeholder="ゲストはコメント入力できません"
                           value={text}

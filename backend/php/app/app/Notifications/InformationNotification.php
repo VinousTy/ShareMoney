@@ -19,10 +19,11 @@ class InformationNotification extends Notification
    *
    * @return void
    */
-  public function __construct($user, $postAccountBook, $comment)
+  public function __construct($user, $comment)
   {
     $this->user = $user;
-    $this->postAccountBook = $postAccountBook;
+    $this->profile = $user->profile;
+    $this->postAccountBook = $comment->postAccountBook;
     $this->comment = $comment;
   }
 
@@ -34,7 +35,7 @@ class InformationNotification extends Notification
    */
   public function via($notifiable)
   {
-    return ['database'];
+    return ['mail', 'database'];
   }
 
   /**
@@ -43,13 +44,19 @@ class InformationNotification extends Notification
    * @param  mixed  $notifiable
    * @return \Illuminate\Notifications\Messages\MailMessage
    */
-  // public function toMail($notifiable)
-  // {
-  //     return (new MailMessage)
-  //                 ->line('The introduction to the notification.')
-  //                 ->action('Notification Action', url('/'))
-  //                 ->line('Thank you for using our application!');
-  // }
+  public function toMail($notifiable)
+  {
+    return (new MailMessage)
+      // ->line('The introduction to the notification.')
+      // ->action('Notification Action', url('/'))
+      // ->line('Thank you for using our application!');
+      ->subject('【ShareMoney】あなたの家計簿にコメントがつきました')
+      ->view('emails.comment-notification', [
+        'url' => url(config('app.url') . '/accountBook/detail/' . $this->user->id . '/' . $this->postAccountBook->date . '/' . $this->postAccountBook->id),
+        'name' => $this->profile->name,
+        'email' => $this->user->email
+      ]);
+  }
 
   /**
    * Get the array representation of the notification.
@@ -62,7 +69,7 @@ class InformationNotification extends Notification
     return [
       'id' => Str::uuid(),
       'user_id' => $this->user->id,
-      'post_account_id' => $this->postAccountBook->id,
+      'post_account_book_id' => $this->postAccountBook->id,
       'date' => $this->postAccountBook->date,
       'created_at' => $this->comment->created_at
     ];

@@ -32,11 +32,10 @@ class CommentController extends Controller
     ]);
 
     $user = $comment->postAccountBook->user;
-    $postAccountBook = $comment->postAccountBook;
     $comment = $comment;
 
     $user->notify(
-      new InformationNotification($user, $postAccountBook, $comment)
+      new InformationNotification($user, $comment)
     );
 
     return response()->json([
