@@ -37,6 +37,7 @@ import {
 import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import Pusher from 'pusher-js';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,7 +67,8 @@ const AccountBookDetail: React.FC = () => {
     [costs, setCosts] = useState<number[]>([]),
     [sortCosts, setSortCosts] = useState<Array<COSTS>>([]),
     [tabIndex, setTabIndex] = useState(0),
-    [text, setText] = useState('');
+    [text, setText] = useState(''),
+    [bool, setBool] = useState(false);
   const accountBook = useSelector(selectAccountBookDetail);
   const profile = useSelector(selectProfile);
   const profiles = useSelector(selectProfiles);
@@ -114,8 +116,19 @@ const AccountBookDetail: React.FC = () => {
   const commentOnPost = [...comments];
 
   useEffect(() => {
+    Pusher.logToConsole = true;
+    const pusher = new Pusher('c27dc43b13ca79edc890', {
+      cluster: 'ap3',
+    });
+
+    const channel = pusher.subscribe('comment');
+
+    channel.bind('message', function (data: any) {
+      setBool(true);
+    });
+
     const fetchBootLoader = async () => {
-      if (cookies) {
+      if (!bool) {
         await dispatch(isSignIn());
         await dispatch(getNotify(cookies));
         await dispatch(
@@ -135,11 +148,22 @@ const AccountBookDetail: React.FC = () => {
             cookie: cookies,
           })
         );
+      } else if (bool) {
+        await dispatch(isSignIn());
+        await dispatch(getNotify(cookies));
+        await dispatch(
+          getComments({
+            body: '',
+            user_id: id,
+            post_account_book_id: post_id,
+            cookie: cookies,
+          })
+        );
       }
     };
     fetchBootLoader();
     setDate(new Date(search_date));
-  }, [dispatch]);
+  }, [dispatch, bool]);
 
   useEffect(() => {
     let totalCost = array.reduce((sum, element) => {
