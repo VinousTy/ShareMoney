@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\HouseHoldBook;
 
+use App\Events\Comment as EventsComment;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Notifications\InformationNotification;
@@ -33,6 +34,8 @@ class CommentController extends Controller
 
     $user = $comment->postAccountBook->user;
     $comment = $comment;
+
+    event(new EventsComment($comment));
 
     $user->notify(
       new InformationNotification($user, $comment)
