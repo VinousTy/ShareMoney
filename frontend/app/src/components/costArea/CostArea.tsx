@@ -45,6 +45,7 @@ interface PROPS {
   setCosts: Dispatch<SetStateAction<never[]>>;
   valid: boolean;
   setValid: React.Dispatch<React.SetStateAction<boolean>>;
+  readCost: any;
 }
 
 const CostArea = (props: PROPS) => {
@@ -128,6 +129,10 @@ const CostArea = (props: PROPS) => {
   useEffect(() => {
     setIndex(props.costs?.length);
   }, [props.costs?.length]);
+
+  useEffect(() => {
+    setCost(props.readCost);
+  }, [props.readCost]);
 
   return (
     <div>
