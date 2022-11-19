@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\HouseHoldBook\PostAccountBookController;
 use App\Http\Controllers\Api\HouseHoldBook\PostExpenseController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\User\UserController;
+use App\Http\Controllers\ImageReadingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,4 +68,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('destroy/bookmark', [BookmarkController::class, 'destroy'])->name('bookmark/destroy');
   Route::get('user/notify', [UserController::class, 'notify'])->name('user/notify');
   Route::post('user/unNotify', [UserController::class, 'unNotify'])->name('user/unNotify');
+  Route::post('ocr/extract', [ImageReadingController::class, 'extract']);
 });
