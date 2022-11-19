@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -26,6 +26,9 @@ import {
   selectIsLoading,
 } from '../../features/layout/layoutSlice';
 import Loading from '../../components/loading/Loading';
+import Webcam from 'react-webcam';
+import axios from 'axios';
+import FlashMessage from '../../components/message/flashMessage/FlashMessage';
 
 interface INPUTS {
   id: string;
@@ -61,6 +64,44 @@ interface PACKET_COSTS {
   };
 }
 
+interface ANNOTATIONS {
+  description: string;
+  boundingPoly: {
+    vertices: [
+      {
+        x: number;
+        y: number;
+      },
+      {
+        x: number;
+        y: number;
+      },
+      {
+        x: number;
+        y: number;
+      },
+      {
+        x: number;
+        y: number;
+      }
+    ];
+  };
+}
+
+interface PICTUREANALYSIS {
+  img: any;
+  cookie: {
+    [x: string]: string;
+  };
+}
+
+const videoConstraints = {
+  width: 1280,
+  height: 720,
+  facingMode: 'environment',
+};
+const apiUrl = process.env.REACT_APP_DEV_API_URL;
+
 const AccountBookForm: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const accountBook = useSelector(selectAccountBook),
@@ -72,10 +113,18 @@ const AccountBookForm: React.FC = () => {
     [editing, setEditing] = useState(false),
     [isAlertmonthlyIncome, setIsAlertmonthlyIncome] = useState(false),
     [costs, setCosts] = useState([]),
-    [valid, setValid] = useState(false);
+    [valid, setValid] = useState(false),
+    [bool, setBool] = useState<boolean>(false),
+    [image, setImage] = useState<null | any>(null),
+    [imageSetting, setImageSetting] = useState(false),
+    [readCost, setReadCost] = useState<number | boolean | string>(''),
+    [date, setDate] = useState<any>(''),
+    [isCaptureEnable, setCaptureEnable] = useState(false),
+    [ocrLoading, setOcrLoading] = useState(false);
   const history = useHistory();
   const [cookies, setCookies] = useCookies();
   const [tabIndex, setTabIndex] = useState(0);
+  const webcamRef = useRef<Webcam>(null);
 
   let id = window.location.pathname.split('/accountBook/regist')[1];
   if (id !== '') {
@@ -86,10 +135,19 @@ const AccountBookForm: React.FC = () => {
     return book.id == id;
   });
 
+  const today = () => {
+    const dt = new Date();
+    var y = dt.getFullYear();
+    var m = ('00' + (dt.getMonth() + 1)).slice(-2);
+    var d = ('00' + dt.getDate()).slice(-2);
+    return y + '-' + m + '-' + d;
+  };
+
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<INPUTS>();
 
@@ -144,6 +202,126 @@ const AccountBookForm: React.FC = () => {
     }
   }, []);
 
+  const array: Array<COSTS> = [];
+  costs?.filter((cost: COST) => {
+    expenseItems.forEach((item) => {
+      if (cost.expenseItem === item.name) {
+        array.push({
+          id: item.id,
+          expenseItem: cost.expenseItem,
+          cost: cost.cost,
+        });
+      }
+    });
+  });
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setImage(imageSrc);
+    }
+    setBool(true);
+    setImageSetting(true);
+  }, [webcamRef]);
+
+  const handlerEditPicture = (e: any) => {
+    setImage(e.target.files![0]);
+    setImageSetting(true);
+  };
+
+  const clickPicture = (e: any) => {
+    const fileInput = document.getElementById('imageInput');
+    fileInput?.click();
+  };
+
+  const tryOcr = async () => {
+    if (bool) {
+      let bin = atob(image.replace(/^.*,/, ''));
+      let buffer = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) {
+        buffer[i] = bin.charCodeAt(i);
+      }
+      let image_file = new File([buffer.buffer], 'image.jpeg', {
+        type: 'image/jpeg',
+      });
+      setReadCost(await pictureAnalysis({ img: image_file, cookie: cookies }));
+      await setValue('date', today());
+    } else {
+      setReadCost(await pictureAnalysis({ img: image, cookie: cookies }));
+      await setValue('date', today());
+    }
+    await setOcrLoading(true);
+  };
+
+  const pictureAnalysis = async (data: PICTUREANALYSIS) => {
+    const uploadData = new FormData();
+    uploadData.append('img', data.img, data.img.name);
+    const res = await axios.post(`${apiUrl}api/ocr/extract`, uploadData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${data.cookie.Bearer}`,
+      },
+    });
+    return findAmountByGoukei(res.data.annotations);
+  };
+
+  const detectKeyWordHeight = (
+    textAnnotations: Array<ANNOTATIONS>,
+    keyWord: string
+  ) => {
+    let regExp = new RegExp(keyWord);
+    for (let i = 1; i < textAnnotations.length; i++) {
+      let text = textAnnotations[i].description;
+      if (text.match(regExp)) {
+        let keyWordUpperHeight = textAnnotations[i].boundingPoly.vertices[0].y; //983
+        let keyWordLowerHeight = textAnnotations[i].boundingPoly.vertices[3].y; //1034
+        let keyWordHeight = (keyWordUpperHeight + keyWordLowerHeight) / 2;
+        return keyWordHeight;
+      }
+    }
+    return false;
+  };
+
+  const findAmountByGoukei = (textAnnotations: Array<ANNOTATIONS>) => {
+    let goukeiHeight = detectKeyWordHeight(textAnnotations, '合計');
+    for (let i = 1; i < textAnnotations.length; i++) {
+      // ¥ が入っていないものはスキップ
+      if (!correctYenMark(textAnnotations[i].description).match(/\¥/)) {
+        continue;
+      }
+      let textLowerHeight = textAnnotations[i].boundingPoly.vertices[3].y;
+      // 「合」のある位置より下のものを捕捉する
+      if (textLowerHeight >= goukeiHeight) {
+        return parseAmount(textAnnotations, i);
+      }
+    }
+    return false;
+  };
+
+  const parseAmount = (textAnnotations: Array<ANNOTATIONS>, i: number) => {
+    let text = correctYenMark(textAnnotations[i].description);
+    // ¥ だけのものはその後の数字と分離してしまっているため、一つ後ろのものを採用する
+    if (text === '¥') {
+      text = correctYenMark(textAnnotations[i + 1].description);
+    }
+    // カンマで終わっているものはそこで金額が途切れてしまっている可能性があるので、一つ後ろと連結する
+    let count = 1;
+    while (text.match(/,$/)) {
+      text += textAnnotations[i + count].description;
+      count += 1;
+    }
+    return parseInt(text.replace(',', '').replace('¥', ''));
+  };
+
+  const correctYenMark = (text: string) => {
+    const correctedText = text
+      .replace(/半/g, '¥')
+      .replace(/ギ/g, '¥')
+      .replace(/羊/g, '¥')
+      .replace(/ /g, '');
+    return correctedText;
+  };
+
   useEffect(() => {
     if (id) {
       if (editAccountBook !== undefined) {
@@ -160,18 +338,11 @@ const AccountBookForm: React.FC = () => {
     }
   }, [reset, accountBook]);
 
-  const array: Array<COSTS> = [];
-  costs?.filter((cost: COST) => {
-    expenseItems.forEach((item) => {
-      if (cost.expenseItem === item.name) {
-        array.push({
-          id: item.id,
-          expenseItem: cost.expenseItem,
-          cost: cost.cost,
-        });
-      }
-    });
-  });
+  useEffect(() => {
+    if (imageSetting) {
+      setValue('date', today());
+    }
+  }, [ocrLoading, costs, addBtn, tabIndex]);
 
   const onSubmit: SubmitHandler<INPUTS> = async (data) => {
     const createPacketAccountBook = {
@@ -255,7 +426,8 @@ const AccountBookForm: React.FC = () => {
           <Loading title={'送信中...'} />
         </div>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          {ocrLoading && <FlashMessage />}
           <div className="w-full py-8 mb-12 md:mb-1">
             <div className="w-10/12 md:w-6/12 mx-auto pt-14 text-center text-white h-auto bg-stone-100 bg-white rounded">
               <h2
@@ -265,24 +437,114 @@ const AccountBookForm: React.FC = () => {
                 家計簿を登録
               </h2>
               <div className="mb-6">
+                {id || (
+                  <div className="mb-7">
+                    <div className="text-left ml-9 text-gray-700 md:ml-14 mb-1 pl-1">
+                      <label data-testid="label-file">
+                        レシート画像を読み取る
+                      </label>
+                    </div>
+                    <div className="text-left ml-9 text-gray-700 md:ml-24 mb-1 pl-1">
+                      <input
+                        type="file"
+                        id="imageInput"
+                        hidden={true}
+                        multiple
+                        onChange={handlerEditPicture}
+                      />
+                      <button
+                        className="text-sm text-blue-500 underline ... cursor-pointer hover:text-red-500 transition-all"
+                        onClick={clickPicture}
+                      >
+                        ファイルを選択
+                      </button>
+                      <br />
+                      <span className="text-sm">または</span>
+                      {isCaptureEnable ? (
+                        <button
+                          className="text-sm text-blue-500 underline ... cursor-pointer hover:text-red-500 transition-all"
+                          onClick={() => setCaptureEnable(false)}
+                        >
+                          撮影を終了する
+                        </button>
+                      ) : (
+                        <button
+                          className="text-sm text-blue-500 underline ... cursor-pointer hover:text-red-500 transition-all"
+                          onClick={() => setCaptureEnable(true)}
+                        >
+                          レシートを撮影する
+                        </button>
+                      )}
+                    </div>
+                    {imageSetting && (
+                      <div className="text-left text-sm ml-9 text-gray-700 mt-3 md:ml-24 mb-1 pl-1">
+                        <button
+                          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow transition-all"
+                          onClick={tryOcr}
+                        >
+                          画像を送信する
+                        </button>
+                      </div>
+                    )}
+                    {isCaptureEnable && (
+                      <>
+                        <div>
+                          <button onClick={() => setCaptureEnable(false)}>
+                            終了
+                          </button>
+                        </div>
+                        <div>
+                          <Webcam
+                            audio={false}
+                            width={540}
+                            height={360}
+                            ref={webcamRef}
+                            screenshotFormat="image/jpeg"
+                            videoConstraints={videoConstraints}
+                          />
+                        </div>
+                        <div className="text-left text-sm ml-9 text-gray-700 mt-3 md:ml-24 mb-1 pl-1">
+                          <button
+                            className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow transition-all"
+                            onClick={capture}
+                          >
+                            撮影
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
                 <div className="text-left ml-9 text-gray-700 md:ml-14 mb-1 pl-1">
                   <label htmlFor="date" data-testid="label-date">
                     入力日
                   </label>
                 </div>
-                <input
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-9/12 py-2 px-3 mb-5"
-                  id="date"
-                  data-testid="input-date"
-                  type="date"
-                  placeholder="年/月/日"
-                  {...register('date', {
-                    required: {
-                      value: true,
-                      message: '※日付の入力は必須です',
-                    },
-                  })}
-                />
+                {imageSetting ? (
+                  <input
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-9/12 py-2 px-3 mb-5"
+                    id="date"
+                    data-testid="input-date"
+                    type="date"
+                    value={date}
+                    placeholder="年/月/日"
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                ) : (
+                  <input
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-9/12 py-2 px-3 mb-5"
+                    id="date"
+                    data-testid="input-date"
+                    type="date"
+                    placeholder="年/月/日"
+                    {...register('date', {
+                      required: {
+                        value: true,
+                        message: '※日付の入力は必須です',
+                      },
+                    })}
+                  />
+                )}
                 {errors.date && (
                   <p className="text-red-500 text-xs italic" role="alert">
                     {errors.date.message}
@@ -332,6 +594,7 @@ const AccountBookForm: React.FC = () => {
                       setCosts={setCosts}
                       valid={valid}
                       setValid={setValid}
+                      readCost={readCost}
                     />
                   </div>
                 </TabPanel>
@@ -450,7 +713,7 @@ const AccountBookForm: React.FC = () => {
               </div>
             </div>
           </div>
-        </form>
+        </div>
       )}
     </>
   );
