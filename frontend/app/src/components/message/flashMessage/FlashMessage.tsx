@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { AppDispatch } from '../../../app/store';
 import {
   editAccountBookMessage,
@@ -23,8 +24,15 @@ const FlashMessage: React.VFC = () => {
   const accountBookSuccessOrFail = useSelector(
     selectAccountBookSuccessOrFailure
   );
+  const location = useLocation();
+  const regist = location.pathname.includes('/accountBook/regist');
 
   const bootLoader = () => {
+    if (regist) {
+      toast.success('解析が完了しました', {
+        duration: 5000,
+      });
+    }
     if (authMessage !== '') {
       successOrFail === true
         ? toast.success(authMessage, {

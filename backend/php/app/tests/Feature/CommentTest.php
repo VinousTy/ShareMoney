@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\PostAccountBook;
+use App\Models\Profile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -51,6 +52,7 @@ class CommentTest extends TestCase
     $auth = $this->actingAs($user);
 
     $postAccountBook = PostAccountBook::factory()->create();
+    $profile = Profile::factory()->create();
 
     $response = $this->post(
       route('comment.create'),
