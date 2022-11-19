@@ -14,8 +14,8 @@ RUN apt-get install -y nodejs
 RUN apt-get update \
     && apt-get install -y libpq-dev \
     && docker-php-ext-install pdo_mysql pdo_pgsql mysqli 
+RUN docker-php-ext-install bcmath
 RUN echo "alias ll='ls -la'" >> ~/.bashrc && . ~/.bashrc
-
 COPY . .
 
 WORKDIR app
